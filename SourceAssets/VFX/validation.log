@@ -1,0 +1,6 @@
+FBX version: 7400
+FBX version: 7400
+VFX_FBX_VALID [{"name": "SM_SwordWave", "bounds_min_cm": [-22.62500762939453, -90.0, -3.5], "bounds_max_cm": [22.625, 90.0, 3.5], "nonmanifold_edges": 0, "zero_area_faces": 0}, {"name": "SM_WarningRing", "bounds_min_cm": [-51.0, -51.0, 0.0], "bounds_max_cm": [51.0, 51.0, 0.25], "nonmanifold_edges": 0, "zero_area_faces": 0}]
+Blender 5.1.1 (hash b70da489d7f4 built 2026-04-14 01:37:22)
+
+Blender quit

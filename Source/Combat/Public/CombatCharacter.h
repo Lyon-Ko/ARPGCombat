@@ -67,6 +67,7 @@ public:
     UPROPERTY(BlueprintReadOnly, Category="Combat") bool bPhaseTwo = false;
     UPROPERTY(BlueprintReadOnly, Category="Combat") bool bLastSkillInterrupted = false;
     UPROPERTY(BlueprintReadOnly, Category="Camera") bool bTargetLocked = false;
+    UFUNCTION(BlueprintPure, Category="Camera") bool IsTargetLocked() const { return bTargetLocked; }
     UPROPERTY(BlueprintAssignable) FCombatFeedbackDelegate OnCombatFeedback;
     UPROPERTY(BlueprintAssignable) FCombatDeathDelegate OnCombatDeath;
     UPROPERTY(BlueprintAssignable) FCombatSkillDelegate OnSkillStarted;
@@ -143,6 +144,8 @@ private:
     float AttackPressedAt = 0.f;
     float MovementRemaining = 0.f;
     float MovementSpeed = 0.f;
+    bool bDashHorizontalOverride = false;
+    float SavedDashMaxAcceleration = 0.f;
     float LastDamageAt = 0.f;
     float AirHangBudgetUsed = 0.f;
     float AirHangRemaining = 0.f;
@@ -168,6 +171,7 @@ private:
     void LookPitch(float Value);
     void JumpPressed();
     void PausePressed();
+    void EndDashHorizontalOverride();
     void TraceHitWindow();
     void GetBladeEndpoints(FVector& Start, FVector& End) const;
     void DestroyOwnedProjectiles();

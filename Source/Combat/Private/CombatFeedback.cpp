@@ -64,9 +64,7 @@ void UCombatFeedbackComponent::ReleaseArea()
     if(Definition->AreaReleaseEffect) UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, Definition->AreaReleaseEffect, Character->GetActorLocation(), FRotator::ZeroRotator, FVector(Definition->AreaRadius / 200.f));
     if(WarningMesh)
     {
-        WarningMesh->SetWorldScale3D(FVector(Definition->AreaRadius / 50.f, Definition->AreaRadius / 50.f, Definition->AreaHeight / 100.f));
-        WarningMesh->SetWorldLocation(Character->GetActorLocation());
-        if(auto* Material = Cast<UMaterialInstanceDynamic>(WarningMesh->GetMaterial(0))) Material->SetScalarParameterValue(TEXT("Opacity"), .07f);
+        if(auto* Material = Cast<UMaterialInstanceDynamic>(WarningMesh->GetMaterial(0))) Material->SetScalarParameterValue(TEXT("Opacity"), .65f);
     }
 }
 void UCombatFeedbackComponent::Feedback(ACombatCharacter* Source, ACombatCharacter* Target, FGameplayTag CueTag, FVector Location, float Intensity)

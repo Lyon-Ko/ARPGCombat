@@ -155,6 +155,12 @@ void ACombatCharacter::BeginSkill(UCombatSkillDefinition* Definition, UCombatGam
         AbilitySystem->SetLooseGameplayTagCount(CT(TEXT("Combat.State.Dashing")), 1);
         FVector Direction = SampleMovementDirection();
         if(Direction.IsNearlyZero()) Direction = -GetActorForwardVector();
+        auto* Move = GetCharacterMovement();
+        SavedDashMaxAcceleration = Move->MaxAcceleration;
+        bDashHorizontalOverride = true;
+        Move->MaxAcceleration = 0.f;
+        Move->Velocity.X = Move->Velocity.Y = 0.f;
+        ConsumeMovementInputVector();
         StartSkillMovement(250.f, .23f, Direction);
         if(GetCharacterMovement()->IsFalling()) bAirDashUsed = true;
     }
@@ -181,6 +187,7 @@ void ACombatCharacter::EndSkill(bool bInterrupted)
     GetWorldTimerManager().ClearTimer(SkillTimeout);
     GetWorldTimerManager().ClearTimer(AreaTimer);
     CloseHitWindow(); MovementRemaining = 0; AirHangRemaining = 0;
+    EndDashHorizontalOverride();
     FeedbackComponent->EndSkillFeedback();
     if(bInterrupted) for(auto Projectile : SkillProjectiles) if(Projectile.IsValid()) Projectile->Destroy();
     if(bInterrupted) SkillProjectiles.Reset();
@@ -323,7 +330,7 @@ void ACombatCharacter::EmitSkillProjectile()
     const FVector Direction = CombatTarget && CombatTarget->IsAlive() ? (CombatTarget->GetActorLocation() - Origin).GetSafeNormal() : GetActorForwardVector();
     FActorSpawnParameters Params; Params.Owner = this; Params.Instigator = this; Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
     if(auto* Projectile = GetWorld()->SpawnActor<ACombatProjectile>(ProjectileClass, Origin, Direction.Rotation(), Params))
-    { Projectile->InitializeProjectile(MakeHit(), ActiveSkill->ProjectileSpeed, Direction, ActiveSkill->CastEffect); SkillProjectiles.Add(Projectile); }
+    { Projectile->InitializeProjectile(MakeHit(), ActiveSkill->ProjectileSpeed, Direction, ActiveSkill->CastEffect, ActiveSkill->ProjectileMesh, ActiveSkill->ProjectileMaterial, ActiveSkill->ProjectileCollisionHalfExtent); SkillProjectiles.Add(Projectile); }
 }
 void ACombatCharacter::ShowAreaWarning()
 {
@@ -454,10 +461,16 @@ void ACombatCharacter::Tick(float DeltaSeconds)
     }
     if(MovementRemaining > 0.f)
     {
+        if(bDashHorizontalOverride)
+        {
+            GetCharacterMovement()->Velocity.X = GetCharacterMovement()->Velocity.Y = 0.f;
+            ConsumeMovementInputVector();
+        }
         const float Step = FMath::Min(DeltaSeconds, MovementRemaining);
         FHitResult Hit; AddActorWorldOffset(MovementDirection * MovementSpeed * Step, true, &Hit);
         MovementRemaining -= Step;
         if(Hit.bBlockingHit) MovementRemaining = 0;
+        if(MovementRemaining <= 0.f) EndDashHorizontalOverride();
     }
     TraceHitWindow();
     if(BufferedSkill.IsValid())
@@ -498,11 +511,11 @@ void ACombatCharacter::SetupPlayerInputComponent(UInputComponent* Input)
     Input->BindAxisKey(EKeys::MouseX, this, &ThisClass::LookYaw);
     Input->BindAxisKey(EKeys::MouseY, this, &ThisClass::LookPitch);
     Input->BindKey(EKeys::LeftMouseButton, IE_Pressed, this, &ThisClass::AttackPressed);
-    Input->BindKey(EKeys::LeftMouseButton, IE_Released, this, &ThisClass::AttackReleased);
+    Input->BindKey(EKeys::LeftMouseButton, IE_Released, this, &ThisClass::AttackReleased).bExecuteWhenPaused = true;
     Input->BindKey(EKeys::RightMouseButton, IE_Pressed, this, &ThisClass::ParryPressed);
     Input->BindKey(EKeys::LeftShift, IE_Pressed, this, &ThisClass::DashPressed);
     Input->BindKey(EKeys::SpaceBar, IE_Pressed, this, &ThisClass::JumpPressed);
-    Input->BindKey(EKeys::SpaceBar, IE_Released, this, &ACharacter::StopJumping);
+    Input->BindKey(EKeys::SpaceBar, IE_Released, this, &ACharacter::StopJumping).bExecuteWhenPaused = true;
     Input->BindKey(EKeys::Q, IE_Pressed, this, &ThisClass::ToggleTargetLock);
     Input->BindKey(EKeys::P, IE_Pressed, this, &ThisClass::PausePressed).bExecuteWhenPaused = true;
     Input->BindKey(EKeys::R, IE_Pressed, this, &ThisClass::RetryEncounter).bExecuteWhenPaused = true;
@@ -543,7 +556,21 @@ void ACombatCharacter::ToggleTargetLock()
     }
     if(!CombatTarget) bTargetLocked = false;
 }
-void ACombatCharacter::PausePressed() { UGameplayStatics::SetGamePaused(GetWorld(), !UGameplayStatics::IsGamePaused(GetWorld())); }
+void ACombatCharacter::PausePressed()
+{
+    const bool bPause = !UGameplayStatics::IsGamePaused(GetWorld());
+    if(bPause) { AttackReleased(); StopJumping(); }
+    UGameplayStatics::SetGamePaused(GetWorld(), bPause);
+}
+void ACombatCharacter::EndDashHorizontalOverride()
+{
+    if(!bDashHorizontalOverride) return;
+    auto* Move = GetCharacterMovement();
+    Move->Velocity.X = Move->Velocity.Y = 0.f;
+    Move->MaxAcceleration = SavedDashMaxAcceleration;
+    ConsumeMovementInputVector();
+    bDashHorizontalOverride = false;
+}
 void ACombatCharacter::RetryEncounter()
 {
     if(IsAlive() && (!CombatTarget || CombatTarget->IsAlive())) return;

@@ -1,0 +1,32 @@
+[
+  {
+    "name": "SM_SwordWave",
+    "bounds_min_cm": [
+      -22.62500762939453,
+      -90.0,
+      -3.5
+    ],
+    "bounds_max_cm": [
+      22.625,
+      90.0,
+      3.5
+    ],
+    "nonmanifold_edges": 0,
+    "zero_area_faces": 0
+  },
+  {
+    "name": "SM_WarningRing",
+    "bounds_min_cm": [
+      -51.0,
+      -51.0,
+      0.0
+    ],
+    "bounds_max_cm": [
+      51.0,
+      51.0,
+      0.25
+    ],
+    "nonmanifold_edges": 0,
+    "zero_area_faces": 0
+  }
+]

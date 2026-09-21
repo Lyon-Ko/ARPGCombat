@@ -51,6 +51,9 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadOnly) float AreaHeight = 700.f;
     UPROPERTY(EditAnywhere, BlueprintReadOnly) float AreaDelay = .18f;
     UPROPERTY(EditAnywhere, BlueprintReadOnly) float ProjectileSpeed = 1400.f;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly) TObjectPtr<UStaticMesh> ProjectileMesh;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly) TObjectPtr<UMaterialInterface> ProjectileMaterial;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly) FVector ProjectileCollisionHalfExtent = FVector(24.f,85.f,20.f);
     UPROPERTY(EditAnywhere, BlueprintReadOnly) bool bAirOnly = false;
     UPROPERTY(EditAnywhere, BlueprintReadOnly) bool bGroundOnly = false;
     UPROPERTY(EditAnywhere, BlueprintReadOnly) bool bFaceTarget = true;

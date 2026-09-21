@@ -159,7 +159,9 @@ Montage 必须走当前角色普通 AnimInstance 的 `DefaultSlot`。不要为�
 
 脚本复制 Attack4 的 GA、Montage、数据，在额外 `ExtensionEvents` 通知轨道添加 0.04 秒 AreaWarning 与 0.49 秒 AreaRelease；数据改为 Damage=32、PoiseDamage=55、AreaRadius=260、Cooldown=1.2。按默认 AreaDelay=0.18，未改变播放速度时预计在 0.67 秒结算范围伤害。
 
-**它保留了复制数据中的 `Combat.Skill.Attack4`，并没有登记新的 SkillTag。** 安装方法是把玩家 SkillDefinitions 中的 DA_Attack4 替换为 DA_Example_CrescentBurst，而不是同时添加两个同标签定义。Attack3 原有的 NextSkillTag 因而会选到这个替换版本。它展示的是“只改 BP/Montage/数据即可替换终结技行为”，不是“已独立增加一个可同时装备的新身份技能”。要后者，请执行本文第 2 节登记新标签并修改接入方式。
+初版脚本保留了复制数据中的 `Combat.Skill.Attack4`，只能通过替换玩家 SkillDefinitions 中的 DA_Attack4 来替换终结技行为。现在项目已在 `Config/DefaultGameplayTags.ini` 登记独立标签 `Combat.Skill.Example.CrescentBurst`，无需修改 C++。
+
+独立新增技能的资源接入仍待编辑器执行和 PIE 验收：将 `/Game/Combat/Skills/Examples/DA_Example_CrescentBurst` 的 SkillTag 改为 `Combat.Skill.Example.CrescentBurst`，InputTag 留空；把这份数据加入玩家 SkillDefinitions，保留原 DA_Attack4；临时将 `/Game/Combat/Skills/DA_Attack3` 的 NextSkillTag 指向新标签。这样前三段之后可以进入独立的 CrescentBurst，而两份终结技仍各有唯一身份。测试后恢复 DA_Attack3 原来的 `Combat.Skill.Attack4` 后继即可恢复原四连。确认角色已授予新定义中的 AbilityClass，再测试通知、伤害、取消和冷却；仅登记标签不代表资源已经接通或新增技能已通过实战。
 
 复制 Montage 时原有通知会保留，因此示例可能同时包含第四剑的近战命中和新增范围爆发；若设计只需要范围伤害，应检查并移除不需要的 HitOpen/HitClose。复制的 GA 已含九类事件分支，脚本主要增加说明注释，没有新增 C++ 逻辑。
 

@@ -78,6 +78,7 @@ void UCombatHUDWidget::NativeTick(const FGeometry& Geometry, float DeltaSeconds)
     Super::NativeTick(Geometry, DeltaSeconds);
     if(!Player || !Boss) BindCharacters();
     if(!Player) return;
+    if(LockText) LockText->SetText(FText::FromString(FString::Printf(TEXT("WASD 移动 · 鼠标 镜头\n左键 剑击 · 右键 精准格挡\nShift 短冲 · Space 二段跳 · Q %s · P 暂停"), Player->IsTargetLocked() ? TEXT("已锁定") : TEXT("自由镜头"))));
     if(HealthBar) HealthBar->SetPercent(Player->GetHealth() / FMath::Max(1.f, Player->GetMaxHealth()));
     if(HealthText) HealthText->SetText(FText::FromString(FString::Printf(TEXT("%s  %.0f / %.0f"), *PlayerName.ToString(), Player->GetHealth(), Player->GetMaxHealth())));
     if(Boss)

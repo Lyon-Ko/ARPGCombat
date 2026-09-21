@@ -1,0 +1,15 @@
+D:\UEproject\Combat\SourceAssets\VFX\build_vfx_meshes.py:18: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  mat.use_nodes = True
+00:03.657  render           | Saved: 'D:\UEproject\Combat\SourceAssets\VFX\SM_SwordWave_Preview.png'
+00:06.641  render           | Saved: 'D:\UEproject\Combat\SourceAssets\VFX\SM_WarningRing_Preview.png'
+
+FBX export starting... 'D:\\UEproject\\Combat\\SourceAssets\\VFX\\SM_SwordWave.fbx'
+export finished in 0.0037 sec.
+
+FBX export starting... 'D:\\UEproject\\Combat\\SourceAssets\\VFX\\SM_WarningRing.fbx'
+export finished in 0.0033 sec.
+信息: 已另存为 "CombatFXMeshes.blend"
+VFX_MESHES_READY {"authorship": "Original procedural geometry; no third-party source", "license": "Project original asset; no third-party restrictions", "units": "cm", "collision": "None authored; runtime controls collision", "assets": [{"name": "SM_SwordWave", "bounds_min_cm": [-22.625, -90.0, -3.5], "bounds_max_cm": [22.625, 90.0, 3.5], "size_cm": [45.25, 180.0, 7.0], "vertices": 324, "faces": 322, "local_forward": "+X", "closed_volume": true, "backface_culling": false}, {"name": "SM_WarningRing", "bounds_min_cm": [-51.0, -51.0, 0.0], "bounds_max_cm": [51.0, 51.0, 0.25], "size_cm": [102.0, 102.0, 0.25], "vertices": 640, "faces": 640, "local_forward": "XY plane; +Z normal", "closed_volume": true, "backface_culling": false}]}
+Blender 5.1.1 (hash b70da489d7f4 built 2026-04-14 01:37:22)
+
+Blender quit

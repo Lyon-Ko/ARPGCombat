@@ -45,10 +45,23 @@ New Skill properties:
 - `bGroundOnly`: set true on Attack1..4 (and other ground-only skills), false on Dash/Parry and air skills. Both direct and input activation enforce it, preventing ground attacks from bypassing the two-air-light budget.
 - `bFaceTarget`: set false for Dash and Parry; ordinary offensive skills may use conditional facing assistance.
 - `bPlayCastSoundAtActivation`: default false. Set true for Dash. Other sounds play once at actual HitOpen / Projectile / AreaRelease, rather than all at activation. Successful parry sound stays contact-triggered.
-- `AreaReleaseEffect`: bind the intended NS_AOEFlash; AOE warning uses low opacity and release displays a low-opacity full-height volume plus Niagara flash. Existing CastSound should be the appropriate AOE burst sound for that skill.
+- `AreaReleaseEffect`: bind the intended NS_AOEFlash for the release impact. The radius-50 cm thin XY warning ring keeps its ground position and thin Z scale from ShowWarning; opacity rises from .2 to .65 on release, then EndSkillFeedback removes it. `AreaHeight` controls actual damage height and does not stretch or lift the ring. Existing CastSound should be the appropriate AOE burst sound for that skill.
 
 GameMode adds `BattleMusic` (USoundBase), `MusicVolume` (.35), `MusicComponent` (UAudioComponent). Set BattleMusic to SW_BattleMusic. It plays and loops in the actual game, and tracks MasterVolume even while pause settings are open. Footstep/swing/impact/parry/death sound routes also use MasterVolume.
 
 Lifecycle: deduplication remembers the most recent64attack IDs per source actor, so interleaved old projectiles and new melee windows cannot reapply the same recent hit. Death and Reset destroy *all* world projectiles whose Owner is that character, including those released by previously completed skills. PhaseText now displays only phase, allowing the WBP's separate BossName label.
 
 This batch is source-ready pending coordinator build/cold launch and rendered verification. Native property hooks are not evidence that the matching assets have already been assigned or visually accepted.
+
+## Sword wave and input correction batch
+
+- SkillDefinition exposes `ProjectileMesh`, `ProjectileMaterial`, and `ProjectileCollisionHalfExtent` (default half size `(24, 85, 20)` cm). Assign the sword wave mesh with local +X propagation and Y width 180 cm; `WaveMesh` follows the projectile root and has no collision. The root `Collision` is now a box, with full default dimensions 48 x 170 x 40 cm. It blocks walls, overlaps opposing characters, ignores the owner during movement, and consumes one hit before calling the receiver. Existing `CastEffect` remains the accompanying Niagara effect. Mesh assignment and wing-contact/wall tests remain pending.
+- `InitializeProjectile` now accepts Mesh, Material, and CollisionHalfExtent after Effect. The native character emitter supplies these from its skill definition; existing Blueprint calls to this function need those inputs reviewed after recompilation.
+- Dash clears existing horizontal velocity and temporarily suppresses normal horizontal acceleration while its controlled movement runs. Vertical velocity and falling physics continue. Completion, blocking, interruption, death and reset restore normal acceleration through skill cleanup.
+- `IsTargetLocked()` is BlueprintPure. The existing HUD controls line displays either `Q 已锁定` or `Q 自由镜头`.
+- Pause entry clears held attack/jump state, and their release bindings execute while paused. Required regression cases: running airborne forward/reverse Dash (about 250 cm horizontal displacement), hold LMB/Space then pause/release/resume (no stale plunge/jump hold), and visible Q state transitions.
+- Default startup/game map is `/Game/Combat/Maps/L_CombatArena.L_CombatArena`, default mode is `/Game/Combat/Blueprints/BP_CombatGameMode.BP_CombatGameMode_C`, and split screen is disabled.
+
+This correction batch is source-only and awaits the coordinator's build and PIE validation.
+
+AI reaction: when the delayed observation snapshot contains the player's executed `Combat.Skill.Dash`, eligible `Combat.Skill.Boss.DashSlash` choices receive a 1.7 weight multiplier. Range, cooldown and movement-space filters still apply before weighting; prior-action repetition penalty and phase-two weighting remain multiplicative. This reads the observed active skill, never raw input, and does not force a chase action. Distribution validation remains pending.

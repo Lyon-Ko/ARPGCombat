@@ -57,6 +57,7 @@ bool ACombatAIController::SelectAction()
         const FString Name = Skill->SkillTag.ToString();
         if(ObservedTargetSkill.ToString().Contains(TEXT("Parry")) && (Name.Contains(TEXT("AOE")) || Name.Contains(TEXT("Leap")))) Weight *= 2.2f;
         if(ObservedTargetSkill.ToString().Contains(TEXT("Attack")) && Name.Contains(TEXT("LeapBack"))) Weight *= 1.8f;
+        if(ObservedTargetSkill.ToString() == TEXT("Combat.Skill.Dash") && Name == TEXT("Combat.Skill.Boss.DashSlash")) Weight *= 1.7f;
         if(CombatPawn->bPhaseTwo && (Name.Contains(TEXT("AOE")) || Name.Contains(TEXT("Dash")))) Weight *= 1.4f;
         Choices.Add({Skill->SkillTag, Weight}); Total += Weight;
     }
