@@ -7,5 +7,7 @@ UCombatRiposteEffect::UCombatRiposteEffect()
     DurationPolicy = EGameplayEffectDurationType::HasDuration;
     DurationMagnitude = FScalableFloat(.8f);
     FInheritedTagContainer Tags; Tags.AddTag(CombatTags::State_RiposteReady);
-    FindOrAddComponent<UTargetTagsGameplayEffectComponent>().SetAndApplyTargetTagChanges(Tags);
+    auto* GrantedTags = CreateDefaultSubobject<UTargetTagsGameplayEffectComponent>(TEXT("RiposteGrantedTags"));
+    GEComponents.Add(GrantedTags);
+    GrantedTags->SetAndApplyTargetTagChanges(Tags);
 }
