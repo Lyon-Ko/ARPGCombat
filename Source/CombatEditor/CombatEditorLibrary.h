@@ -13,7 +13,7 @@ class APlayerController;
 class UUserWidget;
 class UWidgetBlueprint;
 class UStateTree;
-class ANavMeshBoundsVolume; class UNiagaraSystem;
+class ANavMeshBoundsVolume; class UNiagaraSystem; class UNiagaraEmitter;
 
 /** Authoring only. Never linked into the packaged runtime module. */
 UCLASS()
@@ -37,4 +37,8 @@ public:
     static bool RebuildBlendSpace(UBlendSpace* BlendSpace);
     UFUNCTION(BlueprintCallable, Category="Combat|Editor")
     static bool InjectPlayerKey(APlayerController* Controller, FName Key, bool bPressed);
+    UFUNCTION(BlueprintCallable, Category="Combat|Editor")
+    static bool StartPIEWindow(int32 Width = 1920, int32 Height = 1080);
+    UFUNCTION(BlueprintCallable, Category="Combat|Editor")
+    static UNiagaraSystem* CreateNiagaraFromEmitter(const FString& AssetPath, UNiagaraEmitter* Emitter);
 };

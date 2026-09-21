@@ -2,6 +2,25 @@
 #include "GameFramework/PlayerController.h"
 #include "Engine/World.h"
 #include "InputKeyEventArgs.h"
+#include "Editor/UnrealEdEngine.h"
+#include "UnrealEdGlobals.h"
+#include "PlayInEditorDataTypes.h"
+#include "Settings/LevelEditorPlaySettings.h"
+#include "NiagaraSystemFactoryNew.h"
+
+bool UCombatEditorLibrary::StartPIEWindow(int32 Width, int32 Height)
+{
+    if (!GUnrealEd || GUnrealEd->IsPlayingSessionInEditor() || Width < 320 || Height < 240) return false;
+    ULevelEditorPlaySettings* Settings = GetMutableDefault<ULevelEditorPlaySettings>();
+    Settings->NewWindowWidth = Width;
+    Settings->NewWindowHeight = Height;
+    FRequestPlaySessionParams Params;
+    Params.SessionDestination = EPlaySessionDestinationType::InProcess;
+    Params.WorldType = EPlaySessionWorldType::PlayInEditor;
+    Params.bAllowOnlineSubsystem = false;
+    GUnrealEd->RequestPlaySession(Params);
+    return true;
+}
 
 bool UCombatEditorLibrary::InjectPlayerKey(APlayerController* Controller, FName Key, bool bPressed)
 {
@@ -28,6 +47,7 @@ bool UCombatEditorLibrary::InjectPlayerKey(APlayerController* Controller, FName 
 #include "Animation/AnimBlueprintGeneratedClass.h"
 #include "Animation/AnimInstance.h"
 #include "Animation/BlendSpace.h"
+#include "Animation/BlendSpace1D.h"
 #include "Animation/AnimSequence.h"
 #include "AnimGraphNode_Root.h"
 #include "AnimGraphNode_StateMachine.h"
@@ -109,6 +129,20 @@ bool UCombatEditorLibrary::CompileAndSave(UBlueprint* Blueprint)
     FBlueprintEditorUtils::MarkBlueprintAsStructurallyModified(Blueprint);
     FKismetEditorUtilities::CompileBlueprint(Blueprint, EBlueprintCompileOptions::None, &Results);
     return Results.NumErrors == 0 && Blueprint->Status != BS_Error && CombatAuthoring::Save(Blueprint);
+}
+
+UNiagaraSystem* UCombatEditorLibrary::CreateNiagaraFromEmitter(const FString& AssetPath, UNiagaraEmitter* Emitter)
+{
+    if (!Emitter || !AssetPath.StartsWith(TEXT("/Game/Combat/"))) return nullptr;
+    if (auto* Existing = LoadObject<UNiagaraSystem>(nullptr, *AssetPath)) return Existing;
+    auto* Factory = NewObject<UNiagaraSystemFactoryNew>();
+    Factory->EmittersToAddToNewSystem.Emplace(Emitter, Emitter->GetExposedVersion().VersionGuid);
+    UFactory* BaseFactory = Factory;
+    auto* System = Cast<UNiagaraSystem>(BaseFactory->FactoryCreateNew(UNiagaraSystem::StaticClass(), CreatePackage(*AssetPath), *FPackageName::GetLongPackageAssetName(AssetPath), RF_Public | RF_Standalone | RF_Transactional, nullptr, GWarn));
+    if (!System) return nullptr;
+    FAssetRegistryModule::AssetCreated(System);
+    System->RequestCompile(false);
+    return CombatAuthoring::Save(System) ? System : nullptr;
 }
 
 bool UCombatEditorLibrary::RebuildBlendSpace(UBlendSpace* BlendSpace)
@@ -216,6 +250,11 @@ UAnimBlueprint* UCombatEditorLibrary::CreateLocomotion(const FString& AssetPath,
     Player->Node.SetBlendSpace(BlendSpace); Player->ReconstructNode();
     auto* Speed=Variable(Ground->BoundGraph,TEXT("Speed"),-430,60);
     Link(Speed->GetValuePin(),Player->FindPin(TEXT("X")));
+    if (!BlendSpace->IsA<UBlendSpace1D>())
+    {
+        auto* Direction=Variable(Ground->BoundGraph,TEXT("Direction"),-430,160);
+        if (!Link(Direction->GetValuePin(),Player->FindPin(TEXT("Y")))) return nullptr;
+    }
     Link(Player->FindPin(TEXT("Pose")),Ground->GetPoseSinkPinInsideState());
     auto* Fall=Node<UAnimGraphNode_SequencePlayer>(Air->BoundGraph,-150,0); Fall->Node.SetSequence(AirSequence); Fall->Node.SetLoopAnimation(true); Fall->ReconstructNode();
     Link(Fall->FindPin(TEXT("Pose")),Air->GetPoseSinkPinInsideState());
