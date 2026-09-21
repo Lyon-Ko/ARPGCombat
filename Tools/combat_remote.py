@@ -1,6 +1,7 @@
 """Project-scoped CLI using Epic's bundled remote execution protocol."""
 from __future__ import annotations
 import argparse
+import base64
 import json
 import os
 from pathlib import Path
@@ -44,6 +45,23 @@ def status() -> dict:
     return execute("import json\nprint(json.dumps({'project': unreal.Paths.project_dir(), 'engine': unreal.SystemLibrary.get_engine_version(), 'pie': unreal.get_editor_subsystem(unreal.LevelEditorSubsystem).is_in_play_in_editor()}))")
 
 
+def execute_file(path: Path) -> dict:
+    resolved = path.expanduser().resolve(strict=True)
+    source = resolved.read_text(encoding='utf-8-sig')
+    # ExecuteFile scans the entire command for '.py' to guess a filename.
+    # Encode both strings so docstrings/paths cannot trigger that heuristic.
+    source64 = base64.b64encode(source.encode('utf-8')).decode('ascii')
+    path64 = base64.b64encode(str(resolved).encode('utf-8')).decode('ascii')
+    code = (
+        "globals()['__file__'] = __import__('base64').b64decode(" + repr(path64) + ").decode('utf-8')\n"
+        "globals()['__name__'] = '__main__'\n"
+        "exec(compile(__import__('base64').b64decode(" + repr(source64) + "), "
+        "globals()['__file__'], 'exec'), globals(), globals())"
+    )
+    # Use the shared console globals: functions/runner handles survive later --code calls.
+    return execute(code)
+
+
 def list_assets(path: str = '/Game') -> dict:
     return execute('import json\nprint(json.dumps(unreal.EditorAssetLibrary.list_assets(' + repr(path) + ', recursive=True)))')
 
@@ -69,7 +87,7 @@ def main() -> None:
         if args.command == 'status': result = status()
         elif args.command == 'list_assets': result = list_assets(args.path)
         elif args.command == 'pie': result = pie(args.action)
-        else: result = execute(args.file.read_text(encoding='utf-8-sig') if args.file else args.code)
+        else: result = execute_file(args.file) if args.file else execute(args.code)
         print(json.dumps(result, ensure_ascii=False, indent=2))
         sys.exit(0 if result.get('success') else 1)
     except Exception as error:
