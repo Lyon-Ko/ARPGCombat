@@ -854,7 +854,7 @@ class ArenaRegression:
         self.current = None
         self.save()
 
-    def run(self):
+    def setup(self):
         while self.world is None:
             self.world = u.get_editor_subsystem(u.UnrealEditorSubsystem).get_game_world()
             if time.monotonic()-self.boot_wall > 20:
@@ -899,6 +899,9 @@ class ArenaRegression:
         self.baseline = {self.role(a): self.components(a) for a in actors}
         self.report["component_baseline"] = self.baseline
         self.report["status"] = "running"
+
+    def run(self):
+        yield from self.setup()
         for cap in self.caps:
             self.fps = cap
             u.SystemLibrary.execute_console_command(self.world, "t.MaxFPS " + str(cap))

@@ -18,6 +18,12 @@ def runtime_metadata(project):
               'build_version': u.SystemLibrary.get_build_version(),
               'os': platform.platform(), 'machine_architecture': platform.machine(),
               'python_processor': platform.processor(), 'binaries': []}
+    # Observe actual scheduling/instrumentation; never alter these conditions.
+    result['profiling_conditions'] = {
+        'cvars': {name: u.SystemLibrary.get_console_variable_int_value(name) for name in (
+            'mass.FullyParallel', 'mass.UseProcessingQueue', 'stats.AutoEnableNamedEventsWhenProfiling')},
+        'trace_is_tracing': bool(u.TraceUtilLibrary.is_tracing()),
+        'interpretation': 'Read-only snapshot; named-events value is the auto-enable policy, not proof of an active trace.'}
     for name in ('UnrealEditor-Combat.dll', 'UnrealEditor-CombatEditor.dll'):
         path = project/'Binaries/Win64'/name
         if path.exists():
@@ -174,7 +180,8 @@ class Acceptance(BASE['ArenaRegression']):
             super().cleanup()
 
 def start():
-    for key in (KEY, '_combat_arena_ai_scenarios', '_combat_arena_ai_near', '_combat_arena_spatial_visual'):
+    for key in (KEY, '_combat_arena_ai_scenarios', '_combat_arena_ai_near', '_combat_arena_spatial_visual',
+                '_combat_build11_regression', '_combat_combined_sources', '_combat_native_input_smoke'):
         previous = getattr(builtins, key, None)
         if previous and previous.handle is not None:
             raise RuntimeError('Another test runner is active; stop it before acceptance')
