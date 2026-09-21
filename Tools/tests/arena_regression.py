@@ -216,8 +216,11 @@ class ArenaRegression:
             self.report["events"].append(row)
 
     def on_feedback(self, source, target, cue, location, intensity):
+        combo = self.current is not None and self.current.get("name") == "default_four_hit_chain"
         self.event("feedback", source, target=self.role(target), cue=tag_name(cue),
-                   location=xyz(location), intensity=float(intensity))
+                   location=xyz(location), intensity=float(intensity),
+                   **({"target_health": target.get_health(), "source_skill": tag_name(source.get_active_skill_tag())}
+                      if combo and target in (self.player, self.boss) else {}))
 
     def on_started(self, actor, skill):
         self.skill_serial[self.role(actor)] += 1
@@ -226,7 +229,7 @@ class ArenaRegression:
 
     def on_ended(self, actor, skill):
         self.event("skill_ended", actor, skill=tag_name(skill), location=xyz(actor.get_actor_location()),
-                   velocity=xyz(actor.get_velocity()))
+                   velocity=xyz(actor.get_velocity()), interrupted=bool(actor.get_editor_property("last_skill_interrupted")))
 
     def on_death(self, actor):
         self.event("death", actor)
@@ -419,6 +422,7 @@ class ArenaRegression:
         self.current = None
 
     def input_cases(self):
+        yield from self.default_chain_case()
         directions = [("W",), ("W", "D"), ("D",), ("S", "D"),
                       ("S",), ("S", "A"), ("A",), ("W", "A")]
         for keys, expected_degrees in zip(directions, range(0, 360, 45)):
@@ -493,6 +497,95 @@ class ArenaRegression:
         self.check("pause.world_resumes", self.world_time() > paused_time+.05)
         self.current = None
         yield from self.air_input_cases()
+
+    def default_chain_case(self):
+        """Four separate real clicks, authored combo windows and weapon traces."""
+        self.reset_isolated()
+        case = {"name": "default_four_hit_chain", "fps_cap": self.fps,
+                "kind": "real_PC_InputKey; isolated stationary AI target; no data/HP tuning",
+                "events": [], "fixture_distance_cm": 220,
+                "expected_damage": [18, 22, 26, 38], "expected_total_damage": 104,
+                "queue_at_actual_skill_elapsed": .36}
+        self.report["input_cases"].append(case)
+        self.current = case
+        expected = ["Combat.Skill.Attack"+str(i) for i in range(1, 5)]
+        try:
+            for actor in (self.player, self.boss):
+                definitions = list(u.get_default_object(actor.get_class()).get_editor_property("skill_definitions"))
+                rows = [{"path": d.get_path_name(), "tag": tag_name(d.get_editor_property("skill_tag")),
+                         "next": tag_name(d.get_editor_property("next_skill_tag")),
+                         "damage": float(d.get_editor_property("damage"))} for d in definitions if d]
+                installed = {r["tag"] for r in rows}
+                missing = [r for r in rows if r["next"] not in ("", "None", "Invalid") and r["next"] not in installed]
+                self.check("chain."+self.role(actor)+".cdo_next_resolves", not missing,
+                           definitions=rows, missing=missing)
+                self.check("chain."+self.role(actor)+".example_not_default",
+                           not any(t.startswith("Combat.Skill.Example.") for t in installed), installed=sorted(installed))
+                if actor == self.player:
+                    by_tag = {r["tag"]: r for r in rows}
+                    actual = [by_tag.get(t) for t in expected]
+                    self.check("chain.default_links_and_damage",
+                        all(actual) and [r["next"] for r in actual[:3]] == expected[1:]
+                        and actual[3]["next"] in ("", "None", "Invalid")
+                        and [r["damage"] for r in actual] == [18, 22, 26, 38], observed=actual)
+            z = self.player.get_actor_location().z
+            self.player.set_actor_location(u.Vector(0, 0, z), False, True)
+            self.boss.set_actor_location(u.Vector(220, 0, z), False, True)
+            self.player.set_actor_rotation(u.Rotator(roll=0, pitch=0, yaw=0), True)
+            self.boss.set_actor_rotation(u.Rotator(roll=0, pitch=0, yaw=180), True)
+            self.controller.set_control_rotation(u.Rotator(roll=0, pitch=0, yaw=0))
+            yield from self.wait(.3)
+            hp = self.boss.get_health()
+            case["health_before"] = hp
+            before = len(case["events"])
+            started_at, wall_at = self.world_time(), time.monotonic()
+            queued = set()
+            yield from self.tap("LeftMouseButton", .04)
+            while self.world_time()-started_at < 6 and time.monotonic()-wall_at < 12:
+                active = tag_name(self.player.get_active_skill_tag())
+                if active in expected[:3] and active not in queued and self.player.get_skill_elapsed_time() >= .36:
+                    queued.add(active)
+                    self.event("combo_click", self.player, predecessor=active,
+                               skill_elapsed=self.player.get_skill_elapsed_time())
+                    yield from self.tap("LeftMouseButton", .04)
+                ended = [e for e in case["events"][before:] if e["type"] == "skill_ended" and e["actor"] == "player"]
+                if ended and ended[-1]["skill"] == expected[-1] and not self.player.is_busy():
+                    break
+                yield
+            events = case["events"][before:]
+            starts = [e["skill"] for e in events if e["type"] == "skill_started" and e["actor"] == "player"]
+            ends = [e for e in events if e["type"] == "skill_ended" and e["actor"] == "player"]
+            hits = [e for e in events if e["type"] == "feedback" and e["actor"] == "player"
+                    and e.get("target") == "boss" and e.get("cue") == "Combat.Cue.Hit"]
+            healths = [hp]+[e["target_health"] for e in hits]
+            damage = [healths[i]-healths[i+1] for i in range(len(healths)-1)]
+            self.check("chain.completed_before_timeout", bool(ends) and ends[-1]["skill"] == expected[-1]
+                       and not self.player.is_busy() and self.world_time()-started_at < 6
+                       and time.monotonic()-wall_at < 12,
+                       world_elapsed=self.world_time()-started_at, wall_elapsed=time.monotonic()-wall_at,
+                       world_timeout_seconds=6, wall_timeout_seconds=12)
+            self.check("chain.started_order", starts == expected, observed=starts)
+            self.check("chain.ended_order_and_semantics",
+                       [e["skill"] for e in ends] == expected and [e["interrupted"] for e in ends] == [True, True, True, False], observed=ends)
+            self.check("chain.four_real_hits", [e["source_skill"] for e in hits] == expected
+                       and damage == [18, 22, 26, 38], observed_damage=damage, hits=hits)
+            self.check("chain.total_damage", abs(hp-self.boss.get_health()-104) < .01,
+                       health_before=hp, health_after=self.boss.get_health())
+            self.check("chain.four_discrete_clicks", sum(e["type"] == "key" and e.get("key") == "LeftMouseButton"
+                       and e.get("pressed") is True for e in events) == 4, queued_predecessors=sorted(queued))
+            after_hp, after_starts = self.boss.get_health(), len(starts)
+            yield from self.wait(.55)
+            final_starts = [e for e in case["events"][before:] if e["type"] == "skill_started" and e["actor"] == "player"]
+            self.check("chain.window_cleanup_behavior", not self.player.is_busy()
+                       and not self.player.is_parry_window_active() and abs(self.boss.get_health()-after_hp) < .01
+                       and len(final_starts) == after_starts,
+                       observation="Public idle/no late damage/no buffered restart; private hit/combo flags are not reflected",
+                       observed=self.state(self.player))
+            self.check("chain.held_keys_released", not self.held_keys, held_keys=sorted(self.held_keys))
+        finally:
+            self.release_keys()
+            self.reset_isolated()
+            self.current = None
 
     def air_input_cases(self):
         for direction in ("W", "S"):
