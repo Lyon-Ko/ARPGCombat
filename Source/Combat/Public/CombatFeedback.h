@@ -18,6 +18,7 @@ public:
     UFUNCTION(BlueprintCallable) void EndTrail();
     UFUNCTION(BlueprintCallable) void ShowWarning(FVector Center);
     UFUNCTION(BlueprintCallable) void ReleaseArea();
+    UFUNCTION(BlueprintCallable) void PlayReleaseSound();
 protected:
     virtual void BeginPlay() override;
 private:
@@ -25,5 +26,6 @@ private:
     UPROPERTY() TObjectPtr<UCombatSkillDefinition> Definition;
     UPROPERTY() TObjectPtr<UNiagaraComponent> Trail;
     UPROPERTY() TObjectPtr<UStaticMeshComponent> WarningMesh;
+    bool bReleaseSoundPlayed = false;
     UFUNCTION() void Feedback(ACombatCharacter* Source, ACombatCharacter* Target, FGameplayTag CueTag, FVector Location, float Intensity);
 };

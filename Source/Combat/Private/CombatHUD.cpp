@@ -84,7 +84,7 @@ void UCombatHUDWidget::NativeTick(const FGeometry& Geometry, float DeltaSeconds)
     {
         if(BossHealthBar) BossHealthBar->SetPercent(Boss->GetHealth() / FMath::Max(1.f, Boss->GetMaxHealth()));
         if(BossPoiseBar) BossPoiseBar->SetPercent(Boss->GetPoise() / FMath::Max(1.f, Boss->GetMaxPoise()));
-        if(PhaseText) PhaseText->SetText(FText::FromString(BossName.ToString() + (Boss->bPhaseTwo ? TEXT("  ·  破阵") : TEXT(""))));
+        if(PhaseText) PhaseText->SetText(FText::FromString(Boss->bPhaseTwo ? TEXT("破阵") : TEXT("第一阶段")));
     }
     const bool bRiposte = Player->GetAbilitySystemComponent()->HasMatchingGameplayTag(CombatTags::State_RiposteReady);
     if(ParryText)

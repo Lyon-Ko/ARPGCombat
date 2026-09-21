@@ -17,8 +17,9 @@ void UCombatFeedbackComponent::BeginPlay()
 void UCombatFeedbackComponent::BeginSkillFeedback(UCombatSkillDefinition* Skill)
 {
     Definition = Skill;
+    bReleaseSoundPlayed = false;
     if(!Definition || !Character) return;
-    if(Definition->CastSound) UGameplayStatics::PlaySoundAtLocation(this, Definition->CastSound, Character->GetActorLocation(), Character->MasterVolume);
+    if(Definition->bPlayCastSoundAtActivation) PlayReleaseSound();
     if(Definition->CastEffect) UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, Definition->CastEffect, Character->GetActorLocation(), Character->GetActorRotation());
 }
 void UCombatFeedbackComponent::EndSkillFeedback()
@@ -29,6 +30,7 @@ void UCombatFeedbackComponent::EndSkillFeedback()
 }
 void UCombatFeedbackComponent::BeginTrail()
 {
+    PlayReleaseSound();
     if(Definition && Definition->TrailEffect && Character)
     {
         EndTrail();
@@ -37,6 +39,14 @@ void UCombatFeedbackComponent::BeginTrail()
     }
 }
 void UCombatFeedbackComponent::EndTrail() { if(Trail) { Trail->DeactivateImmediate(); Trail->DestroyComponent(); Trail = nullptr; } }
+void UCombatFeedbackComponent::PlayReleaseSound()
+{
+    if(!bReleaseSoundPlayed && Definition && Definition->CastSound && Character)
+    {
+        UGameplayStatics::PlaySoundAtLocation(this, Definition->CastSound, Character->GetActorLocation(), Character->MasterVolume);
+        bReleaseSoundPlayed = true;
+    }
+}
 void UCombatFeedbackComponent::ShowWarning(FVector Center)
 {
     if(!Definition || !Definition->AreaMesh || !Character) return;
@@ -46,13 +56,18 @@ void UCombatFeedbackComponent::ShowWarning(FVector Center)
     WarningMesh->SetWorldLocation(Center - FVector(0,0,Character->GetSimpleCollisionHalfHeight() - 3.f));
     WarningMesh->SetWorldScale3D(FVector(Definition->AreaRadius / 50.f, Definition->AreaRadius / 50.f, .035f));
     if(Definition->AreaMaterial) WarningMesh->SetMaterial(0, Definition->AreaMaterial);
-    if(auto* Material = WarningMesh->CreateDynamicMaterialInstance(0)) Material->SetVectorParameterValue(TEXT("Tint"), Definition->CueColor);
+    if(auto* Material = WarningMesh->CreateDynamicMaterialInstance(0)) { Material->SetVectorParameterValue(TEXT("Tint"), Definition->CueColor); Material->SetScalarParameterValue(TEXT("Opacity"), .2f); }
 }
 void UCombatFeedbackComponent::ReleaseArea()
 {
-    if(!Definition || !WarningMesh) return;
-    WarningMesh->SetWorldScale3D(FVector(Definition->AreaRadius / 50.f, Definition->AreaRadius / 50.f, Definition->AreaHeight / 100.f));
-    WarningMesh->SetWorldLocation(Character->GetActorLocation());
+    if(!Definition || !Character) return;
+    if(Definition->AreaReleaseEffect) UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, Definition->AreaReleaseEffect, Character->GetActorLocation(), FRotator::ZeroRotator, FVector(Definition->AreaRadius / 200.f));
+    if(WarningMesh)
+    {
+        WarningMesh->SetWorldScale3D(FVector(Definition->AreaRadius / 50.f, Definition->AreaRadius / 50.f, Definition->AreaHeight / 100.f));
+        WarningMesh->SetWorldLocation(Character->GetActorLocation());
+        if(auto* Material = Cast<UMaterialInstanceDynamic>(WarningMesh->GetMaterial(0))) Material->SetScalarParameterValue(TEXT("Opacity"), .07f);
+    }
 }
 void UCombatFeedbackComponent::Feedback(ACombatCharacter* Source, ACombatCharacter* Target, FGameplayTag CueTag, FVector Location, float Intensity)
 {

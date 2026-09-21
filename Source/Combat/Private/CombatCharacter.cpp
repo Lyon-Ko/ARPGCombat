@@ -18,6 +18,9 @@
 #include "TimerManager.h"
 #include "GameplayEffect.h"
 #include "GameFramework/PlayerController.h"
+#include "Animation/AnimInstance.h"
+#include "Animation/AnimMontage.h"
+#include "Components/AudioComponent.h"
 
 static FGameplayTag CT(const TCHAR* Name) { return FGameplayTag::RequestGameplayTag(FName(Name)); }
 ACombatCharacter::ACombatCharacter()
@@ -53,6 +56,10 @@ void ACombatCharacter::BeginPlay()
 {
     Super::BeginPlay();
     InitialTransform = GetActorTransform();
+    InitialMeshTransform = GetMesh()->GetRelativeTransform();
+    InitialMeshCollisionProfile = GetMesh()->GetCollisionProfileName();
+    PreviousStepLocation = GetActorLocation();
+    CameraBoom->TargetArmLength = DefaultCameraDistance;
     AbilitySystem->InitAbilityActorInfo(this, this);
     Attributes->InitMaxHealth(InitialHealth); Attributes->InitHealth(InitialHealth);
     Attributes->InitMaxPoise(InitialPoise); Attributes->InitPoise(InitialPoise);
@@ -87,7 +94,7 @@ bool ACombatCharacter::RequestSkillByInputTag(FGameplayTag InputTag)
     FGameplayTagContainer OwnedTags; AbilitySystem->GetOwnedGameplayTags(OwnedTags);
     TArray<UCombatSkillDefinition*> Candidates;
     for(UCombatSkillDefinition* Definition : SkillDefinitions)
-        if(Definition && Definition->InputTag == InputTag && GetSkillCooldownRemaining(Definition->SkillTag) <= 0.f && (Definition->ActivationQuery.IsEmpty() || Definition->ActivationQuery.Matches(OwnedTags)) && (!Definition->bAirOnly || GetCharacterMovement()->IsFalling()) && (Definition->AirAttackIndex == 0 || Definition->AirAttackIndex == AirComboIndex + 1)) Candidates.Add(Definition);
+        if(Definition && Definition->InputTag == InputTag && GetSkillCooldownRemaining(Definition->SkillTag) <= 0.f && (Definition->ActivationQuery.IsEmpty() || Definition->ActivationQuery.Matches(OwnedTags)) && (!Definition->bAirOnly || GetCharacterMovement()->IsFalling()) && (!Definition->bGroundOnly || !GetCharacterMovement()->IsFalling()) && (Definition->AirAttackIndex == 0 || Definition->AirAttackIndex == AirComboIndex + 1)) Candidates.Add(Definition);
     Candidates.Sort([](const UCombatSkillDefinition& A, const UCombatSkillDefinition& B) { return A.Priority > B.Priority; });
     for(auto* Definition : Candidates)
     {
@@ -105,6 +112,7 @@ bool ACombatCharacter::RequestSkillByTag(FGameplayTag SkillTag)
     for(UCombatSkillDefinition* Item : SkillDefinitions) if(Item && Item->SkillTag == SkillTag) { Definition = Item; break; }
     const float Now = GetWorld()->GetTimeSeconds();
     if(!Definition || GetSkillCooldownRemaining(SkillTag) > 0.f || (Definition->bAirOnly && !GetCharacterMovement()->IsFalling()) || (Definition->AirAttackIndex > 0 && (Definition->AirAttackIndex != AirComboIndex + 1 || AirComboIndex >= 2))) return false;
+    if(Definition->bGroundOnly && GetCharacterMovement()->IsFalling()) return false;
     FGameplayTagContainer OwnedTags; AbilitySystem->GetOwnedGameplayTags(OwnedTags);
     if(!Definition->ActivationQuery.IsEmpty() && !Definition->ActivationQuery.Matches(OwnedTags)) return false;
     if(ActiveSkill)
@@ -135,7 +143,7 @@ void ACombatCharacter::BeginSkill(UCombatSkillDefinition* Definition, UCombatGam
     AbilitySystem->SetLooseGameplayTagCount(CombatTags::State_Busy, 1);
     AbilitySystem->SetLooseGameplayTagCount(Definition->SkillTag, 1);
     bCancelable = bComboWindow = false;
-    if(CombatTarget && CombatTarget->IsAlive())
+    if(Definition->bFaceTarget && CanAssistFacing())
     {
         FVector ToTarget = CombatTarget->GetActorLocation() - GetActorLocation(); ToTarget.Z = 0;
         if(!ToTarget.IsNearlyZero()) SetActorRotation(ToTarget.Rotation());
@@ -243,8 +251,10 @@ void ACombatCharacter::ApplyAttributeDelta(const FGameplayAttribute& Attribute, 
 ECombatHitResult ACombatCharacter::ReceiveCombatHit(const FCombatHit& Hit)
 {
     if(!IsAlive() || !Hit.Attacker || Hit.Attacker == this || Hit.Attacker->bIsBoss == bIsBoss) return ECombatHitResult::Miss;
-    if(const int32* Previous = ReceivedAttackIds.Find(Hit.Attacker); Previous && *Previous == Hit.AttackInstance) return ECombatHitResult::Miss;
-    ReceivedAttackIds.Add(Hit.Attacker, Hit.AttackInstance);
+    TArray<int32>& RecentHits = ReceivedAttackIds.FindOrAdd(Hit.Attacker);
+    if(RecentHits.Contains(Hit.AttackInstance)) return ECombatHitResult::Miss;
+    RecentHits.Add(Hit.AttackInstance);
+    if(RecentHits.Num() > 64) RecentHits.RemoveAt(0, RecentHits.Num() - 64);
     const float Now = GetWorld()->GetTimeSeconds();
     const bool bTimedDashInvulnerable = ActiveSkill && ActiveSkill->SkillTag == CT(TEXT("Combat.Skill.Dash")) && GetSkillElapsedTime() >= .04f && GetSkillElapsedTime() <= .18f;
     if(bTimedDashInvulnerable || (AbilitySystem->HasMatchingGameplayTag(CombatTags::State_Invulnerable) && GetActiveSkillTag() != CT(TEXT("Combat.Skill.Dash")))) { BroadcastCue(CombatTags::Cue_Evade, this, GetActorLocation()); return ECombatHitResult::Evaded; }
@@ -260,15 +270,22 @@ ECombatHitResult ACombatCharacter::ReceiveCombatHit(const FCombatHit& Hit)
         Hit.Attacker->CheckPoiseBreak(Now);
         Hit.Attacker->StunnedUntil = FMath::Max(Hit.Attacker->StunnedUntil, Now + .3f);
         Hit.Attacker->AbilitySystem->SetLooseGameplayTagCount(CombatTags::State_Stunned, 1);
+        ApplyHitStop(HitStopDuration * 1.3f); Hit.Attacker->ApplyHitStop(HitStopDuration * 1.3f);
         BroadcastCue(CombatTags::Cue_Parry, Hit.Attacker, Hit.Location, 1.4f);
         return ECombatHitResult::Parried;
     }
     ApplyAttributeDelta(UCombatAttributeSet::GetHealthAttribute(), -FMath::Max(0.f, Hit.Damage));
     if(Now >= PoiseImmuneUntil) ApplyAttributeDelta(UCombatAttributeSet::GetPoiseAttribute(), -FMath::Max(0.f, Hit.PoiseDamage));
     LastDamageAt = Now;
+    ApplyHitStop(HitStopDuration); Hit.Attacker->ApplyHitStop(HitStopDuration);
     Hit.Attacker->BroadcastCue(CombatTags::Cue_Hit, this, Hit.Location, Hit.Damage / 20.f);
     if(!IsAlive()) { Die(); return ECombatHitResult::Killed; }
     CheckPoiseBreak(Now);
+    if(HitReactMontage && (!bIsBoss || !IsBusy()))
+    {
+        if(!bIsBoss) CancelCurrentSkill();
+        PlayAnimMontage(HitReactMontage);
+    }
     return ECombatHitResult::Damaged;
 }
 void ACombatCharacter::CheckPoiseBreak(float Now)
@@ -300,6 +317,7 @@ void ACombatCharacter::EmitSkillProjectile()
 {
     if(!ActiveSkill) return;
     ++AttackInstance;
+    FeedbackComponent->PlayReleaseSound();
     OnProjectileRequested(MakeHit(), ActiveSkill->ProjectileSpeed);
     const FVector Origin = GetActorLocation() + GetActorForwardVector() * 90.f + FVector(0,0,35.f);
     const FVector Direction = CombatTarget && CombatTarget->IsAlive() ? (CombatTarget->GetActorLocation() - Origin).GetSafeNormal() : GetActorForwardVector();
@@ -320,18 +338,28 @@ void ACombatCharacter::DetonateArea()
     if(!ActiveSkill) return;
     BroadcastCue(CombatTags::Cue_AreaRelease, this, AreaCenter, ActiveSkill->AreaRadius);
     FeedbackComponent->ReleaseArea();
+    FeedbackComponent->PlayReleaseSound();
     GetWorldTimerManager().SetTimer(AreaTimer, this, &ThisClass::DoAreaDamage, FMath::Max(.001f, ActiveSkill->AreaDelay), false);
 }
 void ACombatCharacter::DoAreaDamage()
 {
     if(!ActiveSkill || !IsAlive()) return;
     ++AttackInstance;
+    const UCombatSkillDefinition* Definition = ActiveSkill;
+    const UCombatGameplayAbility* Ability = ActiveAbility;
+    const float Radius = Definition->AreaRadius;
+    const float Height = Definition->AreaHeight;
+    const FVector Center = AreaCenter;
+    const FCombatHit BaseHit = MakeHit();
     for(TActorIterator<ACombatCharacter> It(GetWorld()); It; ++It)
     {
         auto* Target = *It;
-        const FVector Delta = Target->GetActorLocation() - AreaCenter;
-        if(Target != this && Target->bIsBoss != bIsBoss && Delta.Size2D() <= ActiveSkill->AreaRadius + Target->GetCapsuleComponent()->GetScaledCapsuleRadius() && FMath::Abs(Delta.Z) <= ActiveSkill->AreaHeight * .5f + Target->GetCapsuleComponent()->GetScaledCapsuleHalfHeight())
-        { auto Hit = MakeHit(); Hit.Location = Target->GetActorLocation(); Hit.Direction = Delta.GetSafeNormal(); Target->ReceiveCombatHit(Hit); }
+        const FVector Delta = Target->GetActorLocation() - Center;
+        if(Target != this && Target->bIsBoss != bIsBoss && Delta.Size2D() <= Radius + Target->GetCapsuleComponent()->GetScaledCapsuleRadius() && FMath::Abs(Delta.Z) <= Height * .5f + Target->GetCapsuleComponent()->GetScaledCapsuleHalfHeight())
+        {
+            FCombatHit Hit = BaseHit; Hit.Location = Target->GetActorLocation(); Hit.Direction = Delta.GetSafeNormal(); Target->ReceiveCombatHit(Hit);
+            if(!IsAlive() || bLastSkillInterrupted || ActiveSkill != Definition || ActiveAbility != Ability) return;
+        }
     }
 }
 void ACombatCharacter::OpenComboWindow() { bComboWindow = true; }
@@ -355,15 +383,38 @@ void ACombatCharacter::Die()
     AbilitySystem->RemoveActiveGameplayEffect(RiposteEffectHandle);
     for(auto Projectile : SkillProjectiles) if(Projectile.IsValid()) Projectile->Destroy();
     SkillProjectiles.Reset();
+    DestroyOwnedProjectiles();
     AbilitySystem->SetLooseGameplayTagCount(CombatTags::State_Dead, 1);
     AbilitySystem->SetLooseGameplayTagCount(CombatTags::State_RiposteReady, 0);
     GetCharacterMovement()->StopMovementImmediately();
     GetCharacterMovement()->DisableMovement();
+    if(DeathSound) UGameplayStatics::PlaySoundAtLocation(this, DeathSound, GetActorLocation(), MasterVolume);
+    if(DeathMontage)
+    {
+        ActiveDeathMontage = DuplicateObject<UAnimMontage>(DeathMontage, this);
+        ActiveDeathMontage->bEnableAutoBlendOut = false;
+        PlayAnimMontage(ActiveDeathMontage);
+    }
+    else if(GetMesh()->GetPhysicsAsset())
+    {
+        GetMesh()->SetCollisionProfileName(TEXT("Ragdoll"));
+        GetMesh()->SetAllBodiesSimulatePhysics(true); GetMesh()->SetSimulatePhysics(true);
+        GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+    }
     BroadcastCue(CombatTags::Cue_Death, this, GetActorLocation(), 2.f); OnCombatDeath.Broadcast(this);
 }
 void ACombatCharacter::ResetCombatState()
 {
     CancelCurrentSkill(); AbilitySystem->CancelAllAbilities();
+    DestroyOwnedProjectiles();
+    CustomTimeDilation = SavedTimeDilation; HitStopUntilReal = 0.f;
+    GetMesh()->bPauseAnims = false;
+    GetMesh()->SetSimulatePhysics(false); GetMesh()->SetAllBodiesSimulatePhysics(false);
+    GetMesh()->AttachToComponent(GetCapsuleComponent(), FAttachmentTransformRules::KeepRelativeTransform);
+    GetMesh()->SetRelativeTransform(InitialMeshTransform); GetMesh()->SetCollisionProfileName(InitialMeshCollisionProfile);
+    GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+    if(auto* Anim = GetMesh()->GetAnimInstance()) Anim->StopAllMontages(0.f);
+    ActiveDeathMontage = nullptr;
     AbilitySystem->SetLooseGameplayTagCount(CombatTags::State_Dead, 0);
     AbilitySystem->SetLooseGameplayTagCount(CombatTags::State_Stunned, 0);
     AbilitySystem->SetLooseGameplayTagCount(CombatTags::State_RiposteReady, 0);
@@ -374,12 +425,19 @@ void ACombatCharacter::ResetCombatState()
     RiposteUntil = StunnedUntil = MovementRemaining = PoiseImmuneUntil = LastDamageAt = 0; bPhaseTwo = bAirDashUsed = bAttackHeld = false;
     ComboIndex = AirComboIndex = 0; AirHangBudgetUsed = AirHangRemaining = 0; SetActorTransform(InitialTransform, false, nullptr, ETeleportType::TeleportPhysics);
     GetCharacterMovement()->SetMovementMode(MOVE_Walking); GetCharacterMovement()->StopMovementImmediately();
+    PreviousStepLocation = GetActorLocation(); StepDistanceAccumulator = 0; StepIndex = 0;
     if(auto* AI = Cast<ACombatAIController>(Controller)) AI->ResetBrain();
 }
 void ACombatCharacter::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
-    if(!IsAlive()) return;
+    if(HitStopUntilReal > 0 && GetWorld()->GetRealTimeSeconds() >= HitStopUntilReal) { CustomTimeDilation = SavedTimeDilation; HitStopUntilReal = 0; }
+    if(!IsAlive())
+    {
+        if(ActiveDeathMontage) if(auto* Anim = GetMesh()->GetAnimInstance(); Anim && Anim->Montage_GetPosition(ActiveDeathMontage) >= ActiveDeathMontage->GetPlayLength() - .02f) GetMesh()->bPauseAnims = true;
+        return;
+    }
+    UpdateFootsteps();
     const float Now = GetWorld()->GetTimeSeconds();
     const bool bAir = GetCharacterMovement()->IsFalling();
     if(bAir && AirHangRemaining > 0.f) { GetCharacterMovement()->Velocity.Z = FMath::Max(0.f, GetCharacterMovement()->Velocity.Z); AirHangRemaining -= DeltaSeconds; }
@@ -413,6 +471,13 @@ void ACombatCharacter::Tick(float DeltaSeconds)
         auto* PC = Cast<APlayerController>(Controller);
         if(PC)
         {
+            if(bTargetLocked && (!CombatTarget || !CombatTarget->IsAlive())) bTargetLocked = false;
+            GetCharacterMovement()->bOrientRotationToMovement = !bTargetLocked;
+            if(bTargetLocked && CombatTarget)
+            {
+                FVector Facing = CombatTarget->GetActorLocation() - GetActorLocation(); Facing.Z = 0.f;
+                if(!Facing.IsNearlyZero()) SetActorRotation(FMath::RInterpTo(GetActorRotation(), Facing.Rotation(), DeltaSeconds, 12.f));
+            }
             MoveForward((PC->IsInputKeyDown(EKeys::W) ? 1.f : 0.f) - (PC->IsInputKeyDown(EKeys::S) ? 1.f : 0.f));
             MoveRight((PC->IsInputKeyDown(EKeys::D) ? 1.f : 0.f) - (PC->IsInputKeyDown(EKeys::A) ? 1.f : 0.f));
             if(bTargetLocked && CombatTarget && CombatTarget->IsAlive())
@@ -422,6 +487,7 @@ void ACombatCharacter::Tick(float DeltaSeconds)
                 PC->SetControlRotation(FMath::RInterpTo(PC->GetControlRotation(), Desired, DeltaSeconds, 4.f));
                 CameraBoom->TargetArmLength = FMath::FInterpTo(CameraBoom->TargetArmLength, FMath::Clamp(FVector::Dist2D(GetActorLocation(), CombatTarget->GetActorLocation()) * .65f + 400.f, 550.f, 1000.f), DeltaSeconds, 3.f);
             }
+            else CameraBoom->TargetArmLength = FMath::FInterpTo(CameraBoom->TargetArmLength, DefaultCameraDistance, DeltaSeconds, 4.f);
             if(bAttackHeld && bAir && Now - AttackPressedAt > .28f) { bAttackHeld = false; RequestSkillByTag(CT(TEXT("Combat.Skill.Plunge"))); }
         }
     }
@@ -497,4 +563,41 @@ FVector ACombatCharacter::SampleMovementDirection() const
     if(bTargetLocked && CombatTarget) BaseYaw = (CombatTarget->GetActorLocation() - GetActorLocation()).Rotation().Yaw;
     const float InputYaw = FMath::RoundToFloat(FMath::RadiansToDegrees(FMath::Atan2(Right, Forward)) / 45.f) * 45.f;
     return FRotator(0, BaseYaw + InputYaw, 0).Vector();
+}
+
+void ACombatCharacter::ApplyHitStop(float Duration)
+{
+    if(Duration <= 0.f) return;
+    const float Now = GetWorld()->GetRealTimeSeconds();
+    if(HitStopUntilReal <= 0.f) { SavedTimeDilation = CustomTimeDilation; HitStopStartedReal = Now; }
+    HitStopUntilReal = FMath::Min(HitStopStartedReal + .085f, FMath::Max(HitStopUntilReal, Now + FMath::Clamp(Duration, .01f, .085f)));
+    CustomTimeDilation = FMath::Min(SavedTimeDilation, .035f);
+}
+void ACombatCharacter::DestroyOwnedProjectiles()
+{
+    for(TActorIterator<ACombatProjectile> It(GetWorld()); It; ++It) if(It->GetOwner() == this) It->Destroy();
+    SkillProjectiles.Reset();
+}
+void ACombatCharacter::UpdateFootsteps()
+{
+    const FVector Location = GetActorLocation();
+    const float Distance = FVector::Dist2D(Location, PreviousStepLocation); PreviousStepLocation = Location;
+    if(GetCharacterMovement()->IsFalling() || IsBusy() || GetVelocity().Size2D() < 100.f) { StepDistanceAccumulator = 0.f; return; }
+    StepDistanceAccumulator += FMath::Min(Distance, 100.f);
+    if(StepDistanceAccumulator >= FMath::Max(30.f, FootstepDistance) && !FootstepSounds.IsEmpty())
+    {
+        StepDistanceAccumulator = 0.f;
+        if(USoundBase* Sound = FootstepSounds[StepIndex++ % FootstepSounds.Num()]) UGameplayStatics::PlaySoundAtLocation(this, Sound, Location, MasterVolume * .65f);
+    }
+}
+bool ACombatCharacter::CanAssistFacing() const
+{
+    if(!CombatTarget || !CombatTarget->IsAlive()) return false;
+    if(bIsBoss || bTargetLocked) return true;
+    const FVector Delta = CombatTarget->GetActorLocation() - GetActorLocation();
+    if(Delta.Size2D() > SoftLockRange) return false;
+    const FVector ViewForward = Controller ? Controller->GetControlRotation().Vector().GetSafeNormal2D() : GetActorForwardVector();
+    if(FVector::DotProduct(ViewForward, Delta.GetSafeNormal2D()) < SoftLockViewDot) return false;
+    FHitResult Obstruction; FCollisionQueryParams Params(SCENE_QUERY_STAT(CombatSoftLock), false, this); Params.AddIgnoredActor(CombatTarget);
+    return !GetWorld()->LineTraceSingleByChannel(Obstruction, GetActorLocation() + FVector(0,0,30), CombatTarget->GetActorLocation() + FVector(0,0,30), ECC_Visibility, Params);
 }

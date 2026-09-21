@@ -16,6 +16,8 @@ class UStaticMeshComponent;
 class ACombatProjectile;
 class UCombatFeedbackComponent;
 class UCameraShakeBase;
+class USoundBase;
+class UAnimMontage;
 
 UCLASS(Blueprintable)
 class COMBAT_API ACombatCharacter : public ACharacter, public IAbilitySystemInterface
@@ -38,6 +40,15 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Settings") float MasterVolume = 1.f;
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Settings") float CameraSensitivity = 1.f;
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Settings") bool bCameraShakeEnabled = true;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Feedback") float HitStopDuration = .045f;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Feedback") TObjectPtr<UAnimMontage> DeathMontage;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Feedback") TObjectPtr<UAnimMontage> HitReactMontage;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Feedback") TObjectPtr<USoundBase> DeathSound;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Feedback") TArray<TObjectPtr<USoundBase>> FootstepSounds;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Feedback") float FootstepDistance = 160.f;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Camera") float DefaultCameraDistance = 560.f;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Camera") float SoftLockRange = 650.f;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Camera") float SoftLockViewDot = .4f;
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Combat") FName WeaponAttachSocket = "hand_r";
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Combat") FName TraceStartSocket = "BladeBase";
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Combat") FName TraceEndSocket = "BladeTip";
@@ -103,15 +114,17 @@ public:
     UFUNCTION(BlueprintCallable) void DashPressed();
     UFUNCTION(BlueprintCallable) void ToggleTargetLock();
     UFUNCTION(BlueprintCallable) void RetryEncounter();
+    UFUNCTION(BlueprintCallable) void ApplyHitStop(float Duration);
 protected:
     virtual void BeginPlay() override;
 private:
     UPROPERTY() TObjectPtr<UCombatSkillDefinition> ActiveSkill;
     UPROPERTY() TObjectPtr<UCombatGameplayAbility> ActiveAbility;
+    UPROPERTY() TObjectPtr<UAnimMontage> ActiveDeathMontage;
     TMap<FGameplayTag, FGameplayAbilitySpecHandle> SkillHandles;
     FActiveGameplayEffectHandle RiposteEffectHandle;
     TSet<TWeakObjectPtr<AActor>> HitActors;
-    TMap<TWeakObjectPtr<ACombatCharacter>, int32> ReceivedAttackIds;
+    TMap<TWeakObjectPtr<ACombatCharacter>, TArray<int32>> ReceivedAttackIds;
     TArray<FActiveGameplayEffectHandle> TemporaryEffects;
     TArray<TWeakObjectPtr<ACombatProjectile>> SkillProjectiles;
     bool bHitWindow = false;
@@ -133,6 +146,14 @@ private:
     float LastDamageAt = 0.f;
     float AirHangBudgetUsed = 0.f;
     float AirHangRemaining = 0.f;
+    float HitStopUntilReal = 0.f;
+    float HitStopStartedReal = 0.f;
+    float SavedTimeDilation = 1.f;
+    float StepDistanceAccumulator = 0.f;
+    int32 StepIndex = 0;
+    FVector PreviousStepLocation = FVector::ZeroVector;
+    FTransform InitialMeshTransform;
+    FName InitialMeshCollisionProfile;
     FVector MovementDirection = FVector::ZeroVector;
     FVector LastTraceStart = FVector::ZeroVector;
     FVector LastTraceEnd = FVector::ZeroVector;
@@ -149,6 +170,9 @@ private:
     void PausePressed();
     void TraceHitWindow();
     void GetBladeEndpoints(FVector& Start, FVector& End) const;
+    void DestroyOwnedProjectiles();
+    void UpdateFootsteps();
+    bool CanAssistFacing() const;
     void DoAreaDamage();
     void Die();
     void CheckPoiseBreak(float Now);

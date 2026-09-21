@@ -28,15 +28,15 @@ protected:
 private:
     UPROPERTY() TObjectPtr<ACombatCharacter> Player;
     UPROPERTY() TObjectPtr<ACombatCharacter> Boss;
-    UPROPERTY() TObjectPtr<UProgressBar> HealthBar;
-    UPROPERTY() TObjectPtr<UProgressBar> BossHealthBar;
-    UPROPERTY() TObjectPtr<UProgressBar> BossPoiseBar;
-    UPROPERTY() TObjectPtr<UTextBlock> HealthText;
-    UPROPERTY() TObjectPtr<UTextBlock> PhaseText;
-    UPROPERTY() TObjectPtr<UTextBlock> LockText;
-    UPROPERTY() TObjectPtr<UTextBlock> ParryText;
-    UPROPERTY() TObjectPtr<UTextBlock> ResultText;
-    UPROPERTY() TObjectPtr<UTextBlock> PauseText;
+    UPROPERTY(meta=(BindWidgetOptional)) TObjectPtr<UProgressBar> HealthBar;
+    UPROPERTY(meta=(BindWidgetOptional)) TObjectPtr<UProgressBar> BossHealthBar;
+    UPROPERTY(meta=(BindWidgetOptional)) TObjectPtr<UProgressBar> BossPoiseBar;
+    UPROPERTY(meta=(BindWidgetOptional)) TObjectPtr<UTextBlock> HealthText;
+    UPROPERTY(meta=(BindWidgetOptional)) TObjectPtr<UTextBlock> PhaseText;
+    UPROPERTY(meta=(BindWidgetOptional)) TObjectPtr<UTextBlock> LockText;
+    UPROPERTY(meta=(BindWidgetOptional)) TObjectPtr<UTextBlock> ParryText;
+    UPROPERTY(meta=(BindWidgetOptional)) TObjectPtr<UTextBlock> ResultText;
+    UPROPERTY(meta=(BindWidgetOptional)) TObjectPtr<UTextBlock> PauseText;
     UPROPERTY() TObjectPtr<UVerticalBox> SettingsPanel;
     float CueRemaining = 0.f;
     FText CenterCue;
@@ -44,3 +44,4 @@ private:
     void BindCharacters();
     UFUNCTION() void HandleFeedback(ACombatCharacter* Source, ACombatCharacter* Target, FGameplayTag CueTag, FVector Location, float Intensity);
 };
+

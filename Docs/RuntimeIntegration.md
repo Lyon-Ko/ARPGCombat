@@ -33,3 +33,22 @@ Public: RequestSkillByTag, RequestSkillByInputTag, ReceiveCombatHit(FCombatHit),
 FCombatHit.AttackInstance must be unique for a new manual test hit from the same attacker. Reusing it intentionally tests deduplication. Exact-time defense checks use world elapsed time at hit receipt, so they do not rely only on tick-updated loose-tag state.
 
 Not yet accepted: full compile after second batch, rendered skill/weapon/HUD inspection, all functional acceptance scenarios, twenty fight/reset cycles, audio/VFX tuning and cold reload. This document records implementation, not a passing visual/functional result.
+
+## Third runtime batch: presentation and lifecycle
+
+New Character properties:
+- `HitStopDuration` (0.045sec default): confirmed damage/parry applies CustomTimeDilation to involved characters only. Restore reads real time every tick, with an 85ms maximum continuous window; global/gameplay time is never slowed, preserving authored AOE .18sec scheduling.
+- `DeathMontage`, `HitReactMontage`, `DeathSound`, `FootstepSounds`, `FootstepDistance` (160cm). Death uses a transient montage copy with auto blend-out disabled and freezes its final pose; without a montage but with PhysicsAsset it ragdolls. Retry unpauses animation, removes simulation, restores mesh transform/collision, stops montages and restores capsule/movement. Footsteps follow grounded travelled distance and don't fire during skills.
+- `DefaultCameraDistance` (560), `SoftLockRange` (650), `SoftLockViewDot` (.4). Unlocked assistance requires range, view direction and unobstructed LOS. Unlock/dead target returns arm distance and free look.
+
+New Skill properties:
+- `bGroundOnly`: set true on Attack1..4 (and other ground-only skills), false on Dash/Parry and air skills. Both direct and input activation enforce it, preventing ground attacks from bypassing the two-air-light budget.
+- `bFaceTarget`: set false for Dash and Parry; ordinary offensive skills may use conditional facing assistance.
+- `bPlayCastSoundAtActivation`: default false. Set true for Dash. Other sounds play once at actual HitOpen / Projectile / AreaRelease, rather than all at activation. Successful parry sound stays contact-triggered.
+- `AreaReleaseEffect`: bind the intended NS_AOEFlash; AOE warning uses low opacity and release displays a low-opacity full-height volume plus Niagara flash. Existing CastSound should be the appropriate AOE burst sound for that skill.
+
+GameMode adds `BattleMusic` (USoundBase), `MusicVolume` (.35), `MusicComponent` (UAudioComponent). Set BattleMusic to SW_BattleMusic. It plays and loops in the actual game, and tracks MasterVolume even while pause settings are open. Footstep/swing/impact/parry/death sound routes also use MasterVolume.
+
+Lifecycle: deduplication remembers the most recent64attack IDs per source actor, so interleaved old projectiles and new melee windows cannot reapply the same recent hit. Death and Reset destroy *all* world projectiles whose Owner is that character, including those released by previously completed skills. PhaseText now displays only phase, allowing the WBP's separate BossName label.
+
+This batch is source-ready pending coordinator build/cold launch and rendered verification. Native property hooks are not evidence that the matching assets have already been assigned or visually accepted.

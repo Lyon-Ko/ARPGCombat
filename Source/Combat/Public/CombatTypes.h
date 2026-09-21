@@ -52,6 +52,9 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadOnly) float AreaDelay = .18f;
     UPROPERTY(EditAnywhere, BlueprintReadOnly) float ProjectileSpeed = 1400.f;
     UPROPERTY(EditAnywhere, BlueprintReadOnly) bool bAirOnly = false;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly) bool bGroundOnly = false;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly) bool bFaceTarget = true;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly) bool bPlayCastSoundAtActivation = false;
     UPROPERTY(EditAnywhere, BlueprintReadOnly) bool bParryable = true;
     UPROPERTY(EditAnywhere, BlueprintReadOnly) bool bCanInterrupt = false;
     UPROPERTY(EditAnywhere, BlueprintReadOnly) TObjectPtr<UStaticMesh> AreaMesh;
@@ -61,6 +64,7 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadOnly) TObjectPtr<UNiagaraSystem> HitEffect;
     UPROPERTY(EditAnywhere, BlueprintReadOnly) TObjectPtr<UNiagaraSystem> TrailEffect;
     UPROPERTY(EditAnywhere, BlueprintReadOnly) TObjectPtr<UNiagaraSystem> CastEffect;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly) TObjectPtr<UNiagaraSystem> AreaReleaseEffect;
     UPROPERTY(EditAnywhere, BlueprintReadOnly) TObjectPtr<USoundBase> CastSound;
     UPROPERTY(EditAnywhere, BlueprintReadOnly) TObjectPtr<USoundBase> HitSound;
     UPROPERTY(EditAnywhere, BlueprintReadOnly) TObjectPtr<USoundBase> ParrySound;

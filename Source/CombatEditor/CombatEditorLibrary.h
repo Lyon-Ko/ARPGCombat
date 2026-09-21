@@ -9,6 +9,7 @@ class UAnimInstance;
 class UAnimSequence;
 class UBlendSpace;
 class USkeleton;
+class APlayerController;
 class UUserWidget;
 class UWidgetBlueprint;
 class UStateTree;
@@ -32,4 +33,8 @@ public:
     static bool CompileAndSave(UBlueprint* Blueprint);
     UFUNCTION(BlueprintCallable, Category="Combat|Editor")
     static bool ConfigureNiagara(UNiagaraSystem* System, FLinearColor Color, float SpriteSize = 12.f, float RibbonWidth = 8.f);
+    UFUNCTION(BlueprintCallable, Category="Combat|Editor")
+    static bool RebuildBlendSpace(UBlendSpace* BlendSpace);
+    UFUNCTION(BlueprintCallable, Category="Combat|Editor")
+    static bool InjectPlayerKey(APlayerController* Controller, FName Key, bool bPressed);
 };

@@ -1,4 +1,16 @@
 #include "CombatEditorLibrary.h"
+#include "GameFramework/PlayerController.h"
+#include "Engine/World.h"
+#include "InputKeyEventArgs.h"
+
+bool UCombatEditorLibrary::InjectPlayerKey(APlayerController* Controller, FName Key, bool bPressed)
+{
+    if (!IsValid(Controller) || !Controller->GetWorld() || Controller->GetWorld()->WorldType != EWorldType::PIE)
+        return false;
+    const FKey InputKey(Key);
+    if (!InputKey.IsValid()) return false;
+    return Controller->InputKey(FInputKeyEventArgs::CreateSimulated(InputKey, bPressed ? IE_Pressed : IE_Released, bPressed ? 1.f : 0.f));
+}
 #include "AssetRegistry/AssetRegistryModule.h"
 #include "Misc/PackageName.h"
 #include "Misc/Paths.h"
@@ -99,6 +111,14 @@ bool UCombatEditorLibrary::CompileAndSave(UBlueprint* Blueprint)
     return Results.NumErrors == 0 && Blueprint->Status != BS_Error && CombatAuthoring::Save(Blueprint);
 }
 
+bool UCombatEditorLibrary::RebuildBlendSpace(UBlendSpace* BlendSpace)
+{
+    if (!BlendSpace || !BlendSpace->GetPathName().StartsWith(TEXT("/Game/Combat/"))) return false;
+    BlendSpace->ValidateSampleData();
+    BlendSpace->ResampleData();
+    return CombatAuthoring::Save(BlendSpace);
+}
+
 bool UCombatEditorLibrary::BuildNavBounds(ANavMeshBoundsVolume* Volume, FVector Size)
 {
     if (!Volume || Size.GetMin()<=0) return false;
@@ -149,6 +169,7 @@ UWidgetBlueprint* UCombatEditorLibrary::CreateHUD(const FString& AssetPath, TSub
     auto Bar=[&](FName Name,FVector2D Pos,FVector2D Size,FLinearColor Color,FVector2D Anchor=FVector2D(0,0),FVector2D Align=FVector2D(0,0))
     {
         auto* B=Tree->ConstructWidget<UProgressBar>(UProgressBar::StaticClass(),Name); B->SetPercent(1); B->SetFillColorAndOpacity(Color);
+        B->bIsVariable=false; // Runtime resolves by name; do not shadow its private cached UPROPERTY.
         FProgressBarStyle Style=B->GetWidgetStyle(); Style.BackgroundImage.TintColor=FSlateColor(FLinearColor(.015f,.02f,.027f,.93f));
         Style.FillImage.TintColor=FSlateColor(FLinearColor::White); B->SetWidgetStyle(Style); Place(B,Pos,Size,Anchor,Align); return B;
     };
