@@ -1,0 +1,3 @@
+[mcp_servers.combat_editor]
+command = "C:\\Users\\Administrator\\.local\\bin\\uv.exe"
+args = ["run", "--project", "D:\\UEproject\\Combat\\Tools", "python", "D:\\UEproject\\Combat\\Tools\\combat_mcp.py"]

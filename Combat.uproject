@@ -1,19 +1,47 @@
 {
-	"FileVersion": 3,
-	"EngineAssociation": "5.8",
-	"Category": "",
-	"Description": "",
-	"Plugins": [
-		{
-			"Name": "ModelingToolsEditorMode",
-			"Enabled": true,
-			"TargetAllowList": [
-				"Editor"
-			]
-		},
-		{
-			"Name": "GameplayStateTree",
-			"Enabled": true
-		}
-	]
+  "FileVersion": 3,
+  "EngineAssociation": "5.8",
+  "Category": "",
+  "Description": "",
+  "Plugins": [
+    {
+      "Name": "ModelingToolsEditorMode",
+      "Enabled": true,
+      "TargetAllowList": [
+        "Editor"
+      ]
+    },
+    {
+      "Name": "GameplayStateTree",
+      "Enabled": true
+    },
+    {
+      "Enabled": true,
+      "Name": "GameplayAbilities"
+    },
+    {
+      "Enabled": true,
+      "Name": "MotionWarping"
+    },
+    {
+      "Enabled": true,
+      "Name": "PythonScriptPlugin"
+    },
+    {
+      "Enabled": true,
+      "Name": "EditorScriptingUtilities"
+    }
+  ],
+  "Modules": [
+    {
+      "Name": "Combat",
+      "LoadingPhase": "Default",
+      "Type": "Runtime"
+    },
+    {
+      "Name": "CombatEditor",
+      "LoadingPhase": "Default",
+      "Type": "Editor"
+    }
+  ]
 }
