@@ -172,7 +172,9 @@ void ACombatCharacter::BeginSkill(UCombatSkillDefinition* Definition, UCombatGam
 }
 void ACombatCharacter::CancelCurrentSkill()
 {
-    if(ActiveAbility) AbilitySystem->CancelAbility(ActiveAbility);
+    // CancelAbility compares the granted CDO, not an InstancedPerActor instance.
+    // The spec handle routes cancellation to the active instance and its tasks.
+    if(ActiveAbility) AbilitySystem->CancelAbilityHandle(ActiveAbility->GetCurrentAbilitySpecHandle());
     else EndSkill(true);
 }
 void ACombatCharacter::FinishSkill()
@@ -183,6 +185,7 @@ void ACombatCharacter::FinishSkill()
 void ACombatCharacter::EndSkill(bool bInterrupted)
 {
     bLastSkillInterrupted = bInterrupted;
+    if(bInterrupted) { BufferedSkill = FGameplayTag(); BufferedUntil = 0.f; }
     const FGameplayTag OldTag = GetActiveSkillTag();
     GetWorldTimerManager().ClearTimer(SkillTimeout);
     GetWorldTimerManager().ClearTimer(AreaTimer);

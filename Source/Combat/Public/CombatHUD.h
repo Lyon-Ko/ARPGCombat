@@ -6,6 +6,7 @@
 class UProgressBar;
 class UTextBlock;
 class UVerticalBox;
+class UBorder;
 class USlider;
 class UCheckBox;
 class ACombatCharacter;
@@ -38,6 +39,7 @@ private:
     UPROPERTY(meta=(BindWidgetOptional)) TObjectPtr<UTextBlock> ResultText;
     UPROPERTY(meta=(BindWidgetOptional)) TObjectPtr<UTextBlock> PauseText;
     UPROPERTY() TObjectPtr<UVerticalBox> SettingsPanel;
+    UPROPERTY() TObjectPtr<UBorder> SettingsBackdrop;
     float CueRemaining = 0.f;
     FText CenterCue;
     bool bLastShowCursor = false;

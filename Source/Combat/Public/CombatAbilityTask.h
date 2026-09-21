@@ -20,6 +20,7 @@ protected:
 private:
     UPROPERTY() TObjectPtr<UAnimMontage> MontageToPlay;
     float PlayRate = 1.f;
+    bool bFinishing = false;
     FDelegateHandle EventHandle;
     FDelegateHandle CancelHandle;
     void OnGameplayEvent(FGameplayTag Tag, const FGameplayEventData* Data);

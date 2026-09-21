@@ -24,11 +24,12 @@ void UCombatAbilityTask_PlayMontageAndEvents::Activate()
 }
 void UCombatAbilityTask_PlayMontageAndEvents::OnGameplayEvent(FGameplayTag Tag, const FGameplayEventData* Data)
 {
-    if(ShouldBroadcastAbilityTaskDelegates()) OnEvent.Broadcast(Tag, Data ? *Data : FGameplayEventData());
+    if(!bFinishing && ShouldBroadcastAbilityTaskDelegates()) OnEvent.Broadcast(Tag, Data ? *Data : FGameplayEventData());
 }
 void UCombatAbilityTask_PlayMontageAndEvents::OnMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 {
-    if(Montage != MontageToPlay) return;
+    if(bFinishing || Montage != MontageToPlay) return;
+    bFinishing = true;
     if(ShouldBroadcastAbilityTaskDelegates())
     {
         if(bInterrupted) OnInterrupted.Broadcast(FGameplayTag(), FGameplayEventData());
@@ -38,11 +39,14 @@ void UCombatAbilityTask_PlayMontageAndEvents::OnMontageEnded(UAnimMontage* Monta
 }
 void UCombatAbilityTask_PlayMontageAndEvents::OnCancelled()
 {
+    if(bFinishing) return;
+    bFinishing = true;
     if(ShouldBroadcastAbilityTaskDelegates()) OnInterrupted.Broadcast(FGameplayTag(), FGameplayEventData());
     EndTask();
 }
 void UCombatAbilityTask_PlayMontageAndEvents::OnDestroy(bool bAbilityEnded)
 {
+    bFinishing = true;
     if(Ability) Ability->OnGameplayAbilityCancelled.Remove(CancelHandle);
     if(auto* ASC = AbilitySystemComponent.Get())
     {
