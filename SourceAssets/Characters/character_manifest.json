@@ -1,0 +1,73 @@
+{
+  "skeleton": "SK_Mannequin, source SKM_Manny_Simple; 88 Blender bones plus root armature node",
+  "units": "centimeters in FBX; modeled in armature local cm; world scale 0.01",
+  "player": "SK_Player_ArmoredSwordsman.fbx",
+  "boss": "SK_Boss_ArmoredSwordsman.fbx",
+  "boss_recommended_actor_scale": 1.18,
+  "materials": [
+    "Metal",
+    "Trim",
+    "Cloth",
+    "Undersuit",
+    "Accent"
+  ],
+  "armor": "Original authored mesh, rigid weights per anatomical plate on Manny skeleton",
+  "weapons": {
+    "SM_Player_LongSword.fbx": {
+      "blade_axis": "+X",
+      "socket": "hand_r",
+      "blade_start_cm": 12,
+      "blade_tip_cm": 106,
+      "socket_location_cm": [
+        -9,
+        -2.5,
+        0
+      ],
+      "socket_rotation_matrix_rows": [
+        [
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ],
+        [
+          1,
+          0,
+          0
+        ]
+      ]
+    },
+    "SM_Boss_Greatsword.fbx": {
+      "blade_axis": "+X",
+      "socket": "hand_r",
+      "blade_start_cm": 12,
+      "blade_tip_cm": 137,
+      "socket_location_cm": [
+        -9,
+        -2.5,
+        0
+      ],
+      "socket_rotation_matrix_rows": [
+        [
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ],
+        [
+          1,
+          0,
+          0
+        ]
+      ]
+    }
+  }
+}

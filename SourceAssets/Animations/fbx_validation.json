@@ -1,0 +1,154 @@
+[
+  {
+    "file": "A_Boss_ChargeAOE.fbx",
+    "bones": 88,
+    "max_rest_head_error_cm": 0.0002509885276732785,
+    "sample_hand_motion_cm": 47.94134669182471,
+    "fbx_bytes": 4706236,
+    "pass": true
+  },
+  {
+    "file": "A_Boss_Combo_01.fbx",
+    "bones": 88,
+    "max_rest_head_error_cm": 0.0002509885276732785,
+    "sample_hand_motion_cm": 36.70100059873295,
+    "fbx_bytes": 4480684,
+    "pass": true
+  },
+  {
+    "file": "A_Boss_Combo_02.fbx",
+    "bones": 88,
+    "max_rest_head_error_cm": 0.0002509885276732785,
+    "sample_hand_motion_cm": 67.92004215144814,
+    "fbx_bytes": 4486284,
+    "pass": true
+  },
+  {
+    "file": "A_Boss_Combo_03.fbx",
+    "bones": 88,
+    "max_rest_head_error_cm": 0.0002509885276732785,
+    "sample_hand_motion_cm": 56.69424455553364,
+    "fbx_bytes": 4574028,
+    "pass": true
+  },
+  {
+    "file": "A_Boss_FrontDashSlash.fbx",
+    "bones": 88,
+    "max_rest_head_error_cm": 0.0002509885276732785,
+    "sample_hand_motion_cm": 52.97731392646325,
+    "fbx_bytes": 4491900,
+    "pass": true
+  },
+  {
+    "file": "A_Boss_JumpWave_Back.fbx",
+    "bones": 88,
+    "max_rest_head_error_cm": 0.0002509885276732785,
+    "sample_hand_motion_cm": 61.80341503003697,
+    "fbx_bytes": 4507804,
+    "pass": true
+  },
+  {
+    "file": "A_Boss_JumpWave_L.fbx",
+    "bones": 88,
+    "max_rest_head_error_cm": 0.0002509885276732785,
+    "sample_hand_motion_cm": 70.38961743174558,
+    "fbx_bytes": 4507436,
+    "pass": true
+  },
+  {
+    "file": "A_Boss_JumpWave_R.fbx",
+    "bones": 88,
+    "max_rest_head_error_cm": 0.0002509885276732785,
+    "sample_hand_motion_cm": 65.88331461773558,
+    "fbx_bytes": 4507500,
+    "pass": true
+  },
+  {
+    "file": "A_Player_Air_01.fbx",
+    "bones": 88,
+    "max_rest_head_error_cm": 0.0002509885276732785,
+    "sample_hand_motion_cm": 77.66469999887676,
+    "fbx_bytes": 4344092,
+    "pass": true
+  },
+  {
+    "file": "A_Player_Air_02.fbx",
+    "bones": 88,
+    "max_rest_head_error_cm": 0.0002509885276732785,
+    "sample_hand_motion_cm": 60.233320911253486,
+    "fbx_bytes": 4367372,
+    "pass": true
+  },
+  {
+    "file": "A_Player_DashStrike.fbx",
+    "bones": 88,
+    "max_rest_head_error_cm": 0.0002509885276732785,
+    "sample_hand_motion_cm": 64.93745256409368,
+    "fbx_bytes": 4367228,
+    "pass": true
+  },
+  {
+    "file": "A_Player_Parry.fbx",
+    "bones": 88,
+    "max_rest_head_error_cm": 0.0002509885276732785,
+    "sample_hand_motion_cm": 33.481376367714674,
+    "fbx_bytes": 4331276,
+    "pass": true
+  },
+  {
+    "file": "A_Player_Plunge.fbx",
+    "bones": 88,
+    "max_rest_head_error_cm": 0.0002509885276732785,
+    "sample_hand_motion_cm": 35.96303718465349,
+    "fbx_bytes": 4416604,
+    "pass": true
+  },
+  {
+    "file": "A_Player_Riposte.fbx",
+    "bones": 88,
+    "max_rest_head_error_cm": 0.0002509885276732785,
+    "sample_hand_motion_cm": 77.0546905693944,
+    "fbx_bytes": 4396524,
+    "pass": true
+  },
+  {
+    "file": "A_Player_Sword_01.fbx",
+    "bones": 88,
+    "max_rest_head_error_cm": 0.0002509885276732785,
+    "sample_hand_motion_cm": 62.91420559480188,
+    "fbx_bytes": 4331004,
+    "pass": true
+  },
+  {
+    "file": "A_Player_Sword_02.fbx",
+    "bones": 88,
+    "max_rest_head_error_cm": 0.0002509885276732785,
+    "sample_hand_motion_cm": 68.37095393007614,
+    "fbx_bytes": 4355740,
+    "pass": true
+  },
+  {
+    "file": "A_Player_Sword_03.fbx",
+    "bones": 88,
+    "max_rest_head_error_cm": 0.0002509885276732785,
+    "sample_hand_motion_cm": 64.605499808211,
+    "fbx_bytes": 4367516,
+    "pass": true
+  },
+  {
+    "file": "A_Player_Sword_04.fbx",
+    "bones": 88,
+    "max_rest_head_error_cm": 0.0002509885276732785,
+    "sample_hand_motion_cm": 79.31662849521005,
+    "fbx_bytes": 4427916,
+    "pass": true
+  },
+  {
+    "file": "A_Sword_GuardIdle.fbx",
+    "bones": 88,
+    "max_rest_head_error_cm": 0.0002509885276732785,
+    "sample_hand_motion_cm": 1.408511251359173,
+    "fbx_bytes": 4682380,
+    "pass": true
+  }
+]

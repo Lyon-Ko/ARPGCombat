@@ -1,0 +1,93 @@
+[
+  {
+    "file": "SW_BattleMusic.wav",
+    "duration": 145.821315,
+    "sample_rate": 44100,
+    "peak": 0.444305419921875,
+    "sha256": "fc4d5bee8a1e3f1c18498560bcb02f636191e76d629395a8bff7d4c1d8fbf67b"
+  },
+  {
+    "file": "SW_Burst.wav",
+    "duration": 0.809562,
+    "sample_rate": 48000,
+    "peak": 0.879974365234375,
+    "sha256": "18c1bdf40a801dbc52b0dd0af8b5cffabb99bac388e6f8e7ab99b613368049fc"
+  },
+  {
+    "file": "SW_Dash.wav",
+    "duration": 0.091792,
+    "sample_rate": 48000,
+    "peak": 0.879974365234375,
+    "sha256": "9774ba09c33c233f610bf0cc593e23a594e9175f405d462225eae5e2b26a312c"
+  },
+  {
+    "file": "SW_Footstep.wav",
+    "duration": 0.603021,
+    "sample_rate": 48000,
+    "peak": 0.879974365234375,
+    "sha256": "e043b8b7fe4c8610880fc354ef5d4a913679beb2fc561c6ecddcbc0d49ba96d8"
+  },
+  {
+    "file": "SW_MetalClash_01.wav",
+    "duration": 1.2625,
+    "sample_rate": 48000,
+    "peak": 0.879974365234375,
+    "sha256": "69470716c016e62078696f0759728a0f88165f2b8e94dbc0253755003d2910c0"
+  },
+  {
+    "file": "SW_MetalClash_02.wav",
+    "duration": 3.104354,
+    "sample_rate": 48000,
+    "peak": 0.879974365234375,
+    "sha256": "d90e366503e45eab44ad876031b3f69a61363e544616f04ac10348f8a93b04cc"
+  },
+  {
+    "file": "SW_MetalClash_03.wav",
+    "duration": 2.517354,
+    "sample_rate": 48000,
+    "peak": 0.857391357421875,
+    "sha256": "11bc08a06a37840a2434279f992236d1037eb2e9f0c2bf1e95052072c84712f4"
+  },
+  {
+    "file": "SW_MetalClash_04.wav",
+    "duration": 2.532375,
+    "sample_rate": 48000,
+    "peak": 0.879974365234375,
+    "sha256": "80ad282153cd943bff94649e00c3f74b885687f5b45973c496a7877e2c46f6f9"
+  },
+  {
+    "file": "SW_Parry.wav",
+    "duration": 0.673646,
+    "sample_rate": 48000,
+    "peak": 0.8800048828125,
+    "sha256": "01edd805987daba5f96821ee7fd411cb292f911747150d68f0989c6ad7e6ec5b"
+  },
+  {
+    "file": "SW_SwordSwing_01.wav",
+    "duration": 0.108458,
+    "sample_rate": 48000,
+    "peak": 0.8800048828125,
+    "sha256": "400caa63e48ead9272a9b0af94595ff00bc9f8f73bff82beab776b8914535306"
+  },
+  {
+    "file": "SW_SwordSwing_02.wav",
+    "duration": 0.114396,
+    "sample_rate": 48000,
+    "peak": 0.8800048828125,
+    "sha256": "49a74f4ede407bf70a7d865e165b96ae15051e371112b725bd8e7cee22255ad2"
+  },
+  {
+    "file": "SW_SwordSwing_03.wav",
+    "duration": 0.160292,
+    "sample_rate": 48000,
+    "peak": 0.879974365234375,
+    "sha256": "6f88c9f9fdb22788347a5260c0358e20f5c6d26766bbbebe9365f9ce60d2d40f"
+  },
+  {
+    "file": "SW_SwordSwing_04.wav",
+    "duration": 0.112,
+    "sample_rate": 48000,
+    "peak": 0.879974365234375,
+    "sha256": "71bbad53d9a6d9692a13aa0249e5e68077bf8b5398ce3a522c8570bc13d08589"
+  }
+]

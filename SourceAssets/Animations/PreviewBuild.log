@@ -1,0 +1,11 @@
+00:00.281  blend            | Read blend: "D:\UEproject\Combat\SourceAssets\Characters\Player_ArmoredSwordsman.blend"
+FBX version: 7400
+FRAME_RANGE 1 250 60
+00:02.906  render           | Saved: 'D:\UEproject\Combat\SourceAssets\Animations\Preview\Sword01_0.png'
+00:05.187  render           | Saved: 'D:\UEproject\Combat\SourceAssets\Animations\Preview\Sword01_1.png'
+00:07.500  render           | Saved: 'D:\UEproject\Combat\SourceAssets\Animations\Preview\Sword01_2.png'
+00:09.765  render           | Saved: 'D:\UEproject\Combat\SourceAssets\Animations\Preview\Sword01_3.png'
+00:12.687  render           | Saved: 'D:\UEproject\Combat\SourceAssets\Animations\Preview\Grip_Closeup.png'
+Blender 5.1.1 (hash b70da489d7f4 built 2026-04-14 01:37:22)
+
+Blender quit

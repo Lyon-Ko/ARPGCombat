@@ -1,0 +1,103 @@
+FBX version: 7300
+Error, could not find any file path in  FBXElem(id=b'Texture', props=[2283558022080, b'EnvSamplerTex\x00\x01Texture', b''], props_type=bytearray(b'LSS'), elems=[FBXElem(id=b'Type', props=[b'TextureVideoClip'], props_type=bytearray(b'S'), elems=[]), FBXElem(id=b'Version', props=[202], props_type=bytearray(b'I'), elems=[]), FBXElem(id=b'TextureName', props=[b'EnvSamplerTex\x00\x01Texture'], props_type=bytearray(b'S'), elems=[]), FBXElem(id=b'Media', props=[b''], props_type=bytearray(b'S'), elems=[]), FBXElem(id=b'FileName', props=[b''], props_type=bytearray(b'S'), elems=[]), FBXElem(id=b'RelativeFilename', props=[b''], props_type=bytearray(b'S'), elems=[]), FBXElem(id=b'ModelUVTranslation', props=[0.0, 0.0], props_type=bytearray(b'DD'), elems=[]), FBXElem(id=b'ModelUVScaling', props=[1.0, 1.0], props_type=bytearray(b'DD'), elems=[]), FBXElem(id=b'Texture_Alpha_Source', props=[b'None'], props_type=bytearray(b'S'), elems=[]), FBXElem(id=b'Cropping', props=[0, 0, 0, 0], props_type=bytearray(b'IIII'), elems=[])])
+       Falling back to:  EnvSamplerTex
+
+FBX export starting... 'D:\\UEproject\\Combat\\SourceAssets\\Animations\\A_Player_Sword_01.fbx'
+(bpy.data.armatures['root'], 'POSE')
+export finished in 0.2478 sec.
+EXPORTED A_Player_Sword_01
+
+FBX export starting... 'D:\\UEproject\\Combat\\SourceAssets\\Animations\\A_Player_Sword_02.fbx'
+(bpy.data.armatures['root'], 'POSE')
+export finished in 0.2509 sec.
+EXPORTED A_Player_Sword_02
+
+FBX export starting... 'D:\\UEproject\\Combat\\SourceAssets\\Animations\\A_Player_Sword_03.fbx'
+(bpy.data.armatures['root'], 'POSE')
+export finished in 0.2539 sec.
+EXPORTED A_Player_Sword_03
+
+FBX export starting... 'D:\\UEproject\\Combat\\SourceAssets\\Animations\\A_Player_Sword_04.fbx'
+(bpy.data.armatures['root'], 'POSE')
+export finished in 0.2841 sec.
+EXPORTED A_Player_Sword_04
+
+FBX export starting... 'D:\\UEproject\\Combat\\SourceAssets\\Animations\\A_Player_Parry.fbx'
+(bpy.data.armatures['root'], 'POSE')
+export finished in 0.2369 sec.
+EXPORTED A_Player_Parry
+
+FBX export starting... 'D:\\UEproject\\Combat\\SourceAssets\\Animations\\A_Player_Riposte.fbx'
+(bpy.data.armatures['root'], 'POSE')
+export finished in 0.2513 sec.
+EXPORTED A_Player_Riposte
+
+FBX export starting... 'D:\\UEproject\\Combat\\SourceAssets\\Animations\\A_Player_DashStrike.fbx'
+(bpy.data.armatures['root'], 'POSE')
+export finished in 0.2464 sec.
+EXPORTED A_Player_DashStrike
+
+FBX export starting... 'D:\\UEproject\\Combat\\SourceAssets\\Animations\\A_Player_Air_01.fbx'
+(bpy.data.armatures['root'], 'POSE')
+export finished in 0.2470 sec.
+EXPORTED A_Player_Air_01
+
+FBX export starting... 'D:\\UEproject\\Combat\\SourceAssets\\Animations\\A_Player_Air_02.fbx'
+(bpy.data.armatures['root'], 'POSE')
+export finished in 0.2664 sec.
+EXPORTED A_Player_Air_02
+
+FBX export starting... 'D:\\UEproject\\Combat\\SourceAssets\\Animations\\A_Player_Plunge.fbx'
+(bpy.data.armatures['root'], 'POSE')
+export finished in 0.2782 sec.
+EXPORTED A_Player_Plunge
+
+FBX export starting... 'D:\\UEproject\\Combat\\SourceAssets\\Animations\\A_Boss_Combo_01.fbx'
+(bpy.data.armatures['root'], 'POSE')
+export finished in 0.2855 sec.
+EXPORTED A_Boss_Combo_01
+
+FBX export starting... 'D:\\UEproject\\Combat\\SourceAssets\\Animations\\A_Boss_Combo_02.fbx'
+(bpy.data.armatures['root'], 'POSE')
+export finished in 0.2857 sec.
+EXPORTED A_Boss_Combo_02
+
+FBX export starting... 'D:\\UEproject\\Combat\\SourceAssets\\Animations\\A_Boss_Combo_03.fbx'
+(bpy.data.armatures['root'], 'POSE')
+export finished in 0.2969 sec.
+EXPORTED A_Boss_Combo_03
+
+FBX export starting... 'D:\\UEproject\\Combat\\SourceAssets\\Animations\\A_Boss_ChargeAOE.fbx'
+(bpy.data.armatures['root'], 'POSE')
+export finished in 0.3243 sec.
+EXPORTED A_Boss_ChargeAOE
+
+FBX export starting... 'D:\\UEproject\\Combat\\SourceAssets\\Animations\\A_Boss_FrontDashSlash.fbx'
+(bpy.data.armatures['root'], 'POSE')
+export finished in 0.2961 sec.
+EXPORTED A_Boss_FrontDashSlash
+
+FBX export starting... 'D:\\UEproject\\Combat\\SourceAssets\\Animations\\A_Boss_JumpWave_L.fbx'
+(bpy.data.armatures['root'], 'POSE')
+export finished in 0.2937 sec.
+EXPORTED A_Boss_JumpWave_L
+
+FBX export starting... 'D:\\UEproject\\Combat\\SourceAssets\\Animations\\A_Boss_JumpWave_R.fbx'
+(bpy.data.armatures['root'], 'POSE')
+export finished in 0.2905 sec.
+EXPORTED A_Boss_JumpWave_R
+
+FBX export starting... 'D:\\UEproject\\Combat\\SourceAssets\\Animations\\A_Boss_JumpWave_Back.fbx'
+(bpy.data.armatures['root'], 'POSE')
+export finished in 0.2991 sec.
+EXPORTED A_Boss_JumpWave_Back
+
+FBX export starting... 'D:\\UEproject\\Combat\\SourceAssets\\Animations\\A_Sword_GuardIdle.fbx'
+(bpy.data.armatures['root'], 'POSE')
+export finished in 0.3204 sec.
+EXPORTED A_Sword_GuardIdle
+00:24.782  reports          | WARNING Path 'E:\temp\render\ttt\M_tex\Baked\T_Manny_02_BN.TGA' cannot be made relative for Image 'T_Manny_02_BN'
+Blender 5.1.1 (hash b70da489d7f4 built 2026-04-14 01:37:22)
+Info: Saved as "SwordCombat_AnimationLibrary.blend"
+
+Blender quit

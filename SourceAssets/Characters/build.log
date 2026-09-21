@@ -1,0 +1,38 @@
+D:\UEproject\Combat\SourceAssets\Scripts\build_armored_characters.py:6: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  m=bpy.data.materials.new(name);m.diffuse_color=(*color,1);m.use_nodes=True;p=m.node_tree.nodes.get('Principled BSDF');p.inputs['Base Color'].default_value=(*color,1);p.inputs['Metallic'].default_value=metal;p.inputs['Roughness'].default_value=rough
+00:01.875  reports          | WARNING Path 'E:\temp\render\ttt\M_tex\Baked\T_Manny_02_BN.TGA' cannot be made relative for Image 'T_Manny_02_BN'
+Blender 5.1.1 (hash b70da489d7f4 built 2026-04-14 01:37:22)
+00:07.938  render           | Saved: 'D:\UEproject\Combat\SourceAssets\Characters\Player_Front.png'
+00:13.797  render           | Saved: 'D:\UEproject\Combat\SourceAssets\Characters\Player_Side.png'
+FBX version: 7300
+Error, could not find any file path in  FBXElem(id=b'Texture', props=[2283558022080, b'EnvSamplerTex\x00\x01Texture', b''], props_type=bytearray(b'LSS'), elems=[FBXElem(id=b'Type', props=[b'TextureVideoClip'], props_type=bytearray(b'S'), elems=[]), FBXElem(id=b'Version', props=[202], props_type=bytearray(b'I'), elems=[]), FBXElem(id=b'TextureName', props=[b'EnvSamplerTex\x00\x01Texture'], props_type=bytearray(b'S'), elems=[]), FBXElem(id=b'Media', props=[b''], props_type=bytearray(b'S'), elems=[]), FBXElem(id=b'FileName', props=[b''], props_type=bytearray(b'S'), elems=[]), FBXElem(id=b'RelativeFilename', props=[b''], props_type=bytearray(b'S'), elems=[]), FBXElem(id=b'ModelUVTranslation', props=[0.0, 0.0], props_type=bytearray(b'DD'), elems=[]), FBXElem(id=b'ModelUVScaling', props=[1.0, 1.0], props_type=bytearray(b'DD'), elems=[]), FBXElem(id=b'Texture_Alpha_Source', props=[b'None'], props_type=bytearray(b'S'), elems=[]), FBXElem(id=b'Cropping', props=[0, 0, 0, 0], props_type=bytearray(b'IIII'), elems=[])])
+       Falling back to:  EnvSamplerTex
+Info: Applied modifier was not first, result may not be as expected
+
+FBX export starting... 'D:\\UEproject\\Combat\\SourceAssets\\Characters\\SK_Player_ArmoredSwordsman.fbx'
+(bpy.data.armatures['root'], 'POSE')
+export finished in 0.3178 sec.
+Info: Saved as "Player_ArmoredSwordsman.blend"
+CHARACTER_COMPLETE Player
+00:21.313  render           | Saved: 'D:\UEproject\Combat\SourceAssets\Characters\Boss_Front.png'
+00:27.344  render           | Saved: 'D:\UEproject\Combat\SourceAssets\Characters\Boss_Side.png'
+FBX version: 7300
+Error, could not find any file path in  FBXElem(id=b'Texture', props=[2283558022080, b'EnvSamplerTex\x00\x01Texture', b''], props_type=bytearray(b'LSS'), elems=[FBXElem(id=b'Type', props=[b'TextureVideoClip'], props_type=bytearray(b'S'), elems=[]), FBXElem(id=b'Version', props=[202], props_type=bytearray(b'I'), elems=[]), FBXElem(id=b'TextureName', props=[b'EnvSamplerTex\x00\x01Texture'], props_type=bytearray(b'S'), elems=[]), FBXElem(id=b'Media', props=[b''], props_type=bytearray(b'S'), elems=[]), FBXElem(id=b'FileName', props=[b''], props_type=bytearray(b'S'), elems=[]), FBXElem(id=b'RelativeFilename', props=[b''], props_type=bytearray(b'S'), elems=[]), FBXElem(id=b'ModelUVTranslation', props=[0.0, 0.0], props_type=bytearray(b'DD'), elems=[]), FBXElem(id=b'ModelUVScaling', props=[1.0, 1.0], props_type=bytearray(b'DD'), elems=[]), FBXElem(id=b'Texture_Alpha_Source', props=[b'None'], props_type=bytearray(b'S'), elems=[]), FBXElem(id=b'Cropping', props=[0, 0, 0, 0], props_type=bytearray(b'IIII'), elems=[])])
+       Falling back to:  EnvSamplerTex
+Info: Applied modifier was not first, result may not be as expected
+
+FBX export starting... 'D:\\UEproject\\Combat\\SourceAssets\\Characters\\SK_Boss_ArmoredSwordsman.fbx'
+(bpy.data.armatures['root.001'], 'POSE')
+export finished in 0.3920 sec.
+Info: Saved as "Boss_ArmoredSwordsman.blend"
+CHARACTER_COMPLETE Boss
+
+FBX export starting... 'D:\\UEproject\\Combat\\SourceAssets\\Weapons\\SM_Player_LongSword.fbx'
+export finished in 0.0042 sec.
+Info: Saved as "SM_Player_LongSword.blend"
+
+FBX export starting... 'D:\\UEproject\\Combat\\SourceAssets\\Weapons\\SM_Boss_Greatsword.fbx'
+export finished in 0.0052 sec.
+Info: Saved as "SM_Boss_Greatsword.blend"
+
+Blender quit

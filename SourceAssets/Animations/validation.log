@@ -1,0 +1,26 @@
+FBX version: 7300
+Error, could not find any file path in  FBXElem(id=b'Texture', props=[2283558022080, b'EnvSamplerTex\x00\x01Texture', b''], props_type=bytearray(b'LSS'), elems=[FBXElem(id=b'Type', props=[b'TextureVideoClip'], props_type=bytearray(b'S'), elems=[]), FBXElem(id=b'Version', props=[202], props_type=bytearray(b'I'), elems=[]), FBXElem(id=b'TextureName', props=[b'EnvSamplerTex\x00\x01Texture'], props_type=bytearray(b'S'), elems=[]), FBXElem(id=b'Media', props=[b''], props_type=bytearray(b'S'), elems=[]), FBXElem(id=b'FileName', props=[b''], props_type=bytearray(b'S'), elems=[]), FBXElem(id=b'RelativeFilename', props=[b''], props_type=bytearray(b'S'), elems=[]), FBXElem(id=b'ModelUVTranslation', props=[0.0, 0.0], props_type=bytearray(b'DD'), elems=[]), FBXElem(id=b'ModelUVScaling', props=[1.0, 1.0], props_type=bytearray(b'DD'), elems=[]), FBXElem(id=b'Texture_Alpha_Source', props=[b'None'], props_type=bytearray(b'S'), elems=[]), FBXElem(id=b'Cropping', props=[0, 0, 0, 0], props_type=bytearray(b'IIII'), elems=[])])
+       Falling back to:  EnvSamplerTex
+FBX version: 7400
+FBX version: 7400
+FBX version: 7400
+FBX version: 7400
+FBX version: 7400
+FBX version: 7400
+FBX version: 7400
+FBX version: 7400
+FBX version: 7400
+FBX version: 7400
+FBX version: 7400
+FBX version: 7400
+FBX version: 7400
+FBX version: 7400
+FBX version: 7400
+FBX version: 7400
+FBX version: 7400
+FBX version: 7400
+FBX version: 7400
+VALIDATION_PASSED 19
+Blender 5.1.1 (hash b70da489d7f4 built 2026-04-14 01:37:22)
+
+Blender quit

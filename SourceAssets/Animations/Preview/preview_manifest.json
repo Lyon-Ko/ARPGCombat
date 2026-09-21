@@ -1,0 +1,38 @@
+[
+  {
+    "image": "D:\\UEproject\\Combat\\SourceAssets\\Animations\\Preview\\Sword01_0.png",
+    "time": 0,
+    "hand_world": [
+      -0.24000397324562073,
+      -0.3600028157234192,
+      1.2499998807907104
+    ]
+  },
+  {
+    "image": "D:\\UEproject\\Combat\\SourceAssets\\Animations\\Preview\\Sword01_1.png",
+    "time": 0.13,
+    "hand_world": [
+      -0.4438306391239166,
+      -0.020288825035095215,
+      1.3470606803894043
+    ]
+  },
+  {
+    "image": "D:\\UEproject\\Combat\\SourceAssets\\Animations\\Preview\\Sword01_2.png",
+    "time": 0.27,
+    "hand_world": [
+      -0.18656399846076965,
+      -0.4012830853462219,
+      1.3033607006072998
+    ]
+  },
+  {
+    "image": "D:\\UEproject\\Combat\\SourceAssets\\Animations\\Preview\\Sword01_3.png",
+    "time": 0.36,
+    "hand_world": [
+      0.35183185338974,
+      -0.2416372001171112,
+      1.1612229347229004
+    ]
+  }
+]
