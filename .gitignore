@@ -11,3 +11,6 @@ Saved/
 Tools/.venv/
 **/__pycache__/
 Tools/logs/
+
+SourceAssets/Tools/python-libs/
+SourceAssets/Audio/Downloads/

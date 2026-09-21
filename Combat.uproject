@@ -30,6 +30,10 @@
     {
       "Enabled": true,
       "Name": "EditorScriptingUtilities"
+    },
+    {
+      "Enabled": true,
+      "Name": "StateTree"
     }
   ],
   "Modules": [

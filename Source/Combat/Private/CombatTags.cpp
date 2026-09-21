@@ -1,0 +1,54 @@
+#include "CombatTags.h"
+namespace CombatTags
+{
+    UE_DEFINE_GAMEPLAY_TAG(State_Busy, "Combat.State.Busy");
+    UE_DEFINE_GAMEPLAY_TAG(State_Dead, "Combat.State.Dead");
+    UE_DEFINE_GAMEPLAY_TAG(State_Invulnerable, "Combat.State.Invulnerable");
+    UE_DEFINE_GAMEPLAY_TAG(State_Parry, "Combat.State.Parry");
+    UE_DEFINE_GAMEPLAY_TAG(State_RiposteReady, "Combat.State.RiposteReady");
+    UE_DEFINE_GAMEPLAY_TAG(State_Stunned, "Combat.State.Stunned");
+    UE_DEFINE_GAMEPLAY_TAG(Event_Root, "Combat.Event");
+    UE_DEFINE_GAMEPLAY_TAG(Cue_Hit, "Combat.Cue.Hit");
+    UE_DEFINE_GAMEPLAY_TAG(Cue_Parry, "Combat.Cue.Parry");
+    UE_DEFINE_GAMEPLAY_TAG(Cue_Evade, "Combat.Cue.Evade");
+    UE_DEFINE_GAMEPLAY_TAG(Cue_AreaWarning, "Combat.Cue.AreaWarning");
+    UE_DEFINE_GAMEPLAY_TAG(Cue_AreaRelease, "Combat.Cue.AreaRelease");
+    UE_DEFINE_GAMEPLAY_TAG(Cue_PoiseBreak, "Combat.Cue.PoiseBreak");
+    UE_DEFINE_GAMEPLAY_TAG(Cue_Death, "Combat.Cue.Death");
+    UE_DEFINE_GAMEPLAY_TAG_STATIC(InputAttack, "Combat.Input.Attack");
+    UE_DEFINE_GAMEPLAY_TAG_STATIC(InputDash, "Combat.Input.Dash");
+    UE_DEFINE_GAMEPLAY_TAG_STATIC(InputParry, "Combat.Input.Parry");
+    UE_DEFINE_GAMEPLAY_TAG_STATIC(StateCooldown, "Combat.State.Cooldown");
+    UE_DEFINE_GAMEPLAY_TAG_STATIC(StateAir, "Combat.State.Air");
+    UE_DEFINE_GAMEPLAY_TAG_STATIC(StateDashing, "Combat.State.Dashing");
+    UE_DEFINE_GAMEPLAY_TAG_STATIC(Attack1, "Combat.Skill.Attack1");
+    UE_DEFINE_GAMEPLAY_TAG_STATIC(Attack2, "Combat.Skill.Attack2");
+    UE_DEFINE_GAMEPLAY_TAG_STATIC(Attack3, "Combat.Skill.Attack3");
+    UE_DEFINE_GAMEPLAY_TAG_STATIC(Attack4, "Combat.Skill.Attack4");
+    UE_DEFINE_GAMEPLAY_TAG_STATIC(Dash, "Combat.Skill.Dash");
+    UE_DEFINE_GAMEPLAY_TAG_STATIC(DashStrike, "Combat.Skill.DashStrike");
+    UE_DEFINE_GAMEPLAY_TAG_STATIC(Air1, "Combat.Skill.Air1");
+    UE_DEFINE_GAMEPLAY_TAG_STATIC(Air2, "Combat.Skill.Air2");
+    UE_DEFINE_GAMEPLAY_TAG_STATIC(Plunge, "Combat.Skill.Plunge");
+    UE_DEFINE_GAMEPLAY_TAG_STATIC(Parry, "Combat.Skill.Parry");
+    UE_DEFINE_GAMEPLAY_TAG_STATIC(Riposte, "Combat.Skill.Riposte");
+    UE_DEFINE_GAMEPLAY_TAG_STATIC(BossCombo1, "Combat.Skill.Boss.Combo1");
+    UE_DEFINE_GAMEPLAY_TAG_STATIC(BossCombo2, "Combat.Skill.Boss.Combo2");
+    UE_DEFINE_GAMEPLAY_TAG_STATIC(BossCombo3, "Combat.Skill.Boss.Combo3");
+    UE_DEFINE_GAMEPLAY_TAG_STATIC(BossAOE, "Combat.Skill.Boss.AOE");
+    UE_DEFINE_GAMEPLAY_TAG_STATIC(BossDashSlash, "Combat.Skill.Boss.DashSlash");
+    UE_DEFINE_GAMEPLAY_TAG_STATIC(BossLeapLeft, "Combat.Skill.Boss.LeapLeft");
+    UE_DEFINE_GAMEPLAY_TAG_STATIC(BossLeapRight, "Combat.Skill.Boss.LeapRight");
+    UE_DEFINE_GAMEPLAY_TAG_STATIC(BossLeapBack, "Combat.Skill.Boss.LeapBack");
+    UE_DEFINE_GAMEPLAY_TAG_STATIC(HitOpen, "Combat.Event.HitOpen");
+    UE_DEFINE_GAMEPLAY_TAG_STATIC(HitClose, "Combat.Event.HitClose");
+    UE_DEFINE_GAMEPLAY_TAG_STATIC(Move, "Combat.Event.Move");
+    UE_DEFINE_GAMEPLAY_TAG_STATIC(Projectile, "Combat.Event.Projectile");
+    UE_DEFINE_GAMEPLAY_TAG_STATIC(AreaWarning, "Combat.Event.AreaWarning");
+    UE_DEFINE_GAMEPLAY_TAG_STATIC(AreaRelease, "Combat.Event.AreaRelease");
+    UE_DEFINE_GAMEPLAY_TAG_STATIC(ComboOpen, "Combat.Event.ComboOpen");
+    UE_DEFINE_GAMEPLAY_TAG_STATIC(Cancelable, "Combat.Event.Cancelable");
+    UE_DEFINE_GAMEPLAY_TAG_STATIC(Finish, "Combat.Event.Finish");
+}
+
+
