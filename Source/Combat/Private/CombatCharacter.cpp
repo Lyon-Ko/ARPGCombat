@@ -349,19 +349,34 @@ void ACombatCharacter::EmitSkillProjectile()
 }
 void ACombatCharacter::ShowAreaWarning()
 {
-    if(!ActiveSkill) return;
-    AreaCenter = GetActorLocation();
-    FeedbackComponent->ShowWarning(AreaCenter);
-    OnAreaWarningRequested(AreaCenter, ActiveSkill->AreaRadius, ActiveSkill->AreaHeight, ActiveSkill->AreaDelay);
-    BroadcastCue(CombatTags::Cue_AreaWarning, this, AreaCenter);
+    if(!ActiveSkill || !IsAlive()) return;
+    const UCombatSkillDefinition* Definition = ActiveSkill;
+    const uint64 ExecutionSerial = SkillExecutionSerial;
+    const FVector Center = GetActorLocation();
+    const float Radius = Definition->AreaRadius, Height = Definition->AreaHeight, Delay = Definition->AreaDelay;
+    const auto IsCurrentExecution = [&]() { return IsAlive() && ActiveSkill == Definition && SkillExecutionSerial == ExecutionSerial; };
+    AreaCenter = Center;
+    FeedbackComponent->ShowWarning(Center);
+    if(!IsCurrentExecution()) return;
+    OnAreaWarningRequested(Center, Radius, Height, Delay);
+    if(!IsCurrentExecution()) return;
+    BroadcastCue(CombatTags::Cue_AreaWarning, this, Center);
 }
 void ACombatCharacter::DetonateArea()
 {
-    if(!ActiveSkill) return;
-    BroadcastCue(CombatTags::Cue_AreaRelease, this, AreaCenter, ActiveSkill->AreaRadius);
+    if(!ActiveSkill || !IsAlive()) return;
+    const UCombatSkillDefinition* Definition = ActiveSkill;
+    const uint64 ExecutionSerial = SkillExecutionSerial;
+    const FVector Center = AreaCenter;
+    const float Radius = Definition->AreaRadius, Delay = Definition->AreaDelay;
+    const auto IsCurrentExecution = [&]() { return IsAlive() && ActiveSkill == Definition && SkillExecutionSerial == ExecutionSerial; };
+    BroadcastCue(CombatTags::Cue_AreaRelease, this, Center, Radius);
+    if(!IsCurrentExecution()) return;
     FeedbackComponent->ReleaseArea();
+    if(!IsCurrentExecution()) return;
     FeedbackComponent->PlayReleaseSound();
-    GetWorldTimerManager().SetTimer(AreaTimer, this, &ThisClass::DoAreaDamage, FMath::Max(.001f, ActiveSkill->AreaDelay), false);
+    if(!IsCurrentExecution()) return;
+    GetWorldTimerManager().SetTimer(AreaTimer, this, &ThisClass::DoAreaDamage, FMath::Max(.001f, Delay), false);
 }
 void ACombatCharacter::DoAreaDamage()
 {
