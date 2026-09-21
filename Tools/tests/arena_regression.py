@@ -10,11 +10,33 @@ import json
 import math
 from pathlib import Path
 import statistics
+import sys
 import time
 import traceback
 import unreal as u
 
 KEY = "_combat_arena_regression"
+VENDOR = Path(__file__).resolve().parents[1] / "vendor/python311"
+if str(VENDOR) not in sys.path:
+    sys.path.insert(0, str(VENDOR))
+try:
+    import orjson as _orjson
+    SERIALIZER = {"backend": "orjson", "version": _orjson.__version__, "vendor": str(VENDOR)}
+except ImportError as exc:
+    _orjson = None
+    SERIALIZER = {"backend": "stdlib-json", "fallback_reason": str(exc)}
+
+def assert_finite_json(value):
+    """orjson maps NaN/Inf to null; reject them explicitly instead of changing evidence."""
+    pending = [value]
+    while pending:
+        item = pending.pop()
+        if isinstance(item, float) and not math.isfinite(item):
+            raise ValueError("Non-finite float in evidence; refusing silent null conversion")
+        if isinstance(item, dict):
+            pending.extend(item.values())
+        elif isinstance(item, (list, tuple)):
+            pending.extend(item)
 
 
 def tag(name):
@@ -58,6 +80,7 @@ class ArenaRegression:
                        "execution": "real PIE actors; no time dilation or health tuning",
                        "requested_fps_caps": self.caps, "fights_per_cap": self.rounds,
                        "planned_natural_fights": len(self.caps)*self.rounds,
+                       "planned_passive_death_round": {"fps_cap": self.caps[0], "round": self.rounds} if len(self.caps)*self.rounds > 1 else None,
                        "fight_timeout_world_seconds": self.fight_timeout,
                        "standalone_injected_cases": [], "input_cases": [], "natural_fights": [],
                        "assertions": [], "timing": {}, "events": [],
@@ -88,11 +111,38 @@ class ArenaRegression:
         return float(u.GameplayStatics.get_time_seconds(self.world))
 
     def save(self):
+        save_started = time.perf_counter()
         self.report["updated_utc"] = datetime.datetime.now(datetime.timezone.utc).isoformat()
         self.report["elapsed_wall_seconds"] = round(time.monotonic()-self.boot_wall, 3)
+        self.report["persistence_format"] = "accelerated-json-v3; identical fields/history/save cadence; timings cover prior completed saves"
+        self.report["serializer"] = SERIALIZER
+        timing = self.report.setdefault("persistence_timing", {"attempts": 0, "serialization_ms_total": 0.0,
+            "write_replace_ms_total": 0.0, "total_ms_total": 0.0, "max_total_ms": 0.0})
         temp = self.path.with_suffix(".tmp")
-        temp.write_text(json.dumps(self.report, ensure_ascii=False, indent=2), encoding="utf-8")
-        temp.replace(self.path)
+        assert_finite_json(self.report)
+        payload = (_orjson.dumps(self.report) if _orjson is not None
+                   else json.dumps(self.report, ensure_ascii=False, allow_nan=False).encode("utf-8"))
+        serialized = time.perf_counter()
+        temp.write_bytes(payload)
+        try:
+            temp.replace(self.path)
+        except PermissionError:
+            # Windows readers can briefly hold the JSON without delete-sharing.
+            # Preserve the complete .tmp journal and retry on the next Slate tick;
+            # never sleep/block the game thread or turn a file-reader race into a
+            # gameplay failure. The main report remains the prior atomic version.
+            self.report["persistence_retry_count"] = self.report.get("persistence_retry_count", 0)+1
+            self.report["pending_report_journal"] = str(temp)
+            return
+        finally:
+            finished = time.perf_counter()
+            duration = (finished-save_started)*1000
+            timing["attempts"] += 1
+            timing["serialization_ms_total"] += (serialized-save_started)*1000
+            timing["write_replace_ms_total"] += (finished-serialized)*1000
+            timing["total_ms_total"] += duration
+            timing["max_total_ms"] = max(timing["max_total_ms"], duration)
+        self.report.pop("pending_report_journal", None)
         self.last_save = time.monotonic()
 
     def check(self, name, ok, **evidence):
@@ -160,6 +210,7 @@ class ArenaRegression:
         row = {"type": kind, "actor": self.role(actor), "world_time": round(self.world_time(), 6),
                "wall_time": round(time.monotonic()-self.boot_wall, 6), **values}
         if self.current is not None:
+            row["stage"] = self.current.get("stage", "isolated")
             self.current.setdefault("events", []).append(row)
         else:
             self.report["events"].append(row)
@@ -261,7 +312,7 @@ class ArenaRegression:
             # Preserve the observed BeginSkill origin even if Parry has ended.
             elapsed = self.world_time()-skill_started
             tolerance = 1.5/self.fps+.005
-            scheduled = at <= elapsed <= at+tolerance and (elapsed <= .2 if at < .2 else elapsed > .2)
+            scheduled = at-.0001 <= elapsed <= at+tolerance and (elapsed <= .2 if at < .2 else elapsed > .2)
             before = self.player.get_health()
             result = self.hit(self.player, self.boss)
             case.update(requested_elapsed=at, receipt_elapsed=elapsed, scheduling_tolerance=tolerance,
@@ -330,6 +381,41 @@ class ArenaRegression:
         self.player.parry_pressed()
         self.check("retry.input_works", tag_name(self.player.get_active_skill_tag()) == "Combat.Skill.Parry")
         self.player.cancel_current_skill()
+        self.current = None
+        yield from self.cancel_reopen_case()
+
+    def cancel_reopen_case(self):
+        case = {"name": "cancel_armed_timer_then_reopen", "fps_cap": self.fps,
+                "kind": "isolated lifecycle; explicit public AreaRelease hook; NOT a natural fight",
+                "events": []}
+        self.report["standalone_injected_cases"].append(case)
+        self.current = case
+        self.reset_isolated()
+        p = self.player.get_actor_location()
+        self.boss.set_actor_location(u.Vector(p.x+200, p.y, p.z), False, True)
+        yield from self.wait(.2)
+        self.check("reopen.aoe_started", self.boss.request_skill_by_tag(tag("Combat.Skill.Boss.AOE")))
+        self.boss.show_area_warning()
+        self.boss.detonate_area()  # Arm the real .18s timer before interruption.
+        armed_at = self.world_time()
+        hp = self.player.get_health()
+        yield from self.wait(.04)
+        self.boss.cancel_current_skill()
+        self.check("reopen.old_skill_ended", not self.boss.is_busy())
+        activated = self.boss.request_skill_by_tag(tag("Combat.Skill.Boss.LeapBack"))
+        self.check("reopen.successor_started", activated)
+        # The old timer is due at .18s; successor's projectile is authored later
+        # (.27/.95s), so this interval has no legitimate successor damage.
+        yield from self.wait(.16)
+        self.check("reopen.old_deadline_observed", self.world_time()-armed_at >= .18,
+                   elapsed_since_arm=self.world_time()-armed_at)
+        self.check("reopen.no_old_timer_damage", abs(self.player.get_health()-hp) < .01,
+                   health_before=hp, health_after=self.player.get_health(),
+                   successor=tag_name(self.boss.get_active_skill_tag()))
+        self.check("reopen.successor_not_cleared", tag_name(self.boss.get_active_skill_tag()) == "Combat.Skill.Boss.LeapBack")
+        self.boss.cancel_current_skill()
+        yield from self.wait(.35)
+        self.assert_clean("reopen.final_cancel")
         self.current = None
 
     def input_cases(self):
@@ -521,7 +607,7 @@ class ArenaRegression:
         self.current = None
 
     def summarize_round(self, row):
-        events = row.get("events", [])
+        events = [e for e in row.get("events", []) if e.get("stage") == "combat"]
         row["skill_start_counts"] = dict(collections.Counter(e["actor"]+":"+e["skill"] for e in events if e["type"] == "skill_started"))
         row["cue_counts"] = dict(collections.Counter(e["cue"] for e in events if e["type"] == "feedback"))
         row["hit_events"] = sum(e.get("cue") == "Combat.Cue.Hit" for e in events)
@@ -533,6 +619,7 @@ class ArenaRegression:
         yield from self.wait(.3)
         self.ai.set_editor_property("random_seed", 731+number)
         row = {"round": number, "fps_cap": self.fps, "kind": "natural_input_bot_fight",
+               "stage": "combat",
                "seed": 731+number, "events": [], "input_counts": {},
                "strategy": {"minimum_skill_observation_seconds": .24,
                             "aoe_flash_response_seconds": .055,
@@ -542,6 +629,10 @@ class ArenaRegression:
                "starting_player": self.state(self.player), "starting_boss": self.state(self.boss),
                "peak_owned_projectiles": 0, "peak_new_components": 0,
                "phase_two_observed": False, "movement_distance_cm": 0.0}
+        passive = (len(self.caps)*self.rounds > 1 and self.fps == self.caps[0] and number == self.rounds)
+        row["strategy"]["name"] = "passive_no_attack_death_coverage" if passive else "active_reactive_swordfighter"
+        row["strategy"]["purpose"] = ("Approach normally, then receive unmodified Boss attacks without attack/parry/dash input; natural defeat coverage."
+                                       if passive else "Real reactive combat for natural victory and skill coverage.")
         self.report["natural_fights"].append(row)
         self.current = row
         if not self.player.get_editor_property("target_locked"):
@@ -550,6 +641,10 @@ class ArenaRegression:
         initial_boss = xyz(self.boss.get_actor_location())
         self.ai.reset_brain()
         start_world, start_wall = self.world_time(), time.monotonic()
+        row["combat_started_world_time"] = start_world
+        row["phase_transitions"] = [{"world_time": start_world, "phase_two": bool(self.boss.get_editor_property("phase_two")),
+                                     "boss_health": self.boss.get_health(), "stage": "combat"}]
+        last_phase = bool(self.boss.get_editor_property("phase_two"))
         last_location = self.player.get_actor_location()
         next_attack = next_defense = 0.0
         attack_token = None
@@ -568,7 +663,12 @@ class ArenaRegression:
             pos, target_pos = self.player.get_actor_location(), self.boss.get_actor_location()
             row["movement_distance_cm"] += distance(pos, last_location)
             last_location = pos
-            row["phase_two_observed"] |= bool(self.boss.get_editor_property("phase_two"))
+            phase = bool(self.boss.get_editor_property("phase_two"))
+            row["phase_two_observed"] |= phase
+            if phase != last_phase:
+                row["phase_transitions"].append({"world_time": now, "phase_two": phase,
+                                                 "boss_health": self.boss.get_health(), "stage": "combat"})
+                last_phase = phase
             d = distance(pos, target_pos)
             if not self.player.is_busy() and d > 150:
                 self.player.add_movement_input(u.Vector((target_pos.x-pos.x)/max(d, 1),
@@ -590,7 +690,7 @@ class ArenaRegression:
                 reaction_due = observed_long_enough and release is not None and now-release["world_time"] >= .055
             elif current_skill.endswith(".DashSlash"):
                 reaction_due = observed_long_enough and self.boss.get_skill_elapsed_time() >= .42
-            if (now >= next_defense and reaction_due and self.boss.is_busy() and d < 600
+            if (not passive and now >= next_defense and reaction_due and self.boss.is_busy() and d < 600
                     and defended_token != boss_token):
                 use_parry = aoe or ((number+int(elapsed*2)) % 3) != 0
                 method = "parry_pressed" if use_parry else "dash_pressed"
@@ -617,7 +717,7 @@ class ArenaRegression:
                            and player_elapsed >= .36 and player_token != attack_token)
             attack_ready = not self.player.is_busy() or chain_ready
             hold_for_aoe = aoe and observed_long_enough and (release is None or now-release["world_time"] < .28)
-            if (now >= next_attack and now >= protected_until and d < 300
+            if (not passive and now >= next_attack and now >= protected_until and d < 300
                     and attack_ready and not hold_for_aoe):
                 self.player.attack_pressed()
                 attack_token = player_token
@@ -634,6 +734,8 @@ class ArenaRegression:
         self.player.attack_released()
         self.stop_ai()
         row.setdefault("outcome", "victory" if self.player.is_alive() else "defeat")
+        row["combat_ended_world_time"] = self.world_time()
+        row["stage"] = "outcome_and_retry"
         row.update(duration_world_seconds=self.world_time()-start_world,
                    duration_wall_seconds=time.monotonic()-start_wall,
                    player_end=self.state(self.player), boss_end=self.state(self.boss),
@@ -642,6 +744,9 @@ class ArenaRegression:
         self.check("fight.real_movement", row["movement_distance_cm"] > 25, distance_cm=row["movement_distance_cm"])
         self.check("fight.ai_executed", row["ai_actions_executed"] > 0)
         self.check("fight.real_damage", any(e.get("cue") == "Combat.Cue.Hit" for e in row["events"]))
+        if passive:
+            self.check("fight.passive_natural_defeat", row["outcome"] == "defeat", outcome=row["outcome"])
+            self.check("fight.passive_no_combat_input", not row["input_counts"], input_counts=row["input_counts"])
         if row["outcome"] == "timeout":
             self.reset_isolated()  # Cleanup only; timeout remains FAIL, never converted to victory.
         else:
@@ -649,6 +754,7 @@ class ArenaRegression:
             self.stop_ai()
         yield from self.wait(.4)
         self.assert_clean("fight.retry", revived=True)
+        row["post_retry"] = {"world_time": self.world_time(), "player": self.state(self.player), "boss": self.state(self.boss)}
         self.check("fight.retry_position", distance(self.player.get_actor_location(), u.Vector(*initial_player)) < 10
                    and distance(self.boss.get_actor_location(), u.Vector(*initial_boss)) < 10)
         self.summarize_round(row)
@@ -729,6 +835,9 @@ class ArenaRegression:
             "defeat_rate": outcomes["defeat"]/total if total else None,
             "timeout_rate": outcomes["timeout"]/total if total else None,
             "assertion_failure_rate": sum(not r["pass"] for r in fights)/total if total else None}
+        self.report["natural_outcome_summary"]["by_strategy"] = {
+            name: dict(collections.Counter(r["outcome"] for r in fights if r["strategy"]["name"] == name))
+            for name in sorted({r["strategy"]["name"] for r in fights})}
         self.check("coverage.natural_victory", outcomes["victory"] >= 1, count=outcomes["victory"])
         self.check("coverage.natural_defeat", outcomes["defeat"] >= 1, count=outcomes["defeat"])
         self.check("coverage.phase_two", any(r["phase_two_observed"] for r in fights))

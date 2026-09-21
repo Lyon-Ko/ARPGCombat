@@ -44,9 +44,16 @@ def analyze(path, warmup_frames, gpu_column=None):
         if header.count(name)>1:
             raise ValueError("Ambiguous duplicate column: "+name)
         indices[metric] = header.index(name) if name in header else None
-    samples, ignored = [], []
+    samples, ignored, extended_headers = [], [], []
     for line,row in enumerate(rows[header_index+1:], header_index+2):
         if not row or row==header:
+            ignored.append(line)
+            continue
+        # UE appends dynamically discovered stat columns to its final header.
+        # It preserves the complete initial header prefix, so all selected timing
+        # indices remain valid. This is a header row, never a numerical frame.
+        if len(row) > len(header) and row[:len(header)] == header:
+            extended_headers.append({'line': line, 'additional_columns': row[len(header):]})
             ignored.append(line)
             continue
         frame_index = indices["frame"]
@@ -71,6 +78,7 @@ def analyze(path, warmup_frames, gpu_column=None):
     report = {"input_csv": str(Path(path).resolve()), "unit": "milliseconds", "input_samples": len(samples),
               "warmup_frames_requested": warmup_frames, "excluded_warmup_frames": min(warmup_frames,len(samples)),
               "retained_frame_samples": len(retained), "ignored_metadata_or_header_lines": ignored,
+              "extended_final_headers": extended_headers,
               "percentile_definition": "linear interpolation at (N-1)*p over sorted frame times",
               "one_percent_low_definition": "1000 / mean of the slowest ceil(N*0.01) retained timing samples; frame metric is FPS, thread/GPU metrics are timing-equivalent rates, not delivered FPS",
               "threshold_definition": "strictly greater than 16.7,20,33.3 milliseconds; fractions in [0,1]",
