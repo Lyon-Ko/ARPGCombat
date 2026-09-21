@@ -1,0 +1,636 @@
+{
+  "status": "passed",
+  "spawned": 45,
+  "observations": [
+    {
+      "system": "NS_FinalMetalHit",
+      "round": 1,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalMetalHit",
+      "round": 1,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalMetalHit",
+      "round": 1,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalMetalHit",
+      "round": 1,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalMetalHit",
+      "round": 1,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalParryFlash",
+      "round": 1,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalParryFlash",
+      "round": 1,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalParryFlash",
+      "round": 1,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalParryFlash",
+      "round": 1,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalParryFlash",
+      "round": 1,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalAOERelease",
+      "round": 1,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalAOERelease",
+      "round": 1,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalAOERelease",
+      "round": 1,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalAOERelease",
+      "round": 1,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalAOERelease",
+      "round": 1,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalMetalHit",
+      "round": 2,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalMetalHit",
+      "round": 2,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalMetalHit",
+      "round": 2,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalMetalHit",
+      "round": 2,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalMetalHit",
+      "round": 2,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalParryFlash",
+      "round": 2,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalParryFlash",
+      "round": 2,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalParryFlash",
+      "round": 2,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalParryFlash",
+      "round": 2,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalParryFlash",
+      "round": 2,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalAOERelease",
+      "round": 2,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalAOERelease",
+      "round": 2,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalAOERelease",
+      "round": 2,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalAOERelease",
+      "round": 2,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalAOERelease",
+      "round": 2,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalMetalHit",
+      "round": 2,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalMetalHit",
+      "round": 2,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalMetalHit",
+      "round": 2,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalMetalHit",
+      "round": 2,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalMetalHit",
+      "round": 2,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalParryFlash",
+      "round": 2,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalParryFlash",
+      "round": 2,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalParryFlash",
+      "round": 2,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalParryFlash",
+      "round": 2,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalParryFlash",
+      "round": 2,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalAOERelease",
+      "round": 2,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalAOERelease",
+      "round": 2,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalAOERelease",
+      "round": 2,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalAOERelease",
+      "round": 2,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalAOERelease",
+      "round": 2,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalMetalHit",
+      "round": 3,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalMetalHit",
+      "round": 3,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalMetalHit",
+      "round": 3,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalMetalHit",
+      "round": 3,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalMetalHit",
+      "round": 3,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalParryFlash",
+      "round": 3,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalParryFlash",
+      "round": 3,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalParryFlash",
+      "round": 3,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalParryFlash",
+      "round": 3,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalParryFlash",
+      "round": 3,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalAOERelease",
+      "round": 3,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalAOERelease",
+      "round": 3,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalAOERelease",
+      "round": 3,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalAOERelease",
+      "round": 3,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalAOERelease",
+      "round": 3,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalMetalHit",
+      "round": 3,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalMetalHit",
+      "round": 3,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalMetalHit",
+      "round": 3,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalMetalHit",
+      "round": 3,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalMetalHit",
+      "round": 3,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalParryFlash",
+      "round": 3,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalParryFlash",
+      "round": 3,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalParryFlash",
+      "round": 3,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalParryFlash",
+      "round": 3,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalParryFlash",
+      "round": 3,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalAOERelease",
+      "round": 3,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalAOERelease",
+      "round": 3,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalAOERelease",
+      "round": 3,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalAOERelease",
+      "round": 3,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalAOERelease",
+      "round": 3,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalMetalHit",
+      "round": 3,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalMetalHit",
+      "round": 3,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalMetalHit",
+      "round": 3,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalMetalHit",
+      "round": 3,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalMetalHit",
+      "round": 3,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalParryFlash",
+      "round": 3,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalParryFlash",
+      "round": 3,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalParryFlash",
+      "round": 3,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalParryFlash",
+      "round": 3,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalParryFlash",
+      "round": 3,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalAOERelease",
+      "round": 3,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalAOERelease",
+      "round": 3,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalAOERelease",
+      "round": 3,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalAOERelease",
+      "round": 3,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    },
+    {
+      "system": "NS_FinalAOERelease",
+      "round": 3,
+      "valid_after_2_seconds": false,
+      "wrapper_invalidated_by_gc": false,
+      "active": false
+    }
+  ]
+}

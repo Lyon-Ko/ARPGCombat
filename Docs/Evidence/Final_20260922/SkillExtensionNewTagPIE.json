@@ -1,0 +1,1171 @@
+{
+  "ability": "/Game/Combat/Abilities/Examples/GA_CrescentBurst.GA_CrescentBurst_C",
+  "data": "/Game/Combat/Skills/Examples/DA_Example_CrescentBurst.DA_Example_CrescentBurst",
+  "skill_tag": "Combat.Skill.Example.CrescentBurst",
+  "seen_chain": [
+    "Combat.Skill.Attack1",
+    "Combat.Skill.Attack2",
+    "Combat.Skill.Attack3",
+    "Combat.Skill.Example.CrescentBurst"
+  ],
+  "damage": 130.0,
+  "ended_cleanly": true,
+  "timeline": [
+    {
+      "elapsed": -7.450580596923828e-09,
+      "tag": "Combat.Skill.Attack1",
+      "health": 1500.0
+    },
+    {
+      "elapsed": 0.008333493024110794,
+      "tag": "Combat.Skill.Attack1",
+      "health": 1500.0
+    },
+    {
+      "elapsed": 0.016666892915964127,
+      "tag": "Combat.Skill.Attack1",
+      "health": 1500.0
+    },
+    {
+      "elapsed": 0.02500038966536522,
+      "tag": "Combat.Skill.Attack1",
+      "health": 1500.0
+    },
+    {
+      "elapsed": 0.03333389014005661,
+      "tag": "Combat.Skill.Attack1",
+      "health": 1500.0
+    },
+    {
+      "elapsed": 0.04166729003190994,
+      "tag": "Combat.Skill.Attack1",
+      "health": 1500.0
+    },
+    {
+      "elapsed": 0.050000689923763275,
+      "tag": "Combat.Skill.Attack1",
+      "health": 1500.0
+    },
+    {
+      "elapsed": 0.058334190398454666,
+      "tag": "Combat.Skill.Attack1",
+      "health": 1500.0
+    },
+    {
+      "elapsed": 0.06666769087314606,
+      "tag": "Combat.Skill.Attack1",
+      "health": 1500.0
+    },
+    {
+      "elapsed": 0.07500109076499939,
+      "tag": "Combat.Skill.Attack1",
+      "health": 1500.0
+    },
+    {
+      "elapsed": 0.08333459496498108,
+      "tag": "Combat.Skill.Attack1",
+      "health": 1500.0
+    },
+    {
+      "elapsed": 0.09166799485683441,
+      "tag": "Combat.Skill.Attack1",
+      "health": 1500.0
+    },
+    {
+      "elapsed": 0.1000014916062355,
+      "tag": "Combat.Skill.Attack1",
+      "health": 1500.0
+    },
+    {
+      "elapsed": 0.1083349883556366,
+      "tag": "Combat.Skill.Attack1",
+      "health": 1500.0
+    },
+    {
+      "elapsed": 0.11666849255561829,
+      "tag": "Combat.Skill.Attack1",
+      "health": 1500.0
+    },
+    {
+      "elapsed": 0.12500199675559998,
+      "tag": "Combat.Skill.Attack1",
+      "health": 1500.0
+    },
+    {
+      "elapsed": 0.1333353966474533,
+      "tag": "Combat.Skill.Attack1",
+      "health": 1500.0
+    },
+    {
+      "elapsed": 0.14166879653930664,
+      "tag": "Combat.Skill.Attack1",
+      "health": 1500.0
+    },
+    {
+      "elapsed": 0.15000219643115997,
+      "tag": "Combat.Skill.Attack1",
+      "health": 1500.0
+    },
+    {
+      "elapsed": 0.1583355963230133,
+      "tag": "Combat.Skill.Attack1",
+      "health": 1500.0
+    },
+    {
+      "elapsed": 0.1666690856218338,
+      "tag": "Combat.Skill.Attack1",
+      "health": 1500.0
+    },
+    {
+      "elapsed": 0.1750025898218155,
+      "tag": "Combat.Skill.Attack1",
+      "health": 1500.0
+    },
+    {
+      "elapsed": 0.18333598971366882,
+      "tag": "Combat.Skill.Attack1",
+      "health": 1500.0
+    },
+    {
+      "elapsed": 0.19166938960552216,
+      "tag": "Combat.Skill.Attack1",
+      "health": 1500.0
+    },
+    {
+      "elapsed": 0.2000027894973755,
+      "tag": "Combat.Skill.Attack1",
+      "health": 1500.0
+    },
+    {
+      "elapsed": 0.20833629369735718,
+      "tag": "Combat.Skill.Attack1",
+      "health": 1500.0
+    },
+    {
+      "elapsed": 0.21670418977737427,
+      "tag": "Combat.Skill.Attack1",
+      "health": 1482.0
+    },
+    {
+      "elapsed": 0.2251242995262146,
+      "tag": "Combat.Skill.Attack1",
+      "health": 1482.0
+    },
+    {
+      "elapsed": 0.2342911958694458,
+      "tag": "Combat.Skill.Attack1",
+      "health": 1482.0
+    },
+    {
+      "elapsed": 0.2519405782222748,
+      "tag": "Combat.Skill.Attack1",
+      "health": 1482.0
+    },
+    {
+      "elapsed": 0.26029789447784424,
+      "tag": "Combat.Skill.Attack1",
+      "health": 1482.0
+    },
+    {
+      "elapsed": 0.26867789030075073,
+      "tag": "Combat.Skill.Attack1",
+      "health": 1482.0
+    },
+    {
+      "elapsed": 0.2770133912563324,
+      "tag": "Combat.Skill.Attack1",
+      "health": 1482.0
+    },
+    {
+      "elapsed": 0.2853468060493469,
+      "tag": "Combat.Skill.Attack1",
+      "health": 1482.0
+    },
+    {
+      "elapsed": 0.29368019104003906,
+      "tag": "Combat.Skill.Attack1",
+      "health": 1482.0
+    },
+    {
+      "elapsed": 0.3020135760307312,
+      "tag": "Combat.Skill.Attack1",
+      "health": 1482.0
+    },
+    {
+      "elapsed": 0.3103470802307129,
+      "tag": "Combat.Skill.Attack1",
+      "health": 1482.0
+    },
+    {
+      "elapsed": 0.3186805844306946,
+      "tag": "Combat.Skill.Attack1",
+      "health": 1482.0
+    },
+    {
+      "elapsed": 0.32701408863067627,
+      "tag": "Combat.Skill.Attack1",
+      "health": 1482.0
+    },
+    {
+      "elapsed": 0.3353475034236908,
+      "tag": "Combat.Skill.Attack1",
+      "health": 1482.0
+    },
+    {
+      "elapsed": 0.34368088841438293,
+      "tag": "Combat.Skill.Attack1",
+      "health": 1482.0
+    },
+    {
+      "elapsed": 0.3520143926143646,
+      "tag": "Combat.Skill.Attack1",
+      "health": 1482.0
+    },
+    {
+      "elapsed": -7.450580596923828e-09,
+      "tag": "Combat.Skill.Attack2",
+      "health": 1482.0
+    },
+    {
+      "elapsed": 0.008333396166563034,
+      "tag": "Combat.Skill.Attack2",
+      "health": 1482.0
+    },
+    {
+      "elapsed": 0.016666892915964127,
+      "tag": "Combat.Skill.Attack2",
+      "health": 1482.0
+    },
+    {
+      "elapsed": 0.02500569447875023,
+      "tag": "Combat.Skill.Attack2",
+      "health": 1482.0
+    },
+    {
+      "elapsed": 0.03333919495344162,
+      "tag": "Combat.Skill.Attack2",
+      "health": 1482.0
+    },
+    {
+      "elapsed": 0.04167269542813301,
+      "tag": "Combat.Skill.Attack2",
+      "health": 1482.0
+    },
+    {
+      "elapsed": 0.0500061959028244,
+      "tag": "Combat.Skill.Attack2",
+      "health": 1482.0
+    },
+    {
+      "elapsed": 0.058339692652225494,
+      "tag": "Combat.Skill.Attack2",
+      "health": 1482.0
+    },
+    {
+      "elapsed": 0.06667318940162659,
+      "tag": "Combat.Skill.Attack2",
+      "health": 1482.0
+    },
+    {
+      "elapsed": 0.07500669360160828,
+      "tag": "Combat.Skill.Attack2",
+      "health": 1482.0
+    },
+    {
+      "elapsed": 0.08334269374608994,
+      "tag": "Combat.Skill.Attack2",
+      "health": 1482.0
+    },
+    {
+      "elapsed": 0.09167619049549103,
+      "tag": "Combat.Skill.Attack2",
+      "health": 1482.0
+    },
+    {
+      "elapsed": 0.10000959038734436,
+      "tag": "Combat.Skill.Attack2",
+      "health": 1482.0
+    },
+    {
+      "elapsed": 0.10834309458732605,
+      "tag": "Combat.Skill.Attack2",
+      "health": 1482.0
+    },
+    {
+      "elapsed": 0.11667649447917938,
+      "tag": "Combat.Skill.Attack2",
+      "health": 1482.0
+    },
+    {
+      "elapsed": 0.12500999867916107,
+      "tag": "Combat.Skill.Attack2",
+      "health": 1482.0
+    },
+    {
+      "elapsed": 0.1333433985710144,
+      "tag": "Combat.Skill.Attack2",
+      "health": 1482.0
+    },
+    {
+      "elapsed": 0.1416769027709961,
+      "tag": "Combat.Skill.Attack2",
+      "health": 1482.0
+    },
+    {
+      "elapsed": 0.15002098679542542,
+      "tag": "Combat.Skill.Attack2",
+      "health": 1482.0
+    },
+    {
+      "elapsed": 0.15835440158843994,
+      "tag": "Combat.Skill.Attack2",
+      "health": 1482.0
+    },
+    {
+      "elapsed": 0.16668789088726044,
+      "tag": "Combat.Skill.Attack2",
+      "health": 1482.0
+    },
+    {
+      "elapsed": 0.17502129077911377,
+      "tag": "Combat.Skill.Attack2",
+      "health": 1482.0
+    },
+    {
+      "elapsed": 0.18335479497909546,
+      "tag": "Combat.Skill.Attack2",
+      "health": 1482.0
+    },
+    {
+      "elapsed": 0.19168829917907715,
+      "tag": "Combat.Skill.Attack2",
+      "health": 1482.0
+    },
+    {
+      "elapsed": 0.20002180337905884,
+      "tag": "Combat.Skill.Attack2",
+      "health": 1460.0
+    },
+    {
+      "elapsed": 0.20835518836975098,
+      "tag": "Combat.Skill.Attack2",
+      "health": 1460.0
+    },
+    {
+      "elapsed": 0.21668869256973267,
+      "tag": "Combat.Skill.Attack2",
+      "health": 1460.0
+    },
+    {
+      "elapsed": 0.225022092461586,
+      "tag": "Combat.Skill.Attack2",
+      "health": 1460.0
+    },
+    {
+      "elapsed": 0.2333555966615677,
+      "tag": "Combat.Skill.Attack2",
+      "health": 1460.0
+    },
+    {
+      "elapsed": 0.24581219255924225,
+      "tag": "Combat.Skill.Attack2",
+      "health": 1460.0
+    },
+    {
+      "elapsed": 0.25544309616088867,
+      "tag": "Combat.Skill.Attack2",
+      "health": 1460.0
+    },
+    {
+      "elapsed": 0.2637764811515808,
+      "tag": "Combat.Skill.Attack2",
+      "health": 1460.0
+    },
+    {
+      "elapsed": 0.27210989594459534,
+      "tag": "Combat.Skill.Attack2",
+      "health": 1460.0
+    },
+    {
+      "elapsed": 0.280443400144577,
+      "tag": "Combat.Skill.Attack2",
+      "health": 1460.0
+    },
+    {
+      "elapsed": 0.2887769043445587,
+      "tag": "Combat.Skill.Attack2",
+      "health": 1460.0
+    },
+    {
+      "elapsed": 0.297110378742218,
+      "tag": "Combat.Skill.Attack2",
+      "health": 1460.0
+    },
+    {
+      "elapsed": 0.30544379353523254,
+      "tag": "Combat.Skill.Attack2",
+      "health": 1460.0
+    },
+    {
+      "elapsed": 0.31377729773521423,
+      "tag": "Combat.Skill.Attack2",
+      "health": 1460.0
+    },
+    {
+      "elapsed": 0.3221108019351959,
+      "tag": "Combat.Skill.Attack2",
+      "health": 1460.0
+    },
+    {
+      "elapsed": 0.3315812051296234,
+      "tag": "Combat.Skill.Attack2",
+      "health": 1460.0
+    },
+    {
+      "elapsed": 0.33991459012031555,
+      "tag": "Combat.Skill.Attack2",
+      "health": 1460.0
+    },
+    {
+      "elapsed": 0.34824809432029724,
+      "tag": "Combat.Skill.Attack2",
+      "health": 1460.0
+    },
+    {
+      "elapsed": 0.3616954982280731,
+      "tag": "Combat.Skill.Attack2",
+      "health": 1460.0
+    },
+    {
+      "elapsed": 5.587935447692871e-08,
+      "tag": "Combat.Skill.Attack3",
+      "health": 1460.0
+    },
+    {
+      "elapsed": 0.00833345577120781,
+      "tag": "Combat.Skill.Attack3",
+      "health": 1460.0
+    },
+    {
+      "elapsed": 0.0166715569794178,
+      "tag": "Combat.Skill.Attack3",
+      "health": 1460.0
+    },
+    {
+      "elapsed": 0.025005057454109192,
+      "tag": "Combat.Skill.Attack3",
+      "health": 1460.0
+    },
+    {
+      "elapsed": 0.03339335694909096,
+      "tag": "Combat.Skill.Attack3",
+      "health": 1460.0
+    },
+    {
+      "elapsed": 0.04172675684094429,
+      "tag": "Combat.Skill.Attack3",
+      "health": 1460.0
+    },
+    {
+      "elapsed": 0.05006025731563568,
+      "tag": "Combat.Skill.Attack3",
+      "health": 1460.0
+    },
+    {
+      "elapsed": 0.05839375779032707,
+      "tag": "Combat.Skill.Attack3",
+      "health": 1460.0
+    },
+    {
+      "elapsed": 0.06685195863246918,
+      "tag": "Combat.Skill.Attack3",
+      "health": 1460.0
+    },
+    {
+      "elapsed": 0.07518535852432251,
+      "tag": "Combat.Skill.Attack3",
+      "health": 1460.0
+    },
+    {
+      "elapsed": 0.0835188627243042,
+      "tag": "Combat.Skill.Attack3",
+      "health": 1460.0
+    },
+    {
+      "elapsed": 0.09185226261615753,
+      "tag": "Combat.Skill.Attack3",
+      "health": 1460.0
+    },
+    {
+      "elapsed": 0.10018585622310638,
+      "tag": "Combat.Skill.Attack3",
+      "health": 1460.0
+    },
+    {
+      "elapsed": 0.10851936042308807,
+      "tag": "Combat.Skill.Attack3",
+      "health": 1460.0
+    },
+    {
+      "elapsed": 0.11685285717248917,
+      "tag": "Combat.Skill.Attack3",
+      "health": 1460.0
+    },
+    {
+      "elapsed": 0.12518635392189026,
+      "tag": "Combat.Skill.Attack3",
+      "health": 1460.0
+    },
+    {
+      "elapsed": 0.13363195955753326,
+      "tag": "Combat.Skill.Attack3",
+      "health": 1460.0
+    },
+    {
+      "elapsed": 0.14197614789009094,
+      "tag": "Combat.Skill.Attack3",
+      "health": 1460.0
+    },
+    {
+      "elapsed": 0.15030956268310547,
+      "tag": "Combat.Skill.Attack3",
+      "health": 1460.0
+    },
+    {
+      "elapsed": 0.15864305198192596,
+      "tag": "Combat.Skill.Attack3",
+      "health": 1460.0
+    },
+    {
+      "elapsed": 0.16697655618190765,
+      "tag": "Combat.Skill.Attack3",
+      "health": 1460.0
+    },
+    {
+      "elapsed": 0.17531195282936096,
+      "tag": "Combat.Skill.Attack3",
+      "health": 1460.0
+    },
+    {
+      "elapsed": 0.18364545702934265,
+      "tag": "Combat.Skill.Attack3",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 0.19197896122932434,
+      "tag": "Combat.Skill.Attack3",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 0.20031246542930603,
+      "tag": "Combat.Skill.Attack3",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 0.20864595472812653,
+      "tag": "Combat.Skill.Attack3",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 0.21724125742912292,
+      "tag": "Combat.Skill.Attack3",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 0.2256355583667755,
+      "tag": "Combat.Skill.Attack3",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 0.23396895825862885,
+      "tag": "Combat.Skill.Attack3",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 0.24230235815048218,
+      "tag": "Combat.Skill.Attack3",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 0.25063586235046387,
+      "tag": "Combat.Skill.Attack3",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 0.25896966457366943,
+      "tag": "Combat.Skill.Attack3",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 0.2673030495643616,
+      "tag": "Combat.Skill.Attack3",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 0.27563655376434326,
+      "tag": "Combat.Skill.Attack3",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 0.2839699685573578,
+      "tag": "Combat.Skill.Attack3",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 0.2923068404197693,
+      "tag": "Combat.Skill.Attack3",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 0.300640344619751,
+      "tag": "Combat.Skill.Attack3",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 0.308976948261261,
+      "tag": "Combat.Skill.Attack3",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 0.3173103630542755,
+      "tag": "Combat.Skill.Attack3",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 0.3256438672542572,
+      "tag": "Combat.Skill.Attack3",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 0.33397725224494934,
+      "tag": "Combat.Skill.Attack3",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 0.34231075644493103,
+      "tag": "Combat.Skill.Attack3",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 0.35064417123794556,
+      "tag": "Combat.Skill.Attack3",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 0.35897764563560486,
+      "tag": "Combat.Skill.Attack3",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 0.3673110604286194,
+      "tag": "Combat.Skill.Attack3",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 1.1175870895385742e-08,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 0.008362513035535812,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 0.016696013510227203,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 0.025029413402080536,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 0.03338231146335602,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 0.04171581193804741,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 0.05005661025643349,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 0.05839011073112488,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 0.06672351062297821,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 0.0750570148229599,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 0.08339041471481323,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 0.09172381460666656,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 0.1000572144985199,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 0.10839071124792099,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 0.11672420799732208,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 0.12505771219730377,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 0.13339121639728546,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 0.14172470569610596,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 0.15005820989608765,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 0.15839171409606934,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 0.16672511398792267,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 0.17505860328674316,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 0.1833920180797577,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1434.0
+    },
+    {
+      "elapsed": 0.19172540307044983,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.20005881786346436,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.20839230716228485,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.21672570705413818,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.22505921125411987,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.2333926111459732,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.2417261153459549,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.2500595152378082,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.25839290022850037,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.26672640442848206,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.2750598192214966,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.2833932042121887,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.2917267084121704,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.3000602126121521,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.30839359760284424,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.3167271018028259,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.32506051659584045,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.33339402079582214,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.34176909923553467,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.35010260343551636,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.35843610763549805,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.3667695224285126,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.3751029968261719,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.38343650102615356,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.3917699158191681,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.40010330080986023,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.4084368050098419,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.4167756140232086,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.42510899901390076,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.4334424138069153,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.4417757987976074,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.4501093029975891,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.4584428071975708,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.4667762219905853,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.47510960698127747,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.48344311118125916,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.49177661538124084,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.5001100897789001,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.5084435939788818,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.5167770981788635,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.5251106023788452,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.5334439873695374,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.541777491569519,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.550110936164856,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.5584443807601929,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.5814685821533203,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.5898020267486572,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.599750816822052,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.6080842018127441,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.6164175868034363,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.624751091003418,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.6330845952033997,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.6414180994033813,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.6497514843940735,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.6580849289894104,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.6664183139801025,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.6747518181800842,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.6830853223800659,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.6914187073707581,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.6997522115707397,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.7080857157707214,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.716448187828064,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1402.0
+    },
+    {
+      "elapsed": 0.7247816324234009,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1370.0
+    },
+    {
+      "elapsed": 0.733115017414093,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1370.0
+    },
+    {
+      "elapsed": 0.7414485216140747,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1370.0
+    },
+    {
+      "elapsed": 0.7497819066047668,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1370.0
+    },
+    {
+      "elapsed": 0.758115291595459,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1370.0
+    },
+    {
+      "elapsed": 0.7664487957954407,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1370.0
+    },
+    {
+      "elapsed": 0.7747822999954224,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1370.0
+    },
+    {
+      "elapsed": 0.783115804195404,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1370.0
+    },
+    {
+      "elapsed": 0.7914493083953857,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1370.0
+    },
+    {
+      "elapsed": 0.7998658418655396,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1370.0
+    },
+    {
+      "elapsed": 0.8081992864608765,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1370.0
+    },
+    {
+      "elapsed": 0.8165327310562134,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1370.0
+    },
+    {
+      "elapsed": 0.8248662352561951,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1370.0
+    },
+    {
+      "elapsed": 0.8331996202468872,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1370.0
+    },
+    {
+      "elapsed": 0.8415639996528625,
+      "tag": "Combat.Skill.Example.CrescentBurst",
+      "health": 1370.0
+    },
+    {
+      "elapsed": 0.0,
+      "tag": "None",
+      "health": 1370.0
+    }
+  ],
+  "defaults_restored": true
+}

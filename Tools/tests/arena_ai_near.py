@@ -19,7 +19,7 @@ class NearAI(BASE['AIScenarios']):
         yield
 
     def run(self):
-        self.report['reference_full_suite'] = 'arena_ai_scenarios_20260921T181713Z.json'
+        self.report['reference_full_suite'] = 'arena_ai_scenarios_20260921T193914Z.json'
         self.report['scope'] = '64 real first-action observations at 180cm; paired neutral/Parry; no health injection'
         yield from super().run()
         rows = self.report['selections']

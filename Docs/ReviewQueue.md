@@ -1,6 +1,6 @@
 # Integration review queue
 
-These are concrete remaining quality/acceptance checks, not additional user approval gates. Root coordinates batches so editor work can continue between builds.
+This is the historical implementation review list from the first PIE pass. Current completion status, fixes and evidence are maintained in [DeliveryVerification](DeliveryVerification.md); the early observations below are not a list of defects still present in the final build.
 
 ## After first successful PIE
 - Verify all regular and derived player inputs, boss StateTree startup and actual montage event flow. No permanent Busy, idle AI, double weapon or skeleton mismatch.

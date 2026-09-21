@@ -1,0 +1,179 @@
+{
+  "source": "D:\\UEproject\\Combat\\Saved\\Acceptance\\arena_acceptance_20260921T185232088295Z.json",
+  "sha256": "afaf8a66c42af6606c1a46f6298eb270c41515d735f59f832e02142c7a395888",
+  "python": "3.11.8 (tags/v3.11.8:db85d51, Feb  6 2024, 22:03:32) [MSC v.1937 64 bit (AMD64)]",
+  "orjson_version": "3.12.0",
+  "orjson_module": "D:\\UEproject\\Combat\\Tools\\vendor\\python311\\orjson\\__init__.py",
+  "runs_each": 9,
+  "results": {
+    "stdlib_pretty": {
+      "bytes": 3158159,
+      "roundtrip_equal": true,
+      "median_ms": {
+        "serialize_ms": 109.79820000284235,
+        "write_replace_ms": 3.5826999992423225,
+        "total_ms": 113.29260000275099
+      },
+      "samples": [
+        {
+          "serialize_ms": 102.50220000307309,
+          "write_replace_ms": 3.150399999867659,
+          "total_ms": 105.65260000294074
+        },
+        {
+          "serialize_ms": 107.42459999892162,
+          "write_replace_ms": 4.8104000015882775,
+          "total_ms": 112.2350000005099
+        },
+        {
+          "serialize_ms": 98.32639999876847,
+          "write_replace_ms": 3.5766000000876375,
+          "total_ms": 101.9029999988561
+        },
+        {
+          "serialize_ms": 94.14189999733935,
+          "write_replace_ms": 2.86469999991823,
+          "total_ms": 97.00659999725758
+        },
+        {
+          "serialize_ms": 129.22290000278736,
+          "write_replace_ms": 5.743499998061452,
+          "total_ms": 134.9664000008488
+        },
+        {
+          "serialize_ms": 109.79820000284235,
+          "write_replace_ms": 3.4943999999086373,
+          "total_ms": 113.29260000275099
+        },
+        {
+          "serialize_ms": 134.2354999978852,
+          "write_replace_ms": 5.297900002915412,
+          "total_ms": 139.5334000008006
+        },
+        {
+          "serialize_ms": 114.59610000019893,
+          "write_replace_ms": 3.5826999992423225,
+          "total_ms": 118.17879999944125
+        },
+        {
+          "serialize_ms": 137.66069999837782,
+          "write_replace_ms": 3.6706999999296386,
+          "total_ms": 141.33139999830746
+        }
+      ]
+    },
+    "stdlib_compact": {
+      "bytes": 1730398,
+      "roundtrip_equal": true,
+      "median_ms": {
+        "serialize_ms": 21.134500002517598,
+        "write_replace_ms": 3.052599997317884,
+        "total_ms": 24.27979999993113
+      },
+      "samples": [
+        {
+          "serialize_ms": 24.038699997618096,
+          "write_replace_ms": 2.604500001325505,
+          "total_ms": 26.6431999989436
+        },
+        {
+          "serialize_ms": 28.83250000013504,
+          "write_replace_ms": 2.718499999900814,
+          "total_ms": 31.551000000035856
+        },
+        {
+          "serialize_ms": 18.256200000905665,
+          "write_replace_ms": 2.9667999988305382,
+          "total_ms": 21.222999999736203
+        },
+        {
+          "serialize_ms": 18.050300001050346,
+          "write_replace_ms": 2.6063000004796777,
+          "total_ms": 20.656600001530023
+        },
+        {
+          "serialize_ms": 18.89609999852837,
+          "write_replace_ms": 3.4009000009973533,
+          "total_ms": 22.296999999525724
+        },
+        {
+          "serialize_ms": 19.919900001696078,
+          "write_replace_ms": 3.082299997913651,
+          "total_ms": 23.00219999960973
+        },
+        {
+          "serialize_ms": 21.134500002517598,
+          "write_replace_ms": 3.145299997413531,
+          "total_ms": 24.27979999993113
+        },
+        {
+          "serialize_ms": 21.88179999939166,
+          "write_replace_ms": 3.2054000002972316,
+          "total_ms": 25.08719999968889
+        },
+        {
+          "serialize_ms": 22.057300000597024,
+          "write_replace_ms": 3.052599997317884,
+          "total_ms": 25.10989999791491
+        }
+      ]
+    },
+    "orjson_compact": {
+      "bytes": 1730394,
+      "roundtrip_equal": true,
+      "median_ms": {
+        "serialize_ms": 1.9622999971034005,
+        "write_replace_ms": 3.153599998768186,
+        "total_ms": 4.81220000074245
+      },
+      "samples": [
+        {
+          "serialize_ms": 1.6892999992705882,
+          "write_replace_ms": 2.2285999984887894,
+          "total_ms": 3.9178999977593776
+        },
+        {
+          "serialize_ms": 1.6095000028144568,
+          "write_replace_ms": 3.153599998768186,
+          "total_ms": 4.763100001582643
+        },
+        {
+          "serialize_ms": 1.443900000595022,
+          "write_replace_ms": 3.8499999973282684,
+          "total_ms": 5.29389999792329
+        },
+        {
+          "serialize_ms": 2.4382000010518823,
+          "write_replace_ms": 2.373999999690568,
+          "total_ms": 4.81220000074245
+        },
+        {
+          "serialize_ms": 1.9753999986278359,
+          "write_replace_ms": 4.424099999596365,
+          "total_ms": 6.399499998224201
+        },
+        {
+          "serialize_ms": 1.8688000018300954,
+          "write_replace_ms": 2.642399998876499,
+          "total_ms": 4.511200000706594
+        },
+        {
+          "serialize_ms": 1.9622999971034005,
+          "write_replace_ms": 3.4661000026972033,
+          "total_ms": 5.428399999800604
+        },
+        {
+          "serialize_ms": 2.290799999173032,
+          "write_replace_ms": 2.273300000524614,
+          "total_ms": 4.564099999697646
+        },
+        {
+          "serialize_ms": 2.116700001352001,
+          "write_replace_ms": 3.609100000176113,
+          "total_ms": 5.725800001528114
+        }
+      ]
+    }
+  },
+  "scope": "Offline serialization and atomic write of identical complete baseline JSON; not gameplay frame timing."
+}

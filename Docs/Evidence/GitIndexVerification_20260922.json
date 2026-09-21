@@ -1,0 +1,408 @@
+{
+  "verified": true,
+  "recorded_utc": "2026-09-21T20:55:32.055996+00:00",
+  "artifacts": 80,
+  "checks": [
+    {
+      "artifact": "Build_DefaultChain_14.log",
+      "mode": "git_blob",
+      "sha256": "5324b64eae8b936876beab4c0c63cbdf61e6d0ca09664c85d1a0ee5f2780b562"
+    },
+    {
+      "artifact": "DefaultChain_AssetValidation.json",
+      "mode": "git_blob",
+      "sha256": "ef320843ad17242dbd3825d548d648dd47a40efc2cec42a833235309b584c66a"
+    },
+    {
+      "artifact": "DefaultChain_ColdStart.json",
+      "mode": "git_blob",
+      "sha256": "064d6d7f2b650765b501f257d58e4f10e59d41a1a3d66be58239bc5ec524b5f9"
+    },
+    {
+      "artifact": "DefaultChainRepair_20260921T195055491298Z.json",
+      "mode": "git_blob",
+      "sha256": "b73b411cbbe782a1a3f59efdf13a90ec4f58911992543445ecf9e681e260e326"
+    },
+    {
+      "artifact": "SkillExtensionFinal_20260921T194848720875Z.json",
+      "mode": "git_blob",
+      "sha256": "7e843da662b96f9f8ed40fb0c7a68a6fced54481a92a489801bf805ed1cfc9bf"
+    },
+    {
+      "artifact": "SkillExtensionFinal_20260921T195256502504Z.json",
+      "mode": "git_blob",
+      "sha256": "21a8263d1f3445a9e20d000933a904b1ff30d7d8a5f8bee0841596e50604b388"
+    },
+    {
+      "artifact": "default_chain_only_20260921T195607760663Z.json",
+      "mode": "git_blob",
+      "sha256": "f4fd16c813daaec54196436173e78c67b79fec6157638d09f1caf9d75b1d64cd"
+    },
+    {
+      "artifact": "arena_acceptance_20260921T192140351854Z.json",
+      "mode": "git_blob",
+      "sha256": "7dea40ae701df1a16e8e0a748a3648463913d7c7e88675c350a5c2d1bf0a40f2"
+    },
+    {
+      "artifact": "Performance_1080pHigh_60_20260921T192140351854Z.json",
+      "mode": "git_blob",
+      "sha256": "4092b154678aadaafdb97a360f35911e9be60f2466cc5266d1d2c51005ed0c84"
+    },
+    {
+      "artifact": "runtime_profile_20260921T193559409889Z.json",
+      "mode": "git_blob",
+      "sha256": "9167f44ed6339a4d15710ac451eb4ce2feb34ebfec74b24ff1a9bb6e1cc5d4e6"
+    },
+    {
+      "artifact": "Performance_Supplemental_1080pHigh_60_20260921T193559409889Z.json",
+      "mode": "git_blob",
+      "sha256": "cd36edf1af1c9fd2868b5824c5c794b2e54e9a4a5c8041cb3820114675ae9ab2"
+    },
+    {
+      "artifact": "gc_profile_20260921T194436862733Z.json",
+      "mode": "git_blob",
+      "sha256": "9ccd8297c61bf1aea3e9fea3774a4fdd3a2bfdc5178ebecf4c7337b4d581eeaa"
+    },
+    {
+      "artifact": "GCAnalysis_20260921T194436862733Z.json",
+      "mode": "git_blob",
+      "sha256": "028f78943907e985dc7f9829ab7bcab70402ec36ad13d479e9a51f2c304915fe"
+    },
+    {
+      "artifact": "trace_profile_20260921T200209859752Z.json",
+      "mode": "git_blob",
+      "sha256": "6efd8a6897599379b8078752e56a2e1c1766e6f7b72f498de62bf3d2f88625ac"
+    },
+    {
+      "artifact": "MassSingleThread_20260921T201336033106Z.json",
+      "mode": "git_blob",
+      "sha256": "0a9647675b9f45327ac6ce4978bbb21d96cd2b0540f3d9938773325b950fe68e"
+    },
+    {
+      "artifact": "arena_ai_scenarios_20260921T193914Z.json",
+      "mode": "git_blob",
+      "sha256": "d5940fcab01c4f3712cb423726aae52d68215f83c5fe3c123ab6cdbeb430d30c"
+    },
+    {
+      "artifact": "arena_ai_near_20260921T194032Z.json",
+      "mode": "git_blob",
+      "sha256": "314bb9322bd61b8a2656394d9fde2f4d5be36167aef0cbd914f2d2cfdb607330"
+    },
+    {
+      "artifact": "arena_spatial_visual_20260921T194122Z.json",
+      "mode": "git_blob",
+      "sha256": "3ea4c6ebe350279f1d658296a5c88d8eb84840f6111d88608bcf180e4db240a4"
+    },
+    {
+      "artifact": "ScreenShot00008.png",
+      "mode": "lfs_oid",
+      "sha256": "3b1a615f094d3c8cda4d1afa9f0660d08a29591a3bfeab38600630606e44a8c7"
+    },
+    {
+      "artifact": "ScreenShot00009.png",
+      "mode": "lfs_oid",
+      "sha256": "761ce01dd9b1a31c9c3f15a10b24c4a18cf946505d7cd299f84a99d055d58d06"
+    },
+    {
+      "artifact": "Build_AreaReentry_13.log",
+      "mode": "git_blob",
+      "sha256": "22eb9311a1c6e3177b5bb7c7a51fea95c1f6fb3b4e3f3a2a98a8e22f9ffd055c"
+    },
+    {
+      "artifact": "Build13_AssetValidation.json",
+      "mode": "git_blob",
+      "sha256": "b3dd6cd4ce859c26722b82d62854d9ca07c0eee0c51d1f4e9119cd14f53c82ac"
+    },
+    {
+      "artifact": "CLIFileProbe.json",
+      "mode": "git_blob",
+      "sha256": "e267f05c1823bd687d7162de4fe6867b00d781eaf8c7ff9671f02fb8691f86c9"
+    },
+    {
+      "artifact": "CLIFilePersistence.json",
+      "mode": "git_blob",
+      "sha256": "03795a1addddcec3b4c1cd13156cd87d3de19cc28511f3d31642fb055ba914b3"
+    },
+    {
+      "artifact": "SkillExtensionNewTagPIE.json",
+      "mode": "git_blob",
+      "sha256": "4384a5b45150403e71febd559b0abb6ca97043dad78db25cab7083e5ce78f94f"
+    },
+    {
+      "artifact": "Build11_Directed_20260921T191304332667Z.json",
+      "mode": "git_blob",
+      "sha256": "eee9f759908d299c525b2bb824f97bc66f2561e484e00fca13c37c040152c991"
+    },
+    {
+      "artifact": "CombinedSources_20260921T191815227899Z.json",
+      "mode": "git_blob",
+      "sha256": "202b4f333995103b4dfebcdb4e660f968b7b5563e3f0b5f60b02e0d8edcaa515"
+    },
+    {
+      "artifact": "CombinedSources_20260921T192102267435Z.json",
+      "mode": "git_blob",
+      "sha256": "7189e483f3caefba25ac2a9792546806ce90112fb8c9445c99e6f2f0bf6fc80e"
+    },
+    {
+      "artifact": "arena_acceptance_20260921T185232088295Z.json",
+      "mode": "git_blob",
+      "sha256": "afaf8a66c42af6606c1a46f6298eb270c41515d735f59f832e02142c7a395888"
+    },
+    {
+      "artifact": "Performance_1080pHigh_60_20260921T185232088295Z.json",
+      "mode": "git_blob",
+      "sha256": "6874993648aa3b030055958e397ec7129ce50fe00d0cbe283ae339271b0ed48c"
+    },
+    {
+      "artifact": "PersistenceBenchmark_20260921_baseline.json",
+      "mode": "git_blob",
+      "sha256": "b6b3fab9b17b0807b24fcab59cc11b3c107ae4c41fa010f6d7053e47a324f99c"
+    },
+    {
+      "artifact": "SerializerBenchmark.json",
+      "mode": "git_blob",
+      "sha256": "c9a4e6b12a33bd932ae9f59c253ca9f2ecf4d90046a6b0661e98b0479ca3d01e"
+    },
+    {
+      "artifact": "CombatNativeFocusedOutput.json",
+      "mode": "git_blob",
+      "sha256": "0edde2faba0bf86353e477735525d37eaa38e49ba30e4131fdf5749026d57901"
+    },
+    {
+      "artifact": "VFXLifetime.json",
+      "mode": "git_blob",
+      "sha256": "96438f3563ee994aba8d35377d3d3e75530a226ef4968bd6295457e47683043d"
+    },
+    {
+      "artifact": "VFXHandoff.json",
+      "mode": "git_blob",
+      "sha256": "0357dda3fcb1497c2929e043fdeb886d3b901c3679c4581c414b293db6e79f86"
+    },
+    {
+      "artifact": "VFXFinalReloadedProperties.txt",
+      "mode": "git_blob",
+      "sha256": "44ea4980376626b0c30e4d45a63f72698dd2545ce2fc0334b193eb3e9d530bb7"
+    },
+    {
+      "artifact": "VFX_final_hit.png",
+      "mode": "lfs_oid",
+      "sha256": "c944453a8158bd98fa3d96ad004f985861fbe1525476d10b121cde1b32535f9c"
+    },
+    {
+      "artifact": "VFX_final_parry.png",
+      "mode": "lfs_oid",
+      "sha256": "de8a4334375a5fab2abd0abc48a55fa7ebb3a5c99a18636fe4be1256ac3583f8"
+    },
+    {
+      "artifact": "VFX_final_aoe.png",
+      "mode": "lfs_oid",
+      "sha256": "a37bac8e3bea909220349fd20a25b8e15fc17a3f104300134f5e3ff76285f758"
+    },
+    {
+      "artifact": "VFX_final_wave.png",
+      "mode": "lfs_oid",
+      "sha256": "c27e86fc0666480d17196e3eba943823acc084a59f9910e36aebc906291d4663"
+    },
+    {
+      "artifact": "VFX_final_warning.png",
+      "mode": "lfs_oid",
+      "sha256": "43fdddc943cf78ed188e3bbd6b961685e0989e09363c9d0246a1d80d0e22fd75"
+    },
+    {
+      "artifact": "VFX_ribbonactive_player_ribbon.png",
+      "mode": "lfs_oid",
+      "sha256": "b104bed57fc671dc7329c917857c5d1e0c3fa6bade4f31950a651b378dd91006"
+    },
+    {
+      "artifact": "VFX_ribbonactive_boss_ribbon.png",
+      "mode": "lfs_oid",
+      "sha256": "abbc2e67a7667f237300ebaa4514cfe817b82ab7dd11d96983c5eca29d661dff"
+    },
+    {
+      "artifact": "ScreenShot00005.png",
+      "mode": "lfs_oid",
+      "sha256": "a08b5233c80c39bd6745433323611e9422b21d66dbcc8180197034310a72e7c2"
+    },
+    {
+      "artifact": "ScreenShot00006.png",
+      "mode": "lfs_oid",
+      "sha256": "fdba263d64147c3d7eade4ee721be1c65830dd85f937eaa8c4315654421c7d3c"
+    },
+    {
+      "artifact": "ScreenShot00007.png",
+      "mode": "lfs_oid",
+      "sha256": "cfa742f63ee7cda21aee1d99990ab74a1eed60e89690d8fb0252b8cdc677fdb1"
+    },
+    {
+      "artifact": "Performance_1080pHigh_60_20260921T202025583112Z.json",
+      "mode": "git_blob",
+      "sha256": "b0973a1c79f45ca5feb9e9f73b0624524a845b8cb34bfcb5689b6bddc169fcf1"
+    },
+    {
+      "artifact": "runtime_profile_20260921T203637661555Z.json",
+      "mode": "git_blob",
+      "sha256": "fc650214a36721de9cd5eb9f4b326247430b92ab3855ab676d332f021f0f3b12"
+    },
+    {
+      "artifact": "Performance_Supplemental_1080pHigh_60_20260921T203637661555Z.json",
+      "mode": "git_blob",
+      "sha256": "1ee5aa76445a6e453a2263b4d51d41226b4097872f91b7c6fe4aa3731ba2cb02"
+    },
+    {
+      "artifact": "MassSerialColdStart_20260921T201915630167Z.json",
+      "mode": "git_blob",
+      "sha256": "5e86a422579f0e78d8602e6ec99e37e2ecd9291ca791bea6cf2c092e517cd606"
+    },
+    {
+      "artifact": "Performance_MassSingleThread_1080pHigh_60_20260921T201336033106Z.json",
+      "mode": "git_blob",
+      "sha256": "c3968ce5ee74d1e7044d21217d732f0c20170d140ee2ec04bfa1c6b5e3acbc68"
+    },
+    {
+      "artifact": "MassWaitDiagnosis_20260921T200209859752Z.json",
+      "mode": "git_blob",
+      "sha256": "8c0c2dd76fd701fa6617b4d446d5003d2d1341ae273107fad66c6f90d44f522d"
+    },
+    {
+      "artifact": "Performance_TraceObserved_1080pHigh_60_20260921T200209859752Z.json",
+      "mode": "git_blob",
+      "sha256": "7f432e2ef72b44cdcb52d58caf36e2d2d4c9af6b8a2fa0f94a2ec2873fa9b476"
+    },
+    {
+      "artifact": "HitchDetails_Final20.json",
+      "mode": "git_blob",
+      "sha256": "6b630406ea58145779ce71a3b2fea7ef8c8c8c5551eb86f61a5c0cc0a222884f"
+    },
+    {
+      "artifact": "FinalRemoteCleanup_20260921T203405877822Z.json",
+      "mode": "git_blob",
+      "sha256": "02393d91af7b0fd9a48baf2f983c4f350785b9986542a1eefeb74dd3fb7629c4"
+    },
+    {
+      "artifact": "FinalRemoteCleanup_20260921T204359642768Z.json",
+      "mode": "git_blob",
+      "sha256": "59edc52b4a9b66063505e7f4504f5cd1a6b10e3616d4f5e5d0825fdab56512ff"
+    },
+    {
+      "artifact": "FinalColdStart_20260921T204520545958Z.json",
+      "mode": "git_blob",
+      "sha256": "dc85386794f59b3a419c71dcc445f646925332c19ae2e5b4cfaa85f3e06d8f32"
+    },
+    {
+      "artifact": "FinalHandoff_20260921T204548707031Z.json",
+      "mode": "git_blob",
+      "sha256": "e6b3c33a06962a6cb214adc154ef607afe1dd2a135d8148aeed7f9ac06b330ea"
+    },
+    {
+      "artifact": "FinalVisualReview_20260921T204648Z.json",
+      "mode": "git_blob",
+      "sha256": "7b22a9c4c1cb80ddc90b2c44d020f8e75bb09df22f144e9bb05a45548b762834"
+    },
+    {
+      "artifact": "NativePauseMenu.json",
+      "mode": "git_blob",
+      "sha256": "6fe1bb638803c6f750a174030461829163dc41bfc46314af086c7b5a50ce91d5"
+    },
+    {
+      "artifact": "NativeInputSmoke_previous_20260921T184149746170Z.json",
+      "mode": "git_blob",
+      "sha256": "3a263590500f8570b21e235acd0d4ca242a932ae1d4163df3422e633bce331e0"
+    },
+    {
+      "artifact": "NativeInputSmoke.json",
+      "mode": "git_blob",
+      "sha256": "b93bbd3fbf5739ffe2dac828f4bc2f53d35eab96fe022726c517eff085611fbc"
+    },
+    {
+      "artifact": "CombatActualMasterOutput.json",
+      "mode": "git_blob",
+      "sha256": "68662cb98aeb350eedecb166053e96ef0945408fecec9ede2be3a887ac89e055"
+    },
+    {
+      "artifact": "CombatActualSkillsOutput.json",
+      "mode": "git_blob",
+      "sha256": "3b5d164a29ff70da021eaf0419829777adbf50efe7677cb21bd427af08778949"
+    },
+    {
+      "artifact": "CombatActualSkillsUnfocusedBypass.json",
+      "mode": "git_blob",
+      "sha256": "60e689fdd780a6019e5a4e7a5f92a75c50cf2ae74c11048212a7622b39417959"
+    },
+    {
+      "artifact": "ScreenShot00010.png",
+      "mode": "lfs_oid",
+      "sha256": "07b24052ff078a67a67c02fad1d13b5472f94b6a1a957c6affca0cb0dfed3c52"
+    },
+    {
+      "artifact": "ScreenShot00011.png",
+      "mode": "lfs_oid",
+      "sha256": "eff983371f65f770ecf08b884746ad0299f5030393ef4f8292720a77931f5b00"
+    },
+    {
+      "artifact": "Combat_FinalColdStart_20260922.log",
+      "mode": "git_blob",
+      "sha256": "64f1edee1c1e2afc50cdd660977dbea7372ffc686a86cb5676ec4413600da051"
+    },
+    {
+      "artifact": "Combat_FinalRuns_20260922.log",
+      "mode": "git_blob",
+      "sha256": "f623327a16dbe4f41be9e8ee16d06557a6f666c734a3b13483740b747a8ee867"
+    },
+    {
+      "artifact": "arena_acceptance_20260921T202025583112Z.json",
+      "mode": "git_blob",
+      "sha256": "124482793e40cb248040cd9fdad05fafcb9da4d7e5c4a2d569ffed89481d8c45"
+    },
+    {
+      "artifact": "Combat_1080pHigh_60_20260921T185232088295Z.csv.gz",
+      "mode": "git_blob",
+      "sha256": "10d10497cc174a83119805b1672623c1d6f44740bcc0bd2c205d9478f40c4e8f"
+    },
+    {
+      "artifact": "Combat_1080pHigh_60_20260921T192140351854Z.csv.gz",
+      "mode": "git_blob",
+      "sha256": "4688165ad4a5ccb74c968f9627ca174198416c019e3bbbab618b650b4a3801ce"
+    },
+    {
+      "artifact": "Combat_1080pHigh_60_20260921T202025583112Z.csv.gz",
+      "mode": "git_blob",
+      "sha256": "0217254046477b4632bcdc9a5f2416de2092b04d4eafb50ca8bf8f0a88a439a8"
+    },
+    {
+      "artifact": "Combat_GCObserved_1080pHigh_60_20260921T194436862733Z.csv.gz",
+      "mode": "git_blob",
+      "sha256": "720a57e613b9a52cf74e29ac33bb741764896cd1b9530cfd913f8082b029dcf4"
+    },
+    {
+      "artifact": "Combat_MassSingleThread_1080pHigh_60_20260921T201336033106Z.csv.gz",
+      "mode": "git_blob",
+      "sha256": "debc5126cc09c7343e699cfb7b1915eebe3f352062d61d3437ab3ee8e744031b"
+    },
+    {
+      "artifact": "Combat_Supplemental_1080pHigh_60_20260921T193559409889Z.csv.gz",
+      "mode": "git_blob",
+      "sha256": "19ee8b1c01db97c7e6496e4385de5e765f3982474a7e08eef89b827fb9402741"
+    },
+    {
+      "artifact": "Combat_Supplemental_1080pHigh_60_20260921T203637661555Z.csv.gz",
+      "mode": "git_blob",
+      "sha256": "c24b7affc221a9c4b9114c64cf414b168795f29e356889df1b1d156450a4aa3c"
+    },
+    {
+      "artifact": "Combat_TraceObserved_1080pHigh_60_20260921T200209859752Z.csv.gz",
+      "mode": "git_blob",
+      "sha256": "f399f4703d1dd429a6c8efdc8340f8b097e1f5236e025f4e649b66a2e7e94755"
+    },
+    {
+      "artifact": "CsvScopes.csv.gz",
+      "mode": "git_blob",
+      "sha256": "32db73705e2ff0d77dcb5b15f5cfc368946653ee56755b84769d883d5a5f752c"
+    },
+    {
+      "artifact": "TimingEvents.csv.gz",
+      "mode": "git_blob",
+      "sha256": "645f5aa0adcc3d28e18729cd7ac214b77bcb2a50566c4ebfeefa0514642adeb1"
+    }
+  ],
+  "scope": "Every portable final-manifest artifact matches its staged Git blob SHA or LFS content OID. Local reference files were separately verified by the archive verifier. Immutable raw evidence is exempt from authored-source whitespace cleanup."
+}

@@ -1,0 +1,18 @@
+{
+  "verified": true,
+  "items": 85,
+  "storage_counts": {
+    "byte_identical_copy": 70,
+    "lossless_gzip": 10,
+    "local_reference_only": 5
+  },
+  "directory": "D:\\UEproject\\Combat\\Docs\\Evidence\\Final_20260922",
+  "directory_bytes": 99065465,
+  "directory_files": 82,
+  "primary_assertions": 495,
+  "rounds": 20,
+  "victories": 17,
+  "defeats": 3,
+  "README_policy": "Not opened for writing by either curation or verification; coordinator owns its concurrent edits",
+  "all_original_copy_reference_and_decompression_sha256_verified": true
+}

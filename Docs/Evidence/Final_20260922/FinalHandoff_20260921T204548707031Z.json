@@ -1,0 +1,126 @@
+{
+  "status": "passed",
+  "started_utc": "20260921T204548707031Z",
+  "errors": [],
+  "assertions": [
+    {
+      "name": "existing_pie",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "two_characters",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "viewport_1080p",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "instrumentation_and_mass",
+      "pass": true,
+      "detail": {
+        "mass.FullyParallel": 0,
+        "stats.AutoEnableNamedEventsWhenProfiling": 0,
+        "r.GPUCsvStatsEnabled": 0
+      }
+    },
+    {
+      "name": "high_readback",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "instrumentation_and_mass",
+      "pass": true,
+      "detail": {
+        "mass.FullyParallel": 0,
+        "stats.AutoEnableNamedEventsWhenProfiling": 0,
+        "r.GPUCsvStatsEnabled": 0
+      }
+    },
+    {
+      "name": "normal_global_speed",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "full_health_idle",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "all_keys_released",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "no_other_runner",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "default_attack3_next",
+      "pass": true,
+      "detail": "Combat.Skill.Attack4"
+    },
+    {
+      "name": "paused_final",
+      "pass": true,
+      "detail": null
+    }
+  ],
+  "scope": "Paused final PIE handoff; screenshot is not performance evidence",
+  "conditions_before": {
+    "mass.FullyParallel": 0,
+    "stats.AutoEnableNamedEventsWhenProfiling": 0,
+    "r.GPUCsvStatsEnabled": 0
+  },
+  "settings": {
+    "sg.ViewDistanceQuality": 2.0,
+    "sg.AntiAliasingQuality": 2.0,
+    "sg.ShadowQuality": 2.0,
+    "sg.GlobalIlluminationQuality": 2.0,
+    "sg.ReflectionQuality": 2.0,
+    "sg.PostProcessQuality": 2.0,
+    "sg.TextureQuality": 2.0,
+    "sg.EffectsQuality": 2.0,
+    "sg.FoliageQuality": 2.0,
+    "sg.ShadingQuality": 2.0,
+    "sg.ResolutionQuality": 100.0,
+    "r.ScreenPercentage": 100.0,
+    "r.VSync": 0.0,
+    "r.MotionBlurQuality": 0.0,
+    "r.Streaming.PoolSize": 2048.0,
+    "t.MaxFPS": 60.0
+  },
+  "conditions_final": {
+    "mass.FullyParallel": 0,
+    "stats.AutoEnableNamedEventsWhenProfiling": 0,
+    "r.GPUCsvStatsEnabled": 0
+  },
+  "actors": [
+    {
+      "boss": false,
+      "health": 300.0,
+      "busy": false,
+      "active_skill": "None"
+    },
+    {
+      "boss": true,
+      "health": 1500.0,
+      "busy": false,
+      "active_skill": "None"
+    }
+  ],
+  "dll_sha256": {
+    "UnrealEditor-Combat.dll": "6a342f29753325a62bf1fe1982214c1031b1d203f2ae7d231d8164454f6b441a",
+    "UnrealEditor-CombatEditor.dll": "aa2822f0597f988aadd99d34add025847f3fe33ce1be211eb8c5ce81de26d35d"
+  },
+  "screenshots": [
+    "D:\\UEproject\\Combat\\Saved\\Screenshots\\WindowsEditor\\ScreenShot00011.png"
+  ],
+  "active_project_callbacks_after_unregister": []
+}

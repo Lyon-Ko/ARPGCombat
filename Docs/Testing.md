@@ -1,111 +1,76 @@
-# Arena 回归测试
+# Combat 测试入口与证据
 
-## 当前状态与权限
+当前 Source `4542b8d` 未改，Content+tests `3787b6c`、项目Config `027dc88`（mass.FullyParallel=0），Build14 重链接 PASS（`Build_DefaultChain_14.log`，3.61秒、3个link actions）。`DefaultChain_ColdStart.json` 已核实实际默认地图、Next标签和当前DLL；当前配置正式报告 `arena_acceptance_20260921T202025583112Z.json` 已通过：status=passed、accepts_twenty_rounds=true、495/495，30/60fps各10场，17胜3败0超时（主动17胜2败、被动1败），cleanup_errors=null。 最终冷启动359/359通过，暂停试玩交接12/12通过，补充十场实测已完成，已完成本次编辑器PIE交付。 `default_chain_only_20260921T195607760663Z.json` 已通过29/29：30/60fps真实PCInputKey四点击，精确Attack1→Attack2→Attack3→Attack4、累计104伤害、对应结束和cleanup均通过。 旧 `arena_acceptance_20260921T192140351854Z.json` 的469/469、17胜3败0超时是旧配置限定证据；该自然bot无默认四标签exact断言，不能作为新配置最终20场结论。
 
-`Tools/tests/arena_regression.py` 已准备好做本地 AST 与公开接口核对。**本次没有执行 remote、没有启动 PIE，也没有产生通过记录。** 它独立于 `Tools/editor/probe_pie_skills.py` 的 19 招冒烟矩阵，不重复宣称技能逐一验收。
+## 正式 20 场入口
 
-必须由 Root / 编辑器负责人明确授权后，在当前工程的实际 PIE 世界执行。脚本导入只定义入口；不会自动开始 PIE、加载地图、改资产或修改 Source。执行会重置当前战斗、暂时改变 `t.MaxFPS`、使用玩家输入方法、移动角色，并在独立判定/生命周期用例中注入命中。不要与人工操作、另一个机器人或其他 PIE 探针同时运行。
-
-## 运行
-
-1. 编译并打开 `L_CombatArena`，等待 shader / Blueprint 编译完成。
-2. 在编辑器负责人授权下启动单人 PIE，确认只有一个玩家与一个 Boss，均为真实 `CombatCharacter`，Boss 使用 `CombatAIController` 与实际 StateTree。默认核对玩家 Skeleton 源于 `/ParagonKwang/`、Boss Skeleton 源于 `/ParagonGreystone/`；允许 `/Game/Combat` 下新增武器 socket 的复制 Mesh，网格与 Skeleton 路径均写入报告。需已编译仅 PIE 有效的 `CombatEditorLibrary.InjectPlayerKey`。
-3. 在获准的 UE Python 执行上下文调用：
+使用已有的、未暂停的 1920×1080 浮动 PIE，由当前唯一测试执行者调用。导入脚本不启动 UE/PIE，也不自动开始测试。
 
 ```python
 import runpy
-arena = runpy.run_path(r'D:/UEproject/Combat/Tools/tests/arena_regression.py')
-print(arena['start']())
+acceptance = runpy.run_path(r'D:\UEproject\Combat\Tools\tests\start_acceptance.py')
+acceptance['start']()
+# 在后续独立调用中查询或停止；不要用循环阻塞 Slate：
+acceptance['status']()
+acceptance['stop']()
 ```
 
-默认在 30 fps 下做 10 场、60 fps 下做 10 场，共 20 场自然战斗。每场默认 180 秒世界时间上限；最坏情况约一小时，不能因运行时间长把超时当成胜利。可在授权后用 `start(fps_caps=(30,), fights_per_cap=1, fight_timeout=180)` 做调试，但这种运行不会满足完整 20 场验收。
+入口拒绝已运行的正式/独立 runner。不要同时使用 UI 自动化、其他 remote 脚本或手动输入控制角色。测试按 30fps 10 场、60fps 10 场运行现有输入、防御、生命周期专项和自然对局。源码条件为 `self.fps == self.caps[0] and number == self.rounds`，因此正式入口只有30fps第10场预设为不攻击的自然死亡覆盖，60fps第10场仍使用主动反应式策略；其余场次均主动。机器人不会注入伤害、改变血量或强行宣布胜负；失败/超时与诊断证据保留。
 
-脚本使用 `unreal.register_slate_post_tick_callback`。每次回调最多推进一个生成器步骤；等待世界时间时立即 `yield`，没有 `sleep`、忙等循环或阻塞远程调用。活跃对象保存在 `builtins._combat_arena_regression`，不依赖 `runpy` 的临时名字。
+实际视口通过 PlayerController 回读；画质设为 High（sg*=2）、sg.ResolutionQuality/ScreenPercentage=100、VSync=0、PoolSize=2048、MotionBlurQuality=0 并检查实际值。报告记录引擎版本、运行 DLL 时间/大小/SHA-256、CVar 原值/回读和运行日志中的 RHI/显卡/驱动信息。文件名为微秒 UTC 的 `Saved/Acceptance/arena_acceptance_*.json`，不覆盖历史报告。
 
-另一次获准的 remote / Python 上下文可以读取状态：
+30fps第2场正常自然战斗会请求UE `Shot SHOWUI`，记录时间、倍率、视口和新截图路径，截图开销保留在30档。60档第1场前设置CSV文件名并单独START，第10场及重试完成后STOP，等待实际写出。CSV包含自然对局、reset、回调、证据保存和所有长帧；`--warmup-frames 0` 分析。性能定义及实测见 [Performance](Performance.md)。延后写盘补充支持3–10场，详见 [RuntimeProfile](RuntimeProfile.md)，独立于正式20场。
 
-```python
-import runpy
-print(runpy.run_path(r'D:/UEproject/Combat/Tools/tests/arena_regression.py')['status']())
-```
+报告的 `status=passed`、`accepts_twenty_rounds=true`、恰好20场及全部断言应共同核对。已完成多少场、胜场数或中间0失败都不能替代最终状态。手动 stop 必须保留 stopped；游戏超时不能通过重置转成胜利。
 
-停止测试：
+## 验证范围与边界
 
-```python
-print(runpy.run_path(r'D:/UEproject/Combat/Tools/tests/arena_regression.py')['stop']())
-```
+- **脚本输入**：通过项目 PIE-only PlayerController InputKey 接口提交真实按下/松开，再观察技能、移动、跳跃。包括跑动空中前/反向 Dash、暂停松键残留等。InputKey 返回 handled 不等于游戏效果成功，判定以实际状态为准。
+- **注入专项**：前后格挡、死亡/阶段阈值等部分夹具用公开 ReceiveCombatHit 或显式位置设置，明确记录为 isolated/synthetic；不计为自然伤害或自然击杀。
+- **自然对局**：真实StateTree与公开玩家输入交互，保留胜败/超时、命中/格挡、阶段和重试证据。正式20仅30fps第10场预设被动。RuntimeProfile只有60fps一个档位，其所选最后一场被动；默认3场为第3场，最终10场采样为第10场。
+- **OS 输入**：历史 NativeInputSmoke 的 Human 标签实际指 root/sky 原生 Windows 输入自动化，并非真人试玩。第一轮观察到 Attack1两次、Parry一次、yaw54.2446°，P/R由协调者观察；第二轮短tap未观察到Space/W/Shift效果，不能标为人工全键PASS。InputKey脚本与OS扫描码/焦点/短tap是不同验证层。
+- **视觉/声音**：孤立慢放VFX截图、前台非零录音及独立镜头测试只证明各自范围，不替代正常速度自然对局与性能。来源和哈希见 [DeliveryVerification](DeliveryVerification.md)。
 
-`stop` 记录 `stopped`，不会记为通过。结束时解除 Python 事件绑定、注销 Slate 回调、通过生成器 `finally` 和 cleanup 释放所有注入并保持的按键、释放攻击保持状态，并恢复原来的暂停状态、帧率上限与 AI 随机种子。脚本不会关闭 PIE。错误或 PIE 提前结束会写入失败和 traceback；恢复失败也记录在 `cleanup_errors`。
+## 独立专项入口
 
-## 真实输入专项
+以下脚本都采用 Slate 非阻塞生成器和 start/status/stop，要求现有 PIE、互斥运行；完整用法以各文件公开函数为准，不调用私有 AI 选招函数。
 
-新增专项已实现，尚未执行：
-
-- W 跑动取得大于 100 cm/s 的前向速度 → Space 升空 → 保持 W 或切换 S → Shift。用实际 `OnSkillStarted/Ended` 位置差测量 Dash 的水平总位移，不包含 Dash 前惯性；目标 250 cm、距离容差 `25 + 650 / fps` cm、方向容差 12°，记录开始速度与技能时长。
-- 空中保持 LMB / Space → P 暂停 → 释放 LMB / Space → P 恢复。通过真实技能事件要求启动 Air1 而没有残留 Plunge；在合法 Air1 恢复后再次 Space 必须成为第二跳，第三次仍不得增加计数。若过早落地或前置攻击未启动则失败，不能以空事件证明成功。
-- Q 按下两次，通过公开 `is_target_locked()` 分别验证翻转与恢复；这是状态验收，HUD 文字视觉检查仍由编辑器负责人另行完成。
-
-这些项目保留 finally/stop 按键释放及暂停恢复，需下一构建包含 `IsTargetLocked` getter，导入脚本不会执行测试。
-
-每个帧率阶段首先运行 `input_cases`，使用编辑器仅 PIE seam → `FInputKeyEventArgs::CreateSimulated` → `PlayerController.InputKey`，不会调用私有输入函数。
-
-- 八向短冲：W、WD、D、SD、S、SA、A、WA，固定控制视角且解除锁定。按 Shift 后跨帧观察 Dash 激活，并测量水平轨迹；目标 250 cm，距离容差 `35 + 650 / fps` cm、角度容差 12°。保持键在 `finally` 释放。场地阻挡造成轨迹不达标也记失败。
-- 双跳：Space 按下/释放后跨游戏帧再按，要求跳跃计数 1→2、第二跳向上速度、第三次不增加次数、落地归零。没有直接改变速度或瞬移到空中。
-- 暂停：P 按下后要求世界暂停；用非阻塞墙钟观察 0.25 秒，世界时间变化必须小于 0.001 秒；再次 P 恢复并要求世界时间推进。
-- 生命周期和自然胜负后的重试均注入 R，等待实际输入处理后核对复活和残留。前者仍是明确标记的注入死亡用例。
-
-输入 seam 返回的是 `InputKey` 的 handled 值；WASD 在角色 Tick 轮询，false 不等于没有更新保持状态。报告保留该值，是否有效由真实移动/技能断言判断。每次按键后让出 Slate 回调，不把提交按键的时刻当成技能开始时间。精准格挡计时读取角色公开 `GetSkillElapsedTime`。
-
-## 判定与生命周期用例
-
-这些用例使用实际配置的角色、实际 Parry GAS 激活和公开 `ReceiveCombatHit(FCombatHit)`，但**命中本身由测试注入**，结果存入 `standalone_injected_cases`，不混入自然战斗统计。
-
-| 用例 | 公开路径与断言 |
+| 脚本 | 目的与限制 |
 | --- | --- |
-| 正面窗口内 | `ParryPressed` 后约 0.10 秒注入命中：要求 `Parried`，生命不变 |
-| 正面窗口尾段 | 约 0.15 秒命中，同样要求 `Parried`；实际到达不能超过 0.20 秒 |
-| 正面窗口外 | 约 0.24 秒命中：要求 `Damaged`，按注入伤害扣血 |
-| 背面窗口内 | 攻击者放到背后，约 0.10 秒命中：要求 `Damaged` |
-| 交错去重 | 同一来源依次送入 old、old、new、old ID：要求 Damaged、Miss、Damaged、Miss，合计仅扣两次血 |
-| 取消清理 | 激活真实 Boss AOE；通过公开组合块创建预警/弹体，取消后等待 1.5 秒，要求无迟到伤害、无技能/格挡状态、无所属弹体或新增附着组件 |
-| 死亡清理 | 独立重置 fixture 后再次激活 AOE、创建弹体，注入明确标记的致死命中；要求 Killed、死亡与临时状态清理 |
-| 重试 | 通过真实 R 键触发 `RetryEncounter`，要求双方复活、满生命/韧性、阶段清零、时间缩放恢复与临时对象清理 |
+| `Tools/tests/arena_ai_scenarios.py` | 配对seed观察真实Attack/Parry/Dash后的StateTree选招；墙边扫掠夹具；AOE期间显式半血注入。分布不保证精确概率比例。 |
+| `Tools/tests/arena_spatial_visual.py` | 四墙地/空Dash、春臂回缩、仅本地玩家近镜头隐藏与恢复、碰撞不变、Q切换、直接Montage停止清理。已知矩形竞技场边界夹具。 |
+| `Tools/tests/arena_regression.py` | 原有专项/自然bot基础类；单场诊断不得冒充正式20入口。 |
 
-生命周期测试里使用 `ShowAreaWarning` / `EmitSkillProjectile` 是为了覆盖取消与死亡时确实存在临时对象的路径。报告记录注入和预条件；未成功创建弹体会失败，不会通过一个空场景“证明”清理成功。它不代替自然攻击的武器扫掠命中验证。
+实际属性通过本地UE PythonStub及Runtime头文件核实，例如 `get_editor_property('character_movement')`、委托 add_callable/remove_callable、WorldTime、AnimInstance montage_stop。每轮异常须保留完整错误，不凭AST通过宣称反射或PIE通过。
 
-这里只断言可公开观测的状态，不读取私有 `bHitWindow`、命中列表或内部计时器，也不复制私有算法来产生预期答案。
+## 历史证据与修复链
 
-## 20 场自然移动战斗
+所有下列 JSON 位于 `Saved/Acceptance`，失败报告继续保留。
 
-每场重置后启动真实 Boss StateTree，玩家机器人通过继承的 `AddMovementInput` 接近敌人，并调用 `AttackPressed` / `AttackReleased`、`ParryPressed`、`DashPressed`。防守决策在观察 Boss 当前技能后至少等待 0.24 秒，每次技能启动最多提交一次防御。AOE 先观察长蓄力，再响应真实 `Combat.Cue.AreaRelease` 闪光：闪光后至少 0.055 秒格挡，目标是在原始 0.18 秒延迟伤害前进入 0.20 秒窗口。闪光响应不重新附加 0.24 秒识别延迟。DashSlash 延迟到技能约 0.42 秒防守；普通近战保留 0.24 秒观察约束，快速首击可能先命中，这是策略限制而非游戏通过证据。报告记录实际观察时长、闪光反应时长与防守请求后的技能，不读取敌人原始输入，也不直接调用 Boss 招式决定下一步。
+| 报告 | 已记录结果 | 解释 |
+| --- | --- | --- |
+| `arena_regression_20260921T180318Z.json` | 单场诊断发现AOE取消无效 | 原取消API比较CDO却传instance，后改为SpecHandle。不是20场报告。 |
+| `arena_acceptance_20260921T185232088295Z.json` | 20场18胜2败0超时；469断言仅30档第10场retry_position失败 | 新树把重置前整帧时间计入reaction，R后新LeapRight造成偏移，整体failed；未放宽容差。 |
+| `Build11_Directed_20260921T191304332667Z.json` | 26/26 PASS | queued Launch后Reset/死亡清力、60fps及2fps真实R。粗帧输入步约.4秒，新AI技能约复活观察后1.2秒出现；孤立压力测试。 |
+| `CombinedSources_20260921T191815227899Z.json` | 16/17；旧AreaRelease回调取消后同技能重启仍造成18伤害 | 12版失败证据保留，不能用其他ID用例通过掩盖。 |
+| `CombinedSources_20260921T192102267435Z.json` | 13版17/17 PASS | 固定近战窗口ID、独立projectile/AOE ID、同窗口去重、回调取消同实例重启隔离。实际投射物/扫掠；为观察临时改Duration/Cooldown，finally恢复，不保存Content，Damage18不改。 |
+| `arena_spatial_final_vfx09.json` | 15/15 PASS | 独立墙边/镜头/直接Montage中断，非自然对局。 |
+| `arena_ai_scenarios_20260921T181713Z.json` / `arena_ai_near_20260921T182044Z.json` | 701 / 258断言PASS | 独立观察、墙边、半血和近身配对，不等于完整最终版本重验。 |
 
-普通续段基于实际 `OnSkillStarted` 序号，每段只在约 0.36 秒提交一次；当前原生动作 ComboOpen 为 0.305–0.335 秒。避免固定频率反复覆盖 0.18 秒缓冲。格挡/冲刺后 0.32 秒不提交攻击，AOE 识别后至闪光后 0.28 秒保留防守，不用攻击取消格挡。攻击按住约 0.055 秒后释放，防止误触空中长按派生。该策略时序需随正式动作数据变更重新核对。
+最终13版独立重验：`arena_ai_scenarios_20260921T193914Z.json` 140次实际选招、701/701；`arena_ai_near_20260921T194032Z.json` 64配对、258/258；`arena_spatial_visual_20260921T194122Z.json` 15/15，截图00008/00009。均通过，保持上述独立夹具边界；历史报告仍保留。
 
-自然战斗期间不调用 `ReceiveCombatHit`，不修改双方生命/伤害、AI 恢复间隔、全局时间缩放或技能时长，也不瞬移取胜。任一方自然死亡才有 `victory` / `defeat`；超时保留 `timeout` 并失败，之后的重置仅用于清理。胜负后通过真实 R 键触发 `RetryEncounter` 再战，检查状态和出生点恢复。
+首轮CSV真实保留22,071帧、warmup0，FrameTime mean17.853ms/p9963.749ms/max755.307ms/1%low9.573fps。不能宣称稳定60fps。`PersistenceBenchmark_20260921_baseline.json`离线9次比较得indent2总耗时中位80.743ms、compact19.456ms；随后接入orjson3.12.0并保留所有字段/历史/同步保存频率，缺依赖明确stdlib fallback。`SerializerUE_20260921T191227144319Z.json`记录真实UE完整save17.181ms；裸编码器基准不是完整路径成本，也不能将全部长帧归因于JSON。有限数验证拒绝NaN/Inf，固定大小persistence_timing记录既往保存开销。
 
-每局持续记录：
+## 当前验证结论
 
-- 世界/墙钟时长、输入次数、实际 `OnSkillStarted/Ended`、`OnCombatFeedback` 和 `OnCombatDeath` 事件。
-- 命中与格挡 cue 次数、各角色实际技能启动计数、AI `ActionsExecuted`、第二阶段观察值、实际移动距离。
-- 世界中的 `CombatProjectile` 数量、角色所属弹体峰值，以及角色拥有/附着组件相对初始基线的新增路径。
-- 结果、重试后的残留、每条断言和每局是否通过。
+当前正式 `arena_acceptance_20260921T202025583112Z.json` 已通过495/495、17胜3败0超时。默认四连、扩展恢复及AI/空间独立证据见上文；历史失败不删除。
 
-20 场整体还要求至少一场自然 victory、一场自然 defeat，并至少观察到一次自然格挡、一次自然弹体与第二阶段。全部 defeat 不能通过，也不能宣称 Boss 可击杀。汇总分别记录胜利/失败/超时次数、自然败率、超时率与场次断言失败率。缺少这些会标记**覆盖不足导致失败**，不能单凭一批容易结束的战斗宣布完整通过。机器人表现不佳造成覆盖不足时，应先复核日志，再调整测试策略；不能补注入伤害或强设阶段来冒充自然覆盖。
+最终延后写盘十场 `runtime_profile_20260921T203637661555Z.json` 为252/253：9胜1被动败、0超时，唯一coverage.natural_projectile失败，原FAILED报告保留；它不替代正式495项通过，剑气已有正式与专项覆盖。对应 `Performance_Supplemental_1080pHigh_60_20260921T203637661555Z.json` 全部21,060帧、0剔除，mean16.6762ms、p9916.7814ms、max25.8148ms、1%low56.9416fps，>20ms共13帧、>33.3ms为0。预热及第10场被动策略不同，不能把差异全部归因JSON写盘，也不宣称稳定无卡顿60fps。
 
-## 时间与容差
+最终只读冷启动 `FinalColdStart_20260921T204520545958Z.json` 为359/359通过；最终 `FinalHandoff_20260921T204548707031Z.json` 暂停试玩交接12/12通过，截图00011已实际接受；补充采样和正式测试是不同验证范围，不能将补充覆盖失败改成PASS，也不能用它抹掉正式与专项已有的剑气覆盖。见 [DeliveryVerification](DeliveryVerification.md)。
 
-使用世界时间判断技能窗口，并同时记录墙钟时间防止暂停/卡住后无限等待。命中调度允许 `1.5 / fps + 0.005` 秒的回调延迟，但窗口内用例的实际命中仍必须不晚于 0.20 秒；越界是调度失败，不允许扩大游戏格挡窗口来通过。
+## 最终版本新标签四连段复验（独立 opt-in）
 
-每个帧率阶段记录实际世界时间步长的中位数、p95、最大值和样本量；中位推算 fps 需与请求值相差不超过 15%，且至少采样 100 次。`t.MaxFPS` 只是上限，机器跑不到目标时会失败，报告不能被称为有效 30/60 fps 一致性结果。shader 卡顿或后台编辑器节流可能导致此项失败；修复环境后重新完整运行，保留旧失败报告。
+`Tools/editor/verify_skill_extension_final.py` 仅加载定义；确认其他 runner 停止且无 PIE，加载后显式 `start()`，用 `status()` 查询、`stop()` 中止。其调用会临时编译保存玩家技能表和 Attack3.NextSkillTag，结束 PIE 后恢复原值、编译保存并实际 reload_packages 读回验证。若相关包有未保存改动会在变更前拒绝，请先自行保存；运行期间不要编辑这两个资产。脚本不会启动或替代正式20场。
 
-## 结果文件与本地核对
-
-输出为 `Saved/Acceptance/arena_regression_<UTC>.json`，最多约每秒原子更新一次，断言和场次切换时也立即落盘。另一次 status / remote 或直接只读此 JSON 即可查看进展。状态为 `starting / running / passed / failed / stopped`；只有完成全部断言且至少 20 场时，`accepts_twenty_rounds` 才能为 true。
-
-移动组件使用已核实的 `get_editor_property("character_movement")`；不依赖未暴露的 `get_character_movement()`。输入 seam 已按本地头文件和实现检查，双跳计数按 UE `Character.h` 的 BlueprintReadOnly 属性核对。接口已按当前 `CombatCharacter.h`、`CombatTypes.h`、`CombatAIController.h` 与 `Docs/RuntimeIntegration.md` 核对。Python 委托 `add_callable/remove_callable`、`GetSkinnedAsset`、`GetChildrenComponents`、`GetTimeSeconds` 和控制台变量查询按本地 UE 5.8 源码核对。Python AST 检查可在不加载 UE 的情况下运行：
-
-```powershell
-& 'D:\blender\5.1\python\bin\python.exe' -c "import ast; from pathlib import Path; p=Path(r'D:\UEproject\Combat\Tools\tests\arena_regression.py'); ast.parse(p.read_text(encoding='utf-8')); print('AST OK')"
-```
-
-AST 和头文件核对不等于 UE 反射绑定或实际 PIE 通过。首次授权运行应先检查是否有 Python 名称/反射错误；任何错误保留为失败记录，修复后重新运行。
+真实 PlayerController InputKey 连段必须精确产生 Attack1→Attack2→Attack3→Combat.Skill.Example.CrescentBurst 四次开始与对应结束（前三段为合法连段取消，末段正常结束）、总伤害130，否则（包括超时）严格失败。Boss AI仅在该孤立夹具停止；不改数值。结果是唯一UTC的 `Saved/Acceptance/SkillExtensionFinal_*.json`，包含当前DLL SHA-256和默认配置重载读回，不覆盖历史 `SkillExtensionNewTagPIE.json`。异常或手动停止同样松开LMB、移除委托、请求结束PIE并恢复资产；恢复失败会显式记录 RESTORE FAILED，不能标通过。首次报告 `SkillExtensionFinal_20260921T194848720875Z.json` 的错误结束语义FAIL保留。`SkillExtensionFinal_20260921T195256502504Z.json` 已通过21项：真实PCInputKey四标签扩展链累计130伤害，前三段为合法combo取消、末段正常结束；Tag从不可变字符串重建独立副本，保存并实际重载后确认Attack3.Next恢复Attack4且玩家CDO技能表恢复。`DefaultChainRepair_20260921T195055491298Z.json` 记录旧live wrapper引用污染的修复。旧 `SkillExtensionNewTagPIE.json` 的四链观察保留，但其同引用比较所得defaults_restored不构成恢复证明，现明确撤销。 `default_chain_only_20260921T195607760663Z.json` 已通过29/29：30/60fps真实PCInputKey四点击，精确Attack1→Attack2→Attack3→Attack4、累计104伤害、对应结束和cleanup均通过。

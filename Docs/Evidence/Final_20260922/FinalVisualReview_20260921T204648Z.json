@@ -1,0 +1,18 @@
+{
+  "status": "accepted",
+  "recorded_utc": "2026-09-21T20:46:48Z",
+  "reviewer": "Astra Ultra coordinator",
+  "method": "Actual Windows preview window selected from sky.list_windows, activated and inspected with sky.get_window_state",
+  "window_id": 165284584,
+  "handoff_report": "FinalHandoff_20260921T204548707031Z.json",
+  "handoff_screenshot": "Saved/Screenshots/WindowsEditor/ScreenShot00011.png",
+  "natural_combat_screenshot": "Saved/Screenshots/WindowsEditor/ScreenShot00010.png",
+  "observations": [
+    "The final cold-start PIE is visible and paused with readable Chinese settings and P resume control.",
+    "Player shows 300/300 health, Boss health and poise bars are full, and both character models are present behind the pause panel.",
+    "The plain flat arena and enclosing walls render normally; there are no editor debug labels in the gameplay HUD.",
+    "Normal-speed formal round2 screenshot was inspected separately and shows native armored characters, swords, contact spark and a short blade trail."
+  ],
+  "scope": "Coordinator visual acceptance of the displayed handoff and referenced natural-combat image; not human gameplay or a new performance measurement. Actual 1920x1080 viewport is independently read by the handoff script.",
+  "final_action": "Preview window activated; no combat input injected after the paused handoff."
+}

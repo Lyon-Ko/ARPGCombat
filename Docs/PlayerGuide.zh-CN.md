@@ -53,12 +53,14 @@ HUD 显示双方生命值、Boss 韧性和阶段。“破韧”提示代表出�
 
 暂停后可使用现有设置项调整音量、镜头灵敏度和镜头震动；按 P 继续。再次试玩时若仍处于编辑器输入状态，先点击 PIE 视口。
 
+锁定时侧移与后退保持朝向目标，自由镜头鼠标转向只在解除锁定后生效。墙边镜头会回缩；距离本地玩家中心小于约 220cm 时，玩家模型与自身武器仅对拥有者视角隐藏，距离大于约 270cm 时恢复，避免身体遮满画面。Boss、碰撞和受击不因此隐藏或关闭，死亡/重试会恢复原可见状态。这是近镜头保护，并非角色消失或无敌。
+
 ## 当前说明的边界
 
 当前角色为原生骨架 Kwang（玩家）和 Greystone（Boss）。角色蓝图位于 `/Game/Combat/Characters/BP_CombatPlayer`、`BP_CombatBoss`；2D 动画蓝图分别为 `/Game/Combat/Animations/Native/Kwang/ABP_CombatKwang2D` 和 `/Game/Combat/Animations/Native/Greystone/ABP_CombatGreystone2D`。最终技能 Montage 以各角色 Native 子目录下的 `AM_Attack1`、`AM_Boss_AOE` 等为准，不使用早期 Manny 模板作为当前绑定说明。
 
 剑刃拖尾使用真实 Niagara Ribbon。范围预警使用原创 `/Game/Combat/VFX/SM_WarningRing` 与 `/Game/Combat/Materials/M_WarningRing`；剑气使用 `/Game/Combat/VFX/SM_SwordWave` 与 `/Game/Combat/Materials/M_SwordWave`，伴随 Niagara 火花。这些绑定说明不等于最终视觉验收通过。
 
-独立新增技能 CrescentBurst 已有一次 PIE 接链及结束记录：`Saved/Acceptance/SkillExtensionNewTagPIE.json` 记录 Attack1→Attack2→Attack3→新标签、整链累计 130 点伤害、正常清理及测试后默认配置恢复。它是独立扩展示例验收，不代表完整战斗验收。重复运行生成 pipeline 会覆盖基础资产；自定义技能、动画和数据请复制到独立 Custom 路径再编辑。
+默认四连30/60fps已由真实PCInputKey四点击验证，29/29、104伤害；独立CrescentBurst扩展链21/21、130伤害，实际保存重载确认恢复默认。证据分别为 `default_chain_only_20260921T195607760663Z.json` 与 `SkillExtensionFinal_20260921T195256502504Z.json`。旧 `SkillExtensionNewTagPIE.json` 的默认恢复证明因live wrapper引用污染撤销，修复记录为 `DefaultChainRepair_20260921T195055491298Z.json`；不再用旧报告宣称默认未被替换。当前Build14、Source `4542b8d`、Content/tests `3787b6c`、Config `027dc88` 的正式20场已通过495/495、17胜3败0超时（`arena_acceptance_20260921T202025583112Z.json`）；补充十场性能已实测并保留剑气覆盖失败，最终冷启动359/359通过，暂停试玩交接12/12通过，项目Mass串行调度不改变本文按键或技能。重复运行生成pipeline会覆盖基础资产，自定义技能、动画和数据请复制到独立Custom路径。
 
-本文中的时间和距离来自当前 Runtime 与技能配置，可随调优变化。完整验收要求包括冷启动、Blueprint 编译、全部招式的实际 PIE 演示、30/60 fps 判定一致性、前后格挡、墙边行为、死亡取消清理和至少 20 次战斗重试；本文不把这些尚未最终汇总的项目标记为已通过。
+本次正式20场、最终冷启动和暂停试玩交接已按交付记录完成；具体范围与历史失败见 [交付验收](DeliveryVerification.md)。当前窗口已暂停，按P继续。战斗音乐循环且作为UI音频在暂停时仍可播放，暂停不等于静音；需要时用音量设置调整。新增或修改招式后应重新验证相应场景。

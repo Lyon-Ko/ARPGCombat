@@ -1,0 +1,325 @@
+{
+  "input": "D:\\UEproject\\Combat\\Saved\\Profiling\\Traces\\csv-scopes-20260921T200855375Z\\CsvScopes.csv",
+  "frame_count": 6308,
+  "mass_scope_count": 6308,
+  "threshold_ms": 25,
+  "long_frames": [
+    {
+      "start": 460.843953,
+      "end": 460.873475,
+      "ms": 29.5223,
+      "mass_scopes": [
+        {
+          "start": 460.850691,
+          "end": 460.860415,
+          "ms": 9.7241
+        }
+      ],
+      "mass_ms": 9.7241
+    },
+    {
+      "start": 460.873475,
+      "end": 460.922491,
+      "ms": 49.0156,
+      "mass_scopes": [
+        {
+          "start": 460.873618,
+          "end": 460.906885,
+          "ms": 33.2674
+        }
+      ],
+      "mass_ms": 33.2674
+    },
+    {
+      "start": 460.922491,
+      "end": 460.948007,
+      "ms": 25.5151,
+      "mass_scopes": [
+        {
+          "start": 460.922624,
+          "end": 460.938434,
+          "ms": 15.8095
+        }
+      ],
+      "mass_ms": 15.8095
+    },
+    {
+      "start": 466.139836,
+      "end": 466.168123,
+      "ms": 28.2871,
+      "mass_scopes": [
+        {
+          "start": 466.148521,
+          "end": 466.148934,
+          "ms": 0.4127
+        }
+      ],
+      "mass_ms": 0.4127
+    },
+    {
+      "start": 467.774559,
+      "end": 467.80537,
+      "ms": 30.8111,
+      "mass_scopes": [
+        {
+          "start": 467.785151,
+          "end": 467.785417,
+          "ms": 0.2657
+        }
+      ],
+      "mass_ms": 0.2657
+    },
+    {
+      "start": 467.978069,
+      "end": 468.004282,
+      "ms": 26.2129,
+      "mass_scopes": [
+        {
+          "start": 467.988804,
+          "end": 467.989106,
+          "ms": 0.3026
+        }
+      ],
+      "mass_ms": 0.3026
+    },
+    {
+      "start": 468.31115,
+      "end": 468.345183,
+      "ms": 34.0328,
+      "mass_scopes": [
+        {
+          "start": 468.322143,
+          "end": 468.322451,
+          "ms": 0.3083
+        }
+      ],
+      "mass_ms": 0.3083
+    },
+    {
+      "start": 476.054723,
+      "end": 476.089491,
+      "ms": 34.7679,
+      "mass_scopes": [
+        {
+          "start": 476.063955,
+          "end": 476.064252,
+          "ms": 0.29710000000000003
+        }
+      ],
+      "mass_ms": 0.29710000000000003
+    },
+    {
+      "start": 477.614226,
+      "end": 477.643603,
+      "ms": 29.376900000000003,
+      "mass_scopes": [
+        {
+          "start": 477.623648,
+          "end": 477.631011,
+          "ms": 7.3631
+        }
+      ],
+      "mass_ms": 7.3631
+    },
+    {
+      "start": 477.643603,
+      "end": 477.692952,
+      "ms": 49.349,
+      "mass_scopes": [
+        {
+          "start": 477.643989,
+          "end": 477.675389,
+          "ms": 31.4006
+        }
+      ],
+      "mass_ms": 31.4006
+    },
+    {
+      "start": 477.692953,
+      "end": 477.728767,
+      "ms": 35.8145,
+      "mass_scopes": [
+        {
+          "start": 477.693198,
+          "end": 477.712468,
+          "ms": 19.270599999999998
+        }
+      ],
+      "mass_ms": 19.270599999999998
+    },
+    {
+      "start": 489.696888,
+      "end": 489.723182,
+      "ms": 26.294700000000002,
+      "mass_scopes": [
+        {
+          "start": 489.709111,
+          "end": 489.710593,
+          "ms": 1.4824
+        }
+      ],
+      "mass_ms": 1.4824
+    },
+    {
+      "start": 490.683965,
+      "end": 490.717731,
+      "ms": 33.7656,
+      "mass_scopes": [
+        {
+          "start": 490.696827,
+          "end": 490.705897,
+          "ms": 9.0701
+        }
+      ],
+      "mass_ms": 9.0701
+    },
+    {
+      "start": 506.685147,
+      "end": 506.710782,
+      "ms": 25.6342,
+      "mass_scopes": [
+        {
+          "start": 506.691178,
+          "end": 506.697814,
+          "ms": 6.6361
+        }
+      ],
+      "mass_ms": 6.6361
+    },
+    {
+      "start": 506.710782,
+      "end": 506.744775,
+      "ms": 33.9927,
+      "mass_scopes": [
+        {
+          "start": 506.710998,
+          "end": 506.732316,
+          "ms": 21.3173
+        }
+      ],
+      "mass_ms": 21.3173
+    },
+    {
+      "start": 506.744775,
+      "end": 506.77338,
+      "ms": 28.6051,
+      "mass_scopes": [
+        {
+          "start": 506.744929,
+          "end": 506.760099,
+          "ms": 15.1693
+        }
+      ],
+      "mass_ms": 15.1693
+    },
+    {
+      "start": 520.952917,
+      "end": 521.001253,
+      "ms": 48.3361,
+      "mass_scopes": [
+        {
+          "start": 520.958381,
+          "end": 520.986876,
+          "ms": 28.4947
+        }
+      ],
+      "mass_ms": 28.4947
+    },
+    {
+      "start": 521.013662,
+      "end": 521.054223,
+      "ms": 40.5609,
+      "mass_scopes": [
+        {
+          "start": 521.033815,
+          "end": 521.039838,
+          "ms": 6.0228
+        }
+      ],
+      "mass_ms": 6.0228
+    },
+    {
+      "start": 521.054224,
+      "end": 521.084341,
+      "ms": 30.1173,
+      "mass_scopes": [
+        {
+          "start": 521.054429,
+          "end": 521.071528,
+          "ms": 17.0988
+        }
+      ],
+      "mass_ms": 17.0988
+    },
+    {
+      "start": 537.16014,
+      "end": 537.193296,
+      "ms": 33.1561,
+      "mass_scopes": [
+        {
+          "start": 537.169208,
+          "end": 537.16956,
+          "ms": 0.3523
+        }
+      ],
+      "mass_ms": 0.3523
+    },
+    {
+      "start": 544.937778,
+      "end": 544.994042,
+      "ms": 56.2641,
+      "mass_scopes": [
+        {
+          "start": 544.94551,
+          "end": 544.980242,
+          "ms": 34.7317
+        }
+      ],
+      "mass_ms": 34.7317
+    },
+    {
+      "start": 544.994043,
+      "end": 545.028112,
+      "ms": 34.069,
+      "mass_scopes": [
+        {
+          "start": 544.994472,
+          "end": 545.015406,
+          "ms": 20.9342
+        }
+      ],
+      "mass_ms": 20.9342
+    },
+    {
+      "start": 545.03911,
+      "end": 545.071184,
+      "ms": 32.0741,
+      "mass_scopes": [
+        {
+          "start": 545.045076,
+          "end": 545.056289,
+          "ms": 11.2134
+        }
+      ],
+      "mass_ms": 11.2134
+    },
+    {
+      "start": 559.247247,
+      "end": 559.333697,
+      "ms": 86.4505,
+      "mass_scopes": [
+        {
+          "start": 559.256789,
+          "end": 559.320854,
+          "ms": 64.0657
+        }
+      ],
+      "mass_ms": 64.0657
+    }
+  ],
+  "mass_max_ms": 64.0657,
+  "native_csv_begin_max_ms": 0.3357,
+  "native_csv_end_max_ms": 0.1146,
+  "scope": "All matching exported engine frames, including trace-tail and stop boundaries. This diagnoses containing CPU scopes; it is not a frame-rate acceptance result or proof of the scheduler cause.",
+  "nested_wait_evidence": "Separate full GameThread export longframe_5449 identifies WaitWithNamedThreadsSupport and Mass ProcessingQueue waits inside the Mass editor scope."
+}

@@ -1,0 +1,12 @@
+{
+  "channels": 8,
+  "sample_rate": 48000,
+  "seconds": 27.264,
+  "sample_width": 2,
+  "peak": 0.310516357421875,
+  "rms": 0.004861095036710717,
+  "nonzero_samples": 2596617,
+  "capture_api": "AudioMixerLibrary master output",
+  "temporary_cvar": "au.DisableAppVolume=1 during capture; restored to original 0",
+  "gameplay": "Actual player AttackPressed swing/hit; no injected audio or Windows loopback"
+}

@@ -5,3 +5,5 @@
 *.umap filter=lfs diff=lfs merge=lfs -text
 *.blend filter=lfs diff=lfs merge=lfs -text
 Tools/vendor/python311/** -text
+# Evidence SHA-256 includes original line endings and recorded whitespace.
+Docs/Evidence/** -text -whitespace

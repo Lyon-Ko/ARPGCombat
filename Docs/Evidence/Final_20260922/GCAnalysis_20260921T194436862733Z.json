@@ -1,0 +1,549 @@
+{
+  "source_report": "D:\\UEproject\\Combat\\Saved\\Acceptance\\gc_profile_20260921T194436862733Z.json",
+  "performance": {
+    "input_csv": "D:\\UEproject\\Combat\\Saved\\Profiling\\CSV\\Combat_GCObserved_1080pHigh_60_20260921T194436862733Z.csv",
+    "unit": "milliseconds",
+    "input_samples": 6219,
+    "warmup_frames_requested": 0,
+    "excluded_warmup_frames": 0,
+    "retained_frame_samples": 6219,
+    "ignored_metadata_or_header_lines": [
+      6221,
+      6222
+    ],
+    "extended_final_headers": [
+      {
+        "line": 6221,
+        "additional_columns": [
+          "Scheduler/GameThread/SignalStandbyThread",
+          "Exclusive/GameThread/GarbageCollection",
+          "Exclusive/GameThread/EventWait/WorldTickMisc",
+          "FMsgLogf/FMsgLogfCount",
+          "GC/Count",
+          "Scheduler/RHIInterruptThread/SignalStandbyThread",
+          "Scheduler/RHIThread/SignalStandbyThread",
+          "Exclusive/GameThread/ActorSpawning",
+          "Exclusive/GameThread/ProjectileMovement",
+          "Ticks/ProjectileMovementComponent",
+          "Ticks/CombatProjectile",
+          "Exclusive/GameThread/ActorDestroying",
+          "Scheduler/BackgroundThreadPool #0/SignalStandbyThread"
+        ]
+      }
+    ],
+    "percentile_definition": "linear interpolation at (N-1)*p over sorted frame times",
+    "one_percent_low_definition": "1000 / mean of the slowest ceil(N*0.01) retained timing samples; frame metric is FPS, thread/GPU metrics are timing-equivalent rates, not delivered FPS",
+    "threshold_definition": "strictly greater than 16.7,20,33.3 milliseconds; fractions in [0,1]",
+    "long_frame_policy": "No clipping, outlier removal or long-frame exclusion",
+    "metrics": {
+      "frame": {
+        "status": "present",
+        "column": "FrameTime",
+        "missing_sample_lines": [],
+        "statistics": {
+          "samples": 6219,
+          "mean_ms": 16.717636018652517,
+          "median_ms": 16.6668,
+          "p95_ms": 16.6713,
+          "p99_ms": 16.71002,
+          "max_ms": 63.6397,
+          "one_percent_low_fps": 46.138361916780894,
+          "one_percent_tail_samples": 63,
+          "over_threshold_fraction": {
+            "16.7": 0.011577424023154847,
+            "20.0": 0.0025727608940344106,
+            "33.3": 0.000964785335262904
+          },
+          "zero_samples": 0
+        },
+        "warning": null
+      },
+      "gpu": {
+        "status": "present",
+        "column": "GPUTime",
+        "missing_sample_lines": [],
+        "statistics": {
+          "samples": 6219,
+          "mean_ms": 3.056969930857051,
+          "median_ms": 3.0072,
+          "p95_ms": 3.5162699999999996,
+          "p99_ms": 4.025509999999995,
+          "max_ms": 5.8621,
+          "one_percent_low_fps": 233.04625487270124,
+          "one_percent_tail_samples": 63,
+          "over_threshold_fraction": {
+            "16.7": 0.0,
+            "20.0": 0.0,
+            "33.3": 0.0
+          },
+          "zero_samples": 0
+        },
+        "warning": null
+      },
+      "render_thread": {
+        "status": "present",
+        "column": "RenderThreadTime",
+        "missing_sample_lines": [],
+        "statistics": {
+          "samples": 6219,
+          "mean_ms": 0.06624560218684676,
+          "median_ms": 0.0007,
+          "p95_ms": 0.0011,
+          "p99_ms": 3.744933999999999,
+          "max_ms": 6.2389,
+          "one_percent_low_fps": 232.46649161570852,
+          "one_percent_tail_samples": 63,
+          "over_threshold_fraction": {
+            "16.7": 0.0,
+            "20.0": 0.0,
+            "33.3": 0.0
+          },
+          "zero_samples": 0
+        },
+        "warning": null
+      },
+      "game_thread": {
+        "status": "present",
+        "column": "GameThreadTime",
+        "missing_sample_lines": [],
+        "statistics": {
+          "samples": 6219,
+          "mean_ms": 7.301747370959961,
+          "median_ms": 7.0076,
+          "p95_ms": 9.543449999999996,
+          "p99_ms": 10.875533999999998,
+          "max_ms": 59.2767,
+          "one_percent_low_fps": 57.06770376499194,
+          "one_percent_tail_samples": 63,
+          "over_threshold_fraction": {
+            "16.7": 0.002733558449911561,
+            "20.0": 0.00241196333815726,
+            "33.3": 0.000964785335262904
+          },
+          "zero_samples": 0
+        },
+        "warning": null
+      }
+    }
+  },
+  "alignment_note": "CSV START wall anchor plus cumulative FrameTime; possible one-frame offset. Nearest event is not proof of causation; inspect offset and duration.",
+  "csv_duration_seconds": 103.96697840000022,
+  "command_span_seconds": 103.96899999999732,
+  "gc_policy_unchanged": true,
+  "hook_removed": true,
+  "capture_gc_events": [
+    {
+      "generation": 2,
+      "start_wall_since_start": 26.32800000000134,
+      "end_wall_since_start": 26.32800000000134,
+      "duration_ms": 7.386800003587268,
+      "collected": 97,
+      "uncollectable": 0
+    },
+    {
+      "generation": 0,
+      "start_wall_since_start": 33.65699999999924,
+      "end_wall_since_start": 33.65699999999924,
+      "duration_ms": 0.06549999670824036,
+      "collected": 0,
+      "uncollectable": 0
+    },
+    {
+      "generation": 0,
+      "start_wall_since_start": 41.78199999999924,
+      "end_wall_since_start": 41.78199999999924,
+      "duration_ms": 0.03730000025825575,
+      "collected": 0,
+      "uncollectable": 0
+    },
+    {
+      "generation": 0,
+      "start_wall_since_start": 50.31300000000192,
+      "end_wall_since_start": 50.31300000000192,
+      "duration_ms": 0.05619999865302816,
+      "collected": 0,
+      "uncollectable": 0
+    },
+    {
+      "generation": 0,
+      "start_wall_since_start": 58.68800000000192,
+      "end_wall_since_start": 58.68800000000192,
+      "duration_ms": 0.039699996705166996,
+      "collected": 0,
+      "uncollectable": 0
+    },
+    {
+      "generation": 0,
+      "start_wall_since_start": 66.86000000000058,
+      "end_wall_since_start": 66.86000000000058,
+      "duration_ms": 0.042100000428035855,
+      "collected": 0,
+      "uncollectable": 0
+    },
+    {
+      "generation": 0,
+      "start_wall_since_start": 75.14099999999598,
+      "end_wall_since_start": 75.14099999999598,
+      "duration_ms": 0.04310000076657161,
+      "collected": 0,
+      "uncollectable": 0
+    },
+    {
+      "generation": 0,
+      "start_wall_since_start": 83.45300000000134,
+      "end_wall_since_start": 83.45300000000134,
+      "duration_ms": 0.04079999780515209,
+      "collected": 0,
+      "uncollectable": 0
+    },
+    {
+      "generation": 2,
+      "start_wall_since_start": 87.43800000000192,
+      "end_wall_since_start": 87.43800000000192,
+      "duration_ms": 6.4388999962829985,
+      "collected": 0,
+      "uncollectable": 0
+    },
+    {
+      "generation": 0,
+      "start_wall_since_start": 94.79699999999866,
+      "end_wall_since_start": 94.79699999999866,
+      "duration_ms": 0.03500000457279384,
+      "collected": 0,
+      "uncollectable": 0
+    },
+    {
+      "generation": 0,
+      "start_wall_since_start": 103.17199999999866,
+      "end_wall_since_start": 103.17199999999866,
+      "duration_ms": 0.03930000093532726,
+      "collected": 0,
+      "uncollectable": 0
+    },
+    {
+      "generation": 0,
+      "start_wall_since_start": 112.01599999999598,
+      "end_wall_since_start": 112.01599999999598,
+      "duration_ms": 0.07550000009359792,
+      "collected": 0,
+      "uncollectable": 0
+    },
+    {
+      "generation": 0,
+      "start_wall_since_start": 122.57800000000134,
+      "end_wall_since_start": 122.57800000000134,
+      "duration_ms": 0.07999999797903001,
+      "collected": 0,
+      "uncollectable": 0
+    }
+  ],
+  "capture_tick_count": 6219,
+  "capture_tick_max_ms": 1.5331000031437725,
+  "capture_slow_ticks_over_10ms": [],
+  "all_hitches_over_20ms": [
+    {
+      "csv_line": 227,
+      "approx_start_wall": 26.328528900001338,
+      "approx_end_wall": 26.356118000001338,
+      "frame_ms": 27.5891,
+      "game_thread_ms": 10.3837,
+      "gpu_ms": 2.9957,
+      "nearest_gc": {
+        "generation": 2,
+        "start_wall_since_start": 26.32800000000134,
+        "end_wall_since_start": 26.32800000000134,
+        "duration_ms": 7.386800003587268,
+        "collected": 97,
+        "uncollectable": 0
+      },
+      "nearest_gc_end_offset_seconds": -0.0281179999999992,
+      "nearest_slow_tick": null,
+      "nearest_slow_tick_end_offset_seconds": null
+    },
+    {
+      "csv_line": 639,
+      "approx_start_wall": 33.20869060000135,
+      "approx_end_wall": 33.26847050000135,
+      "frame_ms": 59.7799,
+      "game_thread_ms": 16.6309,
+      "gpu_ms": 3.3323,
+      "nearest_gc": {
+        "generation": 0,
+        "start_wall_since_start": 33.65699999999924,
+        "end_wall_since_start": 33.65699999999924,
+        "duration_ms": 0.06549999670824036,
+        "collected": 0,
+        "uncollectable": 0
+      },
+      "nearest_gc_end_offset_seconds": 0.3885294999978939,
+      "nearest_slow_tick": null,
+      "nearest_slow_tick_end_offset_seconds": null
+    },
+    {
+      "csv_line": 1837,
+      "approx_start_wall": 53.221204900001354,
+      "approx_end_wall": 53.27084250000135,
+      "frame_ms": 49.6376,
+      "game_thread_ms": 22.5049,
+      "gpu_ms": 3.5384,
+      "nearest_gc": {
+        "generation": 0,
+        "start_wall_since_start": 50.31300000000192,
+        "end_wall_since_start": 50.31300000000192,
+        "duration_ms": 0.05619999865302816,
+        "collected": 0,
+        "uncollectable": 0
+      },
+      "nearest_gc_end_offset_seconds": -2.9578424999994297,
+      "nearest_slow_tick": null,
+      "nearest_slow_tick_end_offset_seconds": null
+    },
+    {
+      "csv_line": 1838,
+      "approx_start_wall": 53.27084250000135,
+      "approx_end_wall": 53.294713200001354,
+      "frame_ms": 23.8707,
+      "game_thread_ms": 15.4227,
+      "gpu_ms": 3.6066,
+      "nearest_gc": {
+        "generation": 0,
+        "start_wall_since_start": 50.31300000000192,
+        "end_wall_since_start": 50.31300000000192,
+        "duration_ms": 0.05619999865302816,
+        "collected": 0,
+        "uncollectable": 0
+      },
+      "nearest_gc_end_offset_seconds": -2.981713199999433,
+      "nearest_slow_tick": null,
+      "nearest_slow_tick_end_offset_seconds": null
+    },
+    {
+      "csv_line": 1839,
+      "approx_start_wall": 53.294713200001354,
+      "approx_end_wall": 53.315124100001356,
+      "frame_ms": 20.4109,
+      "game_thread_ms": 12.1052,
+      "gpu_ms": 3.2625,
+      "nearest_gc": {
+        "generation": 0,
+        "start_wall_since_start": 50.31300000000192,
+        "end_wall_since_start": 50.31300000000192,
+        "duration_ms": 0.05619999865302816,
+        "collected": 0,
+        "uncollectable": 0
+      },
+      "nearest_gc_end_offset_seconds": -3.0021240999994347,
+      "nearest_slow_tick": null,
+      "nearest_slow_tick_end_offset_seconds": null
+    },
+    {
+      "csv_line": 2975,
+      "approx_start_wall": 72.23525190000137,
+      "approx_end_wall": 72.28147780000137,
+      "frame_ms": 46.2259,
+      "game_thread_ms": 27.8323,
+      "gpu_ms": 3.274,
+      "nearest_gc": {
+        "generation": 0,
+        "start_wall_since_start": 75.14099999999598,
+        "end_wall_since_start": 75.14099999999598,
+        "duration_ms": 0.04310000076657161,
+        "collected": 0,
+        "uncollectable": 0
+      },
+      "nearest_gc_end_offset_seconds": 2.8595221999946148,
+      "nearest_slow_tick": null,
+      "nearest_slow_tick_end_offset_seconds": null
+    },
+    {
+      "csv_line": 2976,
+      "approx_start_wall": 72.28147780000138,
+      "approx_end_wall": 72.30872840000139,
+      "frame_ms": 27.2506,
+      "game_thread_ms": 28.5244,
+      "gpu_ms": 3.6626,
+      "nearest_gc": {
+        "generation": 0,
+        "start_wall_since_start": 75.14099999999598,
+        "end_wall_since_start": 75.14099999999598,
+        "duration_ms": 0.04310000076657161,
+        "collected": 0,
+        "uncollectable": 0
+      },
+      "nearest_gc_end_offset_seconds": 2.8322715999945984,
+      "nearest_slow_tick": null,
+      "nearest_slow_tick_end_offset_seconds": null
+    },
+    {
+      "csv_line": 2977,
+      "approx_start_wall": 72.30872840000139,
+      "approx_end_wall": 72.33744770000139,
+      "frame_ms": 28.7193,
+      "game_thread_ms": 12.5647,
+      "gpu_ms": 3.4292,
+      "nearest_gc": {
+        "generation": 0,
+        "start_wall_since_start": 75.14099999999598,
+        "end_wall_since_start": 75.14099999999598,
+        "duration_ms": 0.04310000076657161,
+        "collected": 0,
+        "uncollectable": 0
+      },
+      "nearest_gc_end_offset_seconds": 2.8035522999945925,
+      "nearest_slow_tick": null,
+      "nearest_slow_tick_end_offset_seconds": null
+    },
+    {
+      "csv_line": 3884,
+      "approx_start_wall": 87.43843160000144,
+      "approx_end_wall": 87.46384060000143,
+      "frame_ms": 25.409,
+      "game_thread_ms": 11.4573,
+      "gpu_ms": 2.8304,
+      "nearest_gc": {
+        "generation": 2,
+        "start_wall_since_start": 87.43800000000192,
+        "end_wall_since_start": 87.43800000000192,
+        "duration_ms": 6.4388999962829985,
+        "collected": 0,
+        "uncollectable": 0
+      },
+      "nearest_gc_end_offset_seconds": -0.025840599999511937,
+      "nearest_slow_tick": null,
+      "nearest_slow_tick_end_offset_seconds": null
+    },
+    {
+      "csv_line": 3931,
+      "approx_start_wall": 88.2305176000014,
+      "approx_end_wall": 88.26174290000141,
+      "frame_ms": 31.2253,
+      "game_thread_ms": 26.4592,
+      "gpu_ms": 2.9393,
+      "nearest_gc": {
+        "generation": 2,
+        "start_wall_since_start": 87.43800000000192,
+        "end_wall_since_start": 87.43800000000192,
+        "duration_ms": 6.4388999962829985,
+        "collected": 0,
+        "uncollectable": 0
+      },
+      "nearest_gc_end_offset_seconds": -0.8237428999994876,
+      "nearest_slow_tick": null,
+      "nearest_slow_tick_end_offset_seconds": null
+    },
+    {
+      "csv_line": 3932,
+      "approx_start_wall": 88.26174290000141,
+      "approx_end_wall": 88.2904968000014,
+      "frame_ms": 28.7539,
+      "game_thread_ms": 17.1762,
+      "gpu_ms": 3.1337,
+      "nearest_gc": {
+        "generation": 2,
+        "start_wall_since_start": 87.43800000000192,
+        "end_wall_since_start": 87.43800000000192,
+        "duration_ms": 6.4388999962829985,
+        "collected": 0,
+        "uncollectable": 0
+      },
+      "nearest_gc_end_offset_seconds": -0.8524967999994857,
+      "nearest_slow_tick": null,
+      "nearest_slow_tick_end_offset_seconds": null
+    },
+    {
+      "csv_line": 3936,
+      "approx_start_wall": 88.3409043000014,
+      "approx_end_wall": 88.3664042000014,
+      "frame_ms": 25.4999,
+      "game_thread_ms": 9.7464,
+      "gpu_ms": 2.8795,
+      "nearest_gc": {
+        "generation": 2,
+        "start_wall_since_start": 87.43800000000192,
+        "end_wall_since_start": 87.43800000000192,
+        "duration_ms": 6.4388999962829985,
+        "collected": 0,
+        "uncollectable": 0
+      },
+      "nearest_gc_end_offset_seconds": -0.928404199999477,
+      "nearest_slow_tick": null,
+      "nearest_slow_tick_end_offset_seconds": null
+    },
+    {
+      "csv_line": 4949,
+      "approx_start_wall": 105.23511470000153,
+      "approx_end_wall": 105.29875440000153,
+      "frame_ms": 63.6397,
+      "game_thread_ms": 26.4943,
+      "gpu_ms": 3.4037,
+      "nearest_gc": {
+        "generation": 0,
+        "start_wall_since_start": 103.17199999999866,
+        "end_wall_since_start": 103.17199999999866,
+        "duration_ms": 0.03930000093532726,
+        "collected": 0,
+        "uncollectable": 0
+      },
+      "nearest_gc_end_offset_seconds": -2.1267544000028664,
+      "nearest_slow_tick": null,
+      "nearest_slow_tick_end_offset_seconds": null
+    },
+    {
+      "csv_line": 4950,
+      "approx_start_wall": 105.29875440000153,
+      "approx_end_wall": 105.32203650000153,
+      "frame_ms": 23.2821,
+      "game_thread_ms": 11.715,
+      "gpu_ms": 3.3736,
+      "nearest_gc": {
+        "generation": 0,
+        "start_wall_since_start": 103.17199999999866,
+        "end_wall_since_start": 103.17199999999866,
+        "duration_ms": 0.03930000093532726,
+        "collected": 0,
+        "uncollectable": 0
+      },
+      "nearest_gc_end_offset_seconds": -2.1500365000028694,
+      "nearest_slow_tick": null,
+      "nearest_slow_tick_end_offset_seconds": null
+    },
+    {
+      "csv_line": 5904,
+      "approx_start_wall": 121.20706520000161,
+      "approx_end_wall": 121.2518173000016,
+      "frame_ms": 44.7521,
+      "game_thread_ms": 39.638,
+      "gpu_ms": 3.5644,
+      "nearest_gc": {
+        "generation": 0,
+        "start_wall_since_start": 122.57800000000134,
+        "end_wall_since_start": 122.57800000000134,
+        "duration_ms": 0.07999999797903001,
+        "collected": 0,
+        "uncollectable": 0
+      },
+      "nearest_gc_end_offset_seconds": 1.326182699999734,
+      "nearest_slow_tick": null,
+      "nearest_slow_tick_end_offset_seconds": null
+    },
+    {
+      "csv_line": 5905,
+      "approx_start_wall": 121.2518173000016,
+      "approx_end_wall": 121.2929387000016,
+      "frame_ms": 41.1214,
+      "game_thread_ms": 13.1356,
+      "gpu_ms": 3.4553,
+      "nearest_gc": {
+        "generation": 0,
+        "start_wall_since_start": 122.57800000000134,
+        "end_wall_since_start": 122.57800000000134,
+        "duration_ms": 0.07999999797903001,
+        "collected": 0,
+        "uncollectable": 0
+      },
+      "nearest_gc_end_offset_seconds": 1.2850612999997395,
+      "nearest_slow_tick": null,
+      "nearest_slow_tick_end_offset_seconds": null
+    }
+  ]
+}

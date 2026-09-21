@@ -1,0 +1,11 @@
+{
+  "success": true,
+  "command": "import unreal, os\nassert os.path.normcase(os.path.realpath(unreal.Paths.project_dir())) == 'd:\\\\ueproject\\\\combat', 'Project identity mismatch'\nprint(combat_cli_probe())",
+  "result": "None",
+  "output": [
+    {
+      "type": "Info",
+      "output": "CLI_FILE_PERSISTENCE_PASS\r\n"
+    }
+  ]
+}

@@ -1,0 +1,170 @@
+{
+  "created_utc": "2026-09-21T18:44:44.475224+00:00",
+  "scope": "Pre-formal isolated evidence; NOT 20-bout acceptance or performance",
+  "files": [
+    {
+      "source": "D:\\UEproject\\Combat\\Saved\\Acceptance\\CombatNativeFocusedOutput.json",
+      "snapshot": "CombatNativeFocusedOutput.json",
+      "copied": true,
+      "bytes": 292,
+      "sha256": "0edde2faba0bf86353e477735525d37eaa38e49ba30e4131fdf5749026d57901"
+    },
+    {
+      "source": "D:\\UEproject\\Combat\\Saved\\Acceptance\\CombatActualMasterOutput.json",
+      "snapshot": "CombatActualMasterOutput.json",
+      "copied": true,
+      "bytes": 172,
+      "sha256": "68662cb98aeb350eedecb166053e96ef0945408fecec9ede2be3a887ac89e055"
+    },
+    {
+      "source": "D:\\UEproject\\Combat\\Saved\\Acceptance\\NativeInputSmoke_previous_20260921T184149746170Z.json",
+      "snapshot": "NativeInputSmoke_previous_20260921T184149746170Z.json",
+      "copied": true,
+      "bytes": 2695020,
+      "sha256": "3a263590500f8570b21e235acd0d4ca242a932ae1d4163df3422e633bce331e0"
+    },
+    {
+      "source": "D:\\UEproject\\Combat\\Saved\\Acceptance\\NativeInputSmoke.json",
+      "snapshot": "NativeInputSmoke.json",
+      "copied": true,
+      "bytes": 1771214,
+      "sha256": "b93bbd3fbf5739ffe2dac828f4bc2f53d35eab96fe022726c517eff085611fbc"
+    },
+    {
+      "source": "D:\\UEproject\\Combat\\Saved\\Acceptance\\arena_spatial_final_vfx09.json",
+      "snapshot": "arena_spatial_final_vfx09.json",
+      "copied": true,
+      "bytes": 56983,
+      "sha256": "07113ebad7181294f87f4ca8140d13fd08a2a0bc4343d67c55ef7665cc20983f"
+    },
+    {
+      "source": "D:\\UEproject\\Combat\\Saved\\Acceptance\\VFX_final_capture.json",
+      "snapshot": "VFX_final_capture.json",
+      "copied": true,
+      "bytes": 3691,
+      "sha256": "1b95f057441ac9f7a0634e8d5c88b303f496f1102db4b9f99dbae9cca46ceeab"
+    },
+    {
+      "source": "D:\\UEproject\\Combat\\Saved\\Acceptance\\VFX_final_hit.png",
+      "snapshot": "VFX_final_hit.png",
+      "copied": true,
+      "bytes": 2127860,
+      "sha256": "c944453a8158bd98fa3d96ad004f985861fbe1525476d10b121cde1b32535f9c"
+    },
+    {
+      "source": "D:\\UEproject\\Combat\\Saved\\Acceptance\\VFX_final_parry.png",
+      "snapshot": "VFX_final_parry.png",
+      "copied": true,
+      "bytes": 2114255,
+      "sha256": "de8a4334375a5fab2abd0abc48a55fa7ebb3a5c99a18636fe4be1256ac3583f8"
+    },
+    {
+      "source": "D:\\UEproject\\Combat\\Saved\\Acceptance\\VFX_final_aoe.png",
+      "snapshot": "VFX_final_aoe.png",
+      "copied": true,
+      "bytes": 2136343,
+      "sha256": "a37bac8e3bea909220349fd20a25b8e15fc17a3f104300134f5e3ff76285f758"
+    },
+    {
+      "source": "D:\\UEproject\\Combat\\Saved\\Acceptance\\VFX_final_wave.png",
+      "snapshot": "VFX_final_wave.png",
+      "copied": true,
+      "bytes": 2085763,
+      "sha256": "c27e86fc0666480d17196e3eba943823acc084a59f9910e36aebc906291d4663"
+    },
+    {
+      "source": "D:\\UEproject\\Combat\\Saved\\Acceptance\\VFX_final_warning.png",
+      "snapshot": "VFX_final_warning.png",
+      "copied": true,
+      "bytes": 2118280,
+      "sha256": "43fdddc943cf78ed188e3bbd6b961685e0989e09363c9d0246a1d80d0e22fd75"
+    },
+    {
+      "source": "D:\\UEproject\\Combat\\Saved\\Acceptance\\CombatNativeFocusedOutput.wav",
+      "snapshot": null,
+      "copied": false,
+      "bytes": 65437740,
+      "sha256": "4d5f1a76b3193006ea3bc90eb4b147e896ccd927e1516dcd4fdb37df38e4c008"
+    },
+    {
+      "source": "D:\\UEproject\\Combat\\Saved\\Acceptance\\VFX_ribbonactive_player_ribbon.png",
+      "snapshot": "VFX_ribbonactive_player_ribbon.png",
+      "copied": true,
+      "bytes": 2121798,
+      "sha256": "b104bed57fc671dc7329c917857c5d1e0c3fa6bade4f31950a651b378dd91006"
+    },
+    {
+      "source": "D:\\UEproject\\Combat\\Saved\\Acceptance\\VFX_ribbonactive_boss_ribbon.png",
+      "snapshot": "VFX_ribbonactive_boss_ribbon.png",
+      "copied": true,
+      "bytes": 2095833,
+      "sha256": "abbc2e67a7667f237300ebaa4514cfe817b82ab7dd11d96983c5eca29d661dff"
+    },
+    {
+      "source": "D:\\UEproject\\Combat\\Saved\\Screenshots\\WindowsEditor\\ScreenShot00005.png",
+      "snapshot": "ScreenShot00005.png",
+      "copied": true,
+      "bytes": 2023269,
+      "sha256": "a08b5233c80c39bd6745433323611e9422b21d66dbcc8180197034310a72e7c2"
+    },
+    {
+      "source": "D:\\UEproject\\Combat\\Saved\\Screenshots\\WindowsEditor\\ScreenShot00006.png",
+      "snapshot": "ScreenShot00006.png",
+      "copied": true,
+      "bytes": 2142387,
+      "sha256": "fdba263d64147c3d7eade4ee721be1c65830dd85f937eaa8c4315654421c7d3c"
+    },
+    {
+      "source": "D:\\UEproject\\Combat\\Saved\\Acceptance\\VFXHandoff.json",
+      "snapshot": "VFXHandoff.json",
+      "copied": true,
+      "bytes": 229,
+      "sha256": "0357dda3fcb1497c2929e043fdeb886d3b901c3679c4581c414b293db6e79f86"
+    },
+    {
+      "source": "D:\\UEproject\\Combat\\Saved\\Acceptance\\VFXFinalReloadedProperties.txt",
+      "snapshot": "VFXFinalReloadedProperties.txt",
+      "copied": true,
+      "bytes": 68395,
+      "sha256": "44ea4980376626b0c30e4d45a63f72698dd2545ce2fc0334b193eb3e9d530bb7"
+    },
+    {
+      "source": "D:\\UEproject\\Combat\\Saved\\Acceptance\\CLIFileProbe.json",
+      "snapshot": "CLIFileProbe.json",
+      "copied": true,
+      "bytes": 1035,
+      "sha256": "e267f05c1823bd687d7162de4fe6867b00d781eaf8c7ff9671f02fb8691f86c9"
+    },
+    {
+      "source": "D:\\UEproject\\Combat\\Saved\\Acceptance\\CLIFilePersistence.json",
+      "snapshot": "CLIFilePersistence.json",
+      "copied": true,
+      "bytes": 346,
+      "sha256": "03795a1addddcec3b4c1cd13156cd87d3de19cc28511f3d31642fb055ba914b3"
+    },
+    {
+      "source": "D:\\UEproject\\Combat\\Saved\\Build_Ribbon_10c.log",
+      "snapshot": "Build_Ribbon_10c.log",
+      "copied": true,
+      "bytes": 2193,
+      "sha256": "5f6db9ec491baf5092e3164aa5592d1652ce99f35aa0b53cb341901183f72820"
+    }
+  ],
+  "limitations": [
+    "Focused audio proves actual nonzero foreground output without app-volume bypass; normalized peak below1 does not prove every effect is perceptually correct. WAV retained in Saved, hash only here.",
+    "Native input was root/sky Windows OS automation, not human playtesting despite historical JSON Human label. Previous observer saw Attack1 twice, Parry once, yaw54.2446; second short-keyboard-tap run is not PASS. P/R are coordinator observations.",
+    "Coordinator accepted isolated hit/parry/aoe/wave/warning captures and later actual attack-window player/boss Ribbon captures after Build10c. Earlier VFX captures used dilation0.3, not performance samples.",
+    "spatial_final_vfx09 has15 passed assertions, not natural battles.",
+    "Formal20,1080pHigh performance and final cold launch remain pending."
+  ],
+  "updated_utc": "2026-09-21T18:53:05.664215+00:00",
+  "accepted_additions": {
+    "player_ribbon": "VFX_ribbonactive_player_ribbon.png",
+    "boss_ribbon": "VFX_ribbonactive_boss_ribbon.png",
+    "near_wall_player_hidden_shadow_and_boss_visible": "ScreenShot00005.png",
+    "away_wall_player_restored": "ScreenShot00006.png",
+    "cli": "Both real remote probes success; filename Unicode assertion passed despite terminal echo encoding artifacts.",
+    "handoff": "time_dilation1,1920x1080,health300/1500,ownedNiagara0/0,audio_cvar0,pausedfalse",
+    "build": "Build_Ribbon_10c succeeded; helper b480d8d; finalContent/tools 3a322b1"
+  }
+}

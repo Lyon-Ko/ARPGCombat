@@ -1,0 +1,14 @@
+{
+  "viewport": [
+    1920,
+    1080
+  ],
+  "pause": true,
+  "native_ui_volume": 0.5051020383834839,
+  "native_ui_sensitivity": 1.9357143640518188,
+  "native_ui_camera_shake": false,
+  "texture_pool_mb": 2048.0,
+  "motion_blur": 0.0,
+  "method": "Native Windows UI click on each UMG control; reflected resulting values, no direct setter.",
+  "native_resume_button_unpaused": true
+}

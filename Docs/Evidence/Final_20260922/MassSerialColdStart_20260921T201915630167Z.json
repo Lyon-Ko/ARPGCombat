@@ -1,0 +1,16 @@
+{
+  "status": "passed",
+  "utc": "20260921T201915630167Z",
+  "editor_map": "/Game/Combat/Maps/L_CombatArena.L_CombatArena",
+  "mass_fully_parallel": 0,
+  "trace_connected": false,
+  "named_events": 0,
+  "blueprints_loaded": 33,
+  "ability_graph_errors": 0,
+  "assets_loaded": 216,
+  "attack3_next": "Combat.Skill.Attack4",
+  "binaries": {
+    "UnrealEditor-Combat.dll": "6a342f29753325a62bf1fe1982214c1031b1d203f2ae7d231d8164454f6b441a",
+    "UnrealEditor-CombatEditor.dll": "aa2822f0597f988aadd99d34add025847f3fe33ce1be211eb8c5ce81de26d35d"
+  }
+}

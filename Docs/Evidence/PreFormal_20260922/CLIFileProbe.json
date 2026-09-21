@@ -1,0 +1,11 @@
+{
+  "success": true,
+  "command": "import unreal, os\nassert os.path.normcase(os.path.realpath(unreal.Paths.project_dir())) == 'd:\\\\ueproject\\\\combat', 'Project identity mismatch'\nglobals()['__file__'] = __import__('base64').b64decode('RDpcVUVwcm9qZWN0XENvbWJhdFxTYXZlZFxDTEkgcHJvYmUg6Lev5b6ELnB5').decode('utf-8')\nglobals()['__name__'] = '__main__'\nexec(compile(__import__('base64').b64decode('IiIiUHJvYmUgd2l0aCBkb2NzdHJpbmcgaGVscGVyLnB5IGFuZCBVbmljb2RlOiDot6/lvoTpqozor4E7IG5vIHdvcmxkIG11dGF0aW9uLiIiIgpmcm9tIHBhdGhsaWIgaW1wb3J0IFBhdGgKYXNzZXJ0IF9fbmFtZV9fID09ICdfX21haW5fXycKYXNzZXJ0IFBhdGgoX19maWxlX18pLm5hbWUgPT0gJ0NMSSBwcm9iZSDot6/lvoQucHknCmRlZiBjb21iYXRfY2xpX3Byb2JlKCk6CiAgICByZXR1cm4gJ0NMSV9GSUxFX1BFUlNJU1RFTkNFX1BBU1MnCnByaW50KGNvbWJhdF9jbGlfcHJvYmUoKSwgX19maWxlX18pCg=='), globals()['__file__'], 'exec'), globals(), globals())",
+  "result": "None",
+  "output": [
+    {
+      "type": "Info",
+      "output": "CLI_FILE_PERSISTENCE_PASS D:\\UEproject\\Combat\\Saved\\CLI probe ·��.py\r\n"
+    }
+  ]
+}

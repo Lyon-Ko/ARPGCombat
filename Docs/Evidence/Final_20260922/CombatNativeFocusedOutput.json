@@ -1,0 +1,10 @@
+{
+  "seconds": 85.20533333333333,
+  "channels": 8,
+  "sample_rate": 48000,
+  "peak": 0.388458251953125,
+  "rms": 0.00740550868070853,
+  "nonzero_samples": 8158843,
+  "app_volume_bypass": 0,
+  "scope": "Native OS LMB/RMB/mouse foreground with isolated boss; no debug-volume bypass."
+}

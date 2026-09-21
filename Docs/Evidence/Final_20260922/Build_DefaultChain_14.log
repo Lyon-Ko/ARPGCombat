@@ -1,0 +1,29 @@
+Using bundled DotNet SDK version: 10.0 win-x64
+Running UnrealBuildTool: dotnet "..\..\Engine\Binaries\DotNET\UnrealBuildTool\UnrealBuildTool.dll" CombatEditor Win64 Development -Project=D:\UEproject\Combat\Combat.uproject -WaitMutex -NoHotReloadFromIDE
+Log file: C:\Users\Administrator\AppData\Local\UnrealBuildTool\Log.txt
+Determining max actions to execute in parallel (8 physical cores, 8 logical cores)
+  Executing up to 8 processes, one per physical core
+Using 'git status' to determine working set for adaptive non-unity build (D:\UEproject\Combat).
+UbaServer - Listening on 0.0.0.0:1345
+Invalidating makefile for CombatEditor (working set of source files changed)
+Building CombatEditor...
+===== Toolchain Information =====
+Using ISPC compiler (D:\UE5.8\UE_5.8\Engine\Source\ThirdParty\Intel\ISPC\bin\Windows\ispc.exe)
+  Intel(r) Implicit SPMD Program Compiler (Intel(r) ISPC), 1.24.0 (build commit  @ 20250404, LLVM 18.1.2) 
+Using Visual Studio 14.44.35225 toolchain (D:\VSCODE\Products\VC\Tools\MSVC\14.44.35207) and Windows 10.0.22621.0 SDK (C:\Program Files (x86)\Windows Kits\10).
+=================================
+Using Unreal Build Accelerator local executor to run 3 action(s)
+  CPU 8 physical cores, 8 logical cores
+  Memory 47.06 GB physical, 36.55 GB/50.06 GB committed
+  UBA Storage capacity 40 GB
+[1/3] Link [x64] UnrealEditor-Combat.lib
+  正在创建库 D:/UEproject/Combat/Intermediate/Build/Win64/x64/UnrealEditor/Development/Combat/UnrealEditor-Combat.lib 和对象 D:/UEproject/Combat/Intermediate/Build/Win64/x64/UnrealEditor/Development/Combat/UnrealEditor-Combat.exp
+[2/3] Link [x64] UnrealEditor-Combat.dll
+[3/3] WriteMetadata CombatEditor.target [NoUba]
+
+Total time in Unreal Build Accelerator local executor: 1.24 seconds
+Output binary: D:\UE5.8\UE_5.8\Engine\Binaries\Win64\UnrealEditor.exe
+
+Result: Succeeded
+Total execution time: 3.61 seconds
+Trace written to file C:\Users\Administrator\AppData\Local\UnrealBuildTool\Trace.uba with size 5.3kb

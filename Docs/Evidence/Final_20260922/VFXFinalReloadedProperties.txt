@@ -1,0 +1,1006 @@
+SYSTEM /Game/Combat/VFX/NS_FinalMetalHit.NS_FinalMetalHit valid=1 ready=1
+EMITTER OmnidirectionalBurst enabled=1
+ RENDERER NiagaraSpriteRendererProperties enabled=1
+  MATERIAL /Game/Combat/VFX/M_CombatMetalSpark.M_CombatMetalSpark
+  PIN NiagaraNodeOutput_2.Out default= links=1
+  PIN NiagaraNodeOutput_3.Out default= links=1
+  PIN NiagaraNodeOutput_4.Out default= links=1
+  PIN NiagaraNodeOutput_5.Out default= links=1
+ MODULE SolveForcesAndVelocity script=/Niagara/Modules/Solvers/SolveForcesAndVelocity.SolveForcesAndVelocity
+  INPUT Module.DeltaTime type=NiagaraFloat hidden=0
+  INPUT Module.Force type=Vector3f hidden=0
+  INPUT Module.Velocity type=Vector3f hidden=0
+  INPUT Module.Mass type=NiagaraFloat hidden=0
+  INPUT Module.Position type=NiagaraPosition hidden=0
+  INPUT Module.Speed Limit type=NiagaraFloat hidden=0
+  INPUT Module.PreviousVelocity type=Vector3f hidden=0
+  INPUT Module.Acceleration Limit type=NiagaraFloat hidden=0
+  INPUT Module.Write to Intrinsic Properties type=NiagaraBool hidden=0
+  INPUT Module.Rotational Force type=Vector3f hidden=1
+  INPUT Module.Rotational Inertia type=NiagaraFloat hidden=1
+  INPUT Module.Mesh Orientation type=Quat4f hidden=1
+  INPUT Module.Rotational Velocity type=Vector3f hidden=1
+  INPUT Module.Manually Enable Rotational Solver type=NiagaraBool hidden=0
+  PIN NiagaraNodeFunctionCall_8.InputMap default= links=1
+  PIN NiagaraNodeFunctionCall_8.Clamp Velocity default=false links=0
+  PIN NiagaraNodeFunctionCall_8.Limit Acceleration default=false links=0
+  PIN NiagaraNodeFunctionCall_8.Rotational Solver Is Enabled default=true links=0
+  PIN NiagaraNodeFunctionCall_8.Write to Presolve Properties default=true links=0
+ MODULE SpawnBurst_Instantaneous script=/Niagara/Modules/Emitter/SpawnBurst_Instantaneous.SpawnBurst_Instantaneous
+  INPUT Module.Spawn Count type=NiagaraInt32 hidden=0
+  INPUT Module.Spawn Time type=NiagaraFloat hidden=0
+  INPUT Module.Age type=NiagaraFloat hidden=0
+  INPUT Module.Spawn Probability type=NiagaraFloat hidden=0
+  INPUT Module.Loop Count Limit type=NiagaraInt32 hidden=0
+  INPUT Module.Spawn Group type=NiagaraInt32 hidden=0
+  PIN NiagaraNodeFunctionCall_5.InputMap default= links=1
+  PIN NiagaraNodeFunctionCall_5.Use Spawn Probability default=false links=0
+  PIN NiagaraNodeFunctionCall_5.UseLoopCountLimit default=false links=0
+ MODULE GravityForce script=/Niagara/Modules/Update/Forces/GravityForce.GravityForce
+  INPUT Module.Gravity type=Vector3f hidden=1
+  PIN NiagaraNodeFunctionCall_6.InputMap default= links=1
+  PIN NiagaraNodeFunctionCall_6.Coordinate Space default=World links=0
+ MODULE Drag script=/Niagara/Modules/Update/Forces/Drag.Drag
+  INPUT Module.Drag type=NiagaraFloat hidden=0
+  INPUT Module.Rotational Drag type=NiagaraFloat hidden=0
+  INPUT Module.Ignore Mass type=NiagaraBool hidden=0
+  PIN NiagaraNodeFunctionCall_15.InputMap default= links=1
+  PIN NiagaraNodeFunctionCall_15.Use Linear Drag default=true links=0
+  PIN NiagaraNodeFunctionCall_15.Use Rotational Drag default=false links=0
+ MODULE ScaleColor script=/Niagara/Modules/Update/Color/ScaleColor.ScaleColor
+  INPUT Module.Color Value To Scale type=LinearColor hidden=0
+  INPUT Module.Scale RGB type=Vector3f hidden=0
+  INPUT Module.Scale Alpha type=NiagaraFloat hidden=0
+  INPUT Module.Scale RGBA type=Vector4f hidden=1
+  INPUT Module.Linear Color Curve type=NiagaraDataInterfaceColorCurve hidden=1
+  INPUT Module.Curve Index type=NiagaraFloat hidden=1
+  PIN NiagaraNodeFunctionCall_2.InputMap default= links=1
+  PIN NiagaraNodeFunctionCall_2.Scale Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_2.ScaleA default=true links=0
+  PIN NiagaraNodeFunctionCall_2.ScaleRGB default=true links=0
+  PIN NiagaraNodeFunctionCall_2.ScaleRGBA default=true links=0
+  PIN NiagaraNodeParameterMapSet_8.Source default= links=1
+  PIN NiagaraNodeParameterMapSet_8.ScaleColor.Scale Alpha default= links=1
+ MODULE FloatFromCurve001 script=/Niagara/DynamicInputs/ValueFromCurve/FloatFromCurve.FloatFromCurve
+  INPUT Module.FloatCurve type=NiagaraDataInterfaceCurve hidden=0
+  INPUT Module.CurveIndex type=NiagaraFloat hidden=0
+  INPUT Module.Scale Curve type=NiagaraFloat hidden=0
+  PIN NiagaraNodeFunctionCall_16.InputMap default= links=1
+  PIN NiagaraNodeParameterMapSet_10.Source default= links=1
+  PIN NiagaraNodeParameterMapSet_10.FloatFromCurve001.FloatCurve default= links=1
+ MODULE ParticleState script=/Niagara/Modules/Update/Lifetime/ParticleState.ParticleState
+  INPUT Module.DeltaTime type=NiagaraFloat hidden=0
+  INPUT Module.Lifetime type=NiagaraFloat hidden=0
+  INPUT Module.Loop Particles Lifetime type=NiagaraBool hidden=1
+  INPUT Module.Let Infinitely Lived Particles Die When Emitter Deactivates type=NiagaraBool hidden=1
+  PIN NiagaraNodeFunctionCall_17.InputMap default= links=1
+  PIN NiagaraNodeFunctionCall_17.Kill Particles When Lifetime Has Elapsed default=true links=0
+ MODULE EmitterState script=/Niagara/Modules/Emitter/EmitterState.EmitterState
+  INPUT Module.Loop Duration type=NiagaraFloat hidden=0
+  INPUT Module.Loop Delay type=NiagaraFloat hidden=0
+  INPUT Module.Recalculate Duration Each Loop type=NiagaraBool hidden=1
+  INPUT Module.Delay First Loop Only type=NiagaraBool hidden=1
+  INPUT Module.bUseMinDistance type=NiagaraBool hidden=1
+  INPUT Module.MinDistance type=NiagaraFloat hidden=1
+  INPUT Module.bUseMaxDistance type=NiagaraBool hidden=1
+  INPUT Module.MaxDistance type=NiagaraFloat hidden=1
+  INPUT Module.Min Distance Response type=ENiagaraExecutionStateManagement hidden=1
+  INPUT Module.Max Distance Response type=ENiagaraExecutionStateManagement hidden=1
+  INPUT Module.Visibility Cull Delay type=NiagaraFloat hidden=1
+  INPUT Module.Visibility Cull Response type=ENiagaraExecutionStateManagement hidden=1
+  INPUT Module.Spawn Count Scale type=NiagaraFloat hidden=1
+  INPUT Module.bApplySpawnCountScaleByDistance type=NiagaraBool hidden=1
+  INPUT Module.Spawn Count Scale By Distance type=NiagaraDataInterfaceCurve hidden=1
+  INPUT Module.Loop Count type=NiagaraInt32 hidden=1
+  INPUT Module.Reset Age On Awaken type=NiagaraBool hidden=1
+  PIN NiagaraNodeFunctionCall_7.InputMap default= links=1
+  PIN NiagaraNodeFunctionCall_7.Enable Distance Culling default=false links=0
+  PIN NiagaraNodeFunctionCall_7.Enable Visibility Culling default=false links=0
+  PIN NiagaraNodeFunctionCall_7.Inactive Response default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_7.Life Cycle Mode default=NewEnumerator1 links=0
+  PIN NiagaraNodeFunctionCall_7.Loop Behavior default=NewEnumerator1 links=0
+  PIN NiagaraNodeFunctionCall_7.Loop Duration Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_7.Scalability Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_7.Scale Spawn Count default=false links=0
+  PIN NiagaraNodeFunctionCall_7.UseLoopDelay default=false links=0
+ MODULE ScaleSpriteSize script=/Niagara/Modules/Update/Size/ScaleSpriteSize.ScaleSpriteSize
+  INPUT Module.Initial Sprite Size type=Vector2f hidden=0
+  INPUT Module.Scale Factor type=Vector2f hidden=0
+  PIN NiagaraNodeFunctionCall_22.InputMap default= links=1
+  PIN NiagaraNodeParameterMapSet_0.Source default= links=1
+  PIN NiagaraNodeParameterMapSet_0.ScaleSpriteSize.Scale Factor default= links=1
+ MODULE Vector2DFromFloat script=/Niagara/DynamicInputs/TypeConversions/Vector2DFromFloat.Vector2DFromFloat
+  INPUT Module.Value type=NiagaraFloat hidden=0
+  PIN NiagaraNodeFunctionCall_23.InputMap default= links=1
+  PIN NiagaraNodeParameterMapSet_5.Source default= links=1
+  PIN NiagaraNodeParameterMapSet_5.Vector2DFromFloat.Value default= links=1
+ MODULE FloatFromCurve script=/Niagara/DynamicInputs/ValueFromCurve/FloatFromCurve.FloatFromCurve
+  INPUT Module.FloatCurve type=NiagaraDataInterfaceCurve hidden=0
+  INPUT Module.CurveIndex type=NiagaraFloat hidden=0
+  INPUT Module.Scale Curve type=NiagaraFloat hidden=0
+  PIN NiagaraNodeFunctionCall_24.InputMap default= links=1
+  PIN NiagaraNodeParameterMapSet_6.Source default= links=1
+  PIN NiagaraNodeParameterMapSet_6.FloatFromCurve.FloatCurve default= links=1
+ MODULE InitializeParticle script=/Niagara/Modules/Spawn/Initialization/V2/InitializeParticle.InitializeParticle
+  INPUT Module.Material Random type=NiagaraFloat hidden=0
+  INPUT Module.Lifetime type=NiagaraFloat hidden=1
+  INPUT Module.Lifetime Min type=NiagaraFloat hidden=0
+  INPUT Module.Lifetime Max type=NiagaraFloat hidden=0
+  INPUT Module.Color type=LinearColor hidden=0
+  INPUT Module.Color Minimum type=LinearColor hidden=1
+  INPUT Module.Color Maximum type=LinearColor hidden=1
+  INPUT Module.Hue Shift Range type=Vector2f hidden=1
+  INPUT Module.Saturation Range type=Vector2f hidden=1
+  INPUT Module.Value Range type=Vector2f hidden=1
+  INPUT Module.Alpha Scale Range type=Vector2f hidden=1
+  INPUT Module.Mass type=NiagaraFloat hidden=1
+  INPUT Module.Mass Min type=NiagaraFloat hidden=1
+  INPUT Module.Mass Max type=NiagaraFloat hidden=1
+  INPUT Module.Uniform Sprite Size type=NiagaraFloat hidden=1
+  INPUT Module.Uniform Sprite Size Min type=NiagaraFloat hidden=0
+  INPUT Module.Uniform Sprite Size Max type=NiagaraFloat hidden=0
+  INPUT Module.Sprite Size type=Vector2f hidden=1
+  INPUT Module.Sprite Size Min type=Vector2f hidden=1
+  INPUT Module.Sprite Size Max type=Vector2f hidden=1
+  INPUT Module.Sprite UV Scale type=Vector2f hidden=1
+  INPUT Module.Sprite Rotation Angle Min type=NiagaraFloat hidden=0
+  INPUT Module.Sprite Rotation Angle Max type=NiagaraFloat hidden=0
+  INPUT Module.Sprite Rotation Angle type=NiagaraFloat hidden=1
+  INPUT Module.Mesh Uniform Scale type=NiagaraFloat hidden=1
+  INPUT Module.Mesh Uniform Scale Min type=NiagaraFloat hidden=1
+  INPUT Module.Mesh Uniform Scale Max type=NiagaraFloat hidden=1
+  INPUT Module.Mesh Scale type=Vector3f hidden=1
+  INPUT Module.Mesh Scale Min type=Vector3f hidden=1
+  INPUT Module.Mesh Scale Max type=Vector3f hidden=1
+  INPUT Module.Position type=NiagaraPosition hidden=1
+  INPUT Module.Position Offset type=Vector3f hidden=0
+  INPUT Module.Position Offset Coordinate Space type=ENiagaraCoordinateSpace hidden=0
+  INPUT Module.Mesh Renderer Mesh Index type=NiagaraInt32 hidden=1
+  INPUT Module.Mesh Renderer Info type=NiagaraDataInterfaceMeshRendererInfo hidden=1
+  INPUT Module.Mesh Renderer Random Seed type=NiagaraInt32 hidden=1
+  INPUT Module.Ribbon Width type=NiagaraFloat hidden=1
+  INPUT Module.Ribbon Twist  type=NiagaraFloat hidden=1
+  INPUT Module.Ribbon Facing Vector type=Vector3f hidden=1
+  PIN NiagaraNodeFunctionCall_10.InputMap default= links=1
+  PIN NiagaraNodeFunctionCall_10.AdjustAlpha default=false links=0
+  PIN NiagaraNodeFunctionCall_10.AdjustHue default=true links=0
+  PIN NiagaraNodeFunctionCall_10.AdjustSaturation default=false links=0
+  PIN NiagaraNodeFunctionCall_10.AdjustValue default=false links=0
+  PIN NiagaraNodeFunctionCall_10.Color Channel Mode default=NewEnumerator1 links=0
+  PIN NiagaraNodeFunctionCall_10.Color Mode default=NewEnumerator1 links=0
+  PIN NiagaraNodeFunctionCall_10.Color Randomness Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_10.Lifetime Mode default=NewEnumerator1 links=0
+  PIN NiagaraNodeFunctionCall_10.Lifetime Randomness Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_10.Mass Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_10.Mass Randomness Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_10.Mesh Renderer Array Visibility Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_10.Mesh Scale Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_10.Mesh Scale Randomness Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_10.Position Mode default=NewEnumerator2 links=0
+  PIN NiagaraNodeFunctionCall_10.Ribbon Facing Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_10.Ribbon Twist Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_10.Ribbon Width Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_10.Sprite Rotation Mode default=NewEnumerator2 links=0
+  PIN NiagaraNodeFunctionCall_10.Sprite Rotation Randomness Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_10.Sprite Size Mode default=NewEnumerator1 links=0
+  PIN NiagaraNodeFunctionCall_10.Sprite Size Randomness Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_10.Sprite UV Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_10.Sprite UV Randomness Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_10.UsePositionOffset default=false links=0
+  PIN NiagaraNodeFunctionCall_10.Wrap Index By Mesh Count default=true links=0
+  PIN NiagaraNodeFunctionCall_10.Write Material Random default=true links=0
+ MODULE ShapeLocation script=/Niagara/Modules/Spawn/Location/V2/ShapeLocation.ShapeLocation
+  INPUT Module.Hemisphere Distribution type=Vector2f hidden=1
+  INPUT Module.Sphere Surface Distribution type=NiagaraFloat hidden=1
+  INPUT Module.Random Seed type=NiagaraInt32 hidden=1
+  INPUT Module.Sphere Radius type=NiagaraFloat hidden=1
+  INPUT Module.U Position type=NiagaraFloat hidden=1
+  INPUT Module.V Position type=NiagaraFloat hidden=1
+  INPUT Module.Sphere Radius Position type=NiagaraFloat hidden=1
+  INPUT Module.Uniform Particle Index type=NiagaraInt32 hidden=1
+  INPUT Module.Uniform Distribution type=NiagaraFloat hidden=1
+  INPUT Module.Uniform Endpoint Offset type=NiagaraFloat hidden=1
+  INPUT Module.Uniform Spiral Amount type=NiagaraFloat hidden=1
+  INPUT Module.Uniform Count type=NiagaraInt32 hidden=1
+  INPUT Module.Cylinder Radius type=NiagaraFloat hidden=1
+  INPUT Module.Cylinder Height type=NiagaraFloat hidden=1
+  INPUT Module.Non Uniform Scale type=Vector3f hidden=0
+  INPUT Module.Lathe Profile type=NiagaraDataInterfaceCurve hidden=1
+  INPUT Module.Surface Only Band Thickness type=NiagaraFloat hidden=1
+  INPUT Module.Cylinder Height Midpoint type=NiagaraFloat hidden=1
+  INPUT Module.Box Midpoint type=Vector3f hidden=1
+  INPUT Module.Box Size type=Vector3f hidden=1
+  INPUT Module.Surface Expansion Mode type=ENiagaraExpansionMode hidden=1
+  INPUT Module.Plane Size type=Vector2f hidden=1
+  INPUT Module.Plane Midpoint type=Vector2f hidden=1
+  INPUT Module.Surface Distribution type=NiagaraFloat hidden=1
+  INPUT Module.U Distribution type=NiagaraFloat hidden=1
+  INPUT Module.V Distribution type=NiagaraFloat hidden=1
+  INPUT Module.Handle Radius type=NiagaraFloat hidden=1
+  INPUT Module.Large Radius type=NiagaraFloat hidden=1
+  INPUT Module.Knot Helix Loops type=NiagaraInt32 hidden=1
+  INPUT Module.Knot Ring Loops type=NiagaraInt32 hidden=1
+  INPUT Module.Torus Knot Tube Radius type=NiagaraFloat hidden=1
+  INPUT Module.Disc Coverage type=NiagaraFloat hidden=1
+  INPUT Module.Radius Position type=NiagaraFloat hidden=1
+  INPUT Module.Ring Radius type=NiagaraFloat hidden=1
+  INPUT Module.Uniform Spiral Falloff type=NiagaraFloat hidden=1
+  INPUT Module.Cone Angle type=NiagaraFloat hidden=1
+  INPUT Module.Cone Length type=NiagaraFloat hidden=1
+  INPUT Module.Cone Surface Distribution type=NiagaraFloat hidden=1
+  INPUT Module.Cone Radial Angle type=NiagaraFloat hidden=1
+  INPUT Module.Cone Inner Angle type=NiagaraFloat hidden=1
+  INPUT Module.Wedge Horizontal Angle type=NiagaraFloat hidden=1
+  INPUT Module.Wedge Vertical Angle type=NiagaraFloat hidden=1
+  INPUT Module.Apply Owner Scale type=Vector3f hidden=0
+  INPUT Module.Offset type=Vector3f hidden=1
+  INPUT Module.Offset Coordinate Space type=ENiagaraCoordinateSpace hidden=1
+  INPUT Module.Rotation Coordinate Space type=ENiagaraCoordinateSpace hidden=0
+  INPUT Module.Yaw / Pitch / Roll type=Vector3f hidden=0
+  INPUT Module.Rotation Axis type=Vector3f hidden=0
+  INPUT Module.Rotation Angle type=NiagaraFloat hidden=0
+  INPUT Module.Rotation Quaternion type=Quat4f hidden=0
+  INPUT Module.Invert Rotation Quaternion type=NiagaraBool hidden=0
+  INPUT Module.Additional Yaw / Pitch / Roll type=Vector3f hidden=0
+  INPUT Module.Rotation Matrix type=NiagaraMatrix hidden=0
+  INPUT Module.Shape Origin type=NiagaraPosition hidden=0
+  INPUT Module.Custom Transform Matrix type=NiagaraMatrix hidden=1
+  INPUT Module.Spawn Group Mask type=NiagaraInt32 hidden=0
+  INPUT Module.Spawn Group type=NiagaraInt32 hidden=1
+  PIN NiagaraNodeFunctionCall_1.InputMap default= links=1
+  PIN NiagaraNodeFunctionCall_1.Additional Quaternion Rotation default=false links=0
+  PIN NiagaraNodeFunctionCall_1.Apply To Particle Position default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_1.Box / Plane Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_1.Cone Angle Type default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_1.Cone Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_1.Cylinder Distribution default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_1.Enable Lathe Profile default=false links=0
+  PIN NiagaraNodeFunctionCall_1.Enable Torus Knot Radius default=false links=0
+  PIN NiagaraNodeFunctionCall_1.Evaluation Type default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_1.Fixed Random Seed default=false links=0
+  PIN NiagaraNodeFunctionCall_1.Flatten Endcaps default=false links=0
+  PIN NiagaraNodeFunctionCall_1.Hemicircle Internal Cap default=true links=0
+  PIN NiagaraNodeFunctionCall_1.Hemicircle X default=false links=0
+  PIN NiagaraNodeFunctionCall_1.Hemicircle Y default=false links=0
+  PIN NiagaraNodeFunctionCall_1.Hemisphere Angle Type default=NewEnumerator1 links=0
+  PIN NiagaraNodeFunctionCall_1.MaskSpawnGroup default=false links=0
+  PIN NiagaraNodeFunctionCall_1.Offset Mode default=NewEnumerator1 links=0
+  PIN NiagaraNodeFunctionCall_1.Override Seed default=false links=0
+  PIN NiagaraNodeFunctionCall_1.Randomness Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_1.Ring / Disc Distribution Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_1.Ring / Disc Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_1.Rotation Angle Type default=NewEnumerator1 links=0
+  PIN NiagaraNodeFunctionCall_1.Rotation Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_1.Scale Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_1.Shape Primitive default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_1.Sphere Distribution default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_1.Surface Only default=false links=0
+  PIN NiagaraNodeFunctionCall_1.Torus Distribution Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_1.Torus Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_1.Transform Method default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_1.Transform Order default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_1.Use Endcaps In Surface Only Mode default=true links=0
+  PIN NiagaraNodeFunctionCall_1.UseOwnerScale default=true links=0
+ MODULE AddVelocity script=/Niagara/Modules/Spawn/Velocity/AddVelocity.AddVelocity
+  INPUT Module.Velocity type=Vector3f hidden=1
+  INPUT Module.Velocity Speed Scale type=NiagaraFloat hidden=1
+  INPUT Module.Cone Angle type=NiagaraFloat hidden=1
+  INPUT Module.UseVelDistribution type=NiagaraBool hidden=1
+  INPUT Module.Velocity Speed type=NiagaraFloat hidden=0
+  INPUT Module.Random Seed type=NiagaraInt32 hidden=0
+  INPUT Module.Cone Axis type=Vector3f hidden=1
+  INPUT Module.Speed Falloff From Cone Axis type=NiagaraFloat hidden=1
+  INPUT Module.Distribution Along Cone Axis type=NiagaraFloat hidden=1
+  INPUT Module.UseConeFalloff type=NiagaraBool hidden=1
+  INPUT Module.Inner Cone Angle type=NiagaraFloat hidden=1
+  INPUT Module.Rotation Coordinate Space type=ENiagaraCoordinateSpace hidden=1
+  INPUT Module.Yaw / Pitch / Roll type=Vector3f hidden=1
+  INPUT Module.Rotation Axis type=Vector3f hidden=1
+  INPUT Module.Rotation Angle type=NiagaraFloat hidden=1
+  INPUT Module.Rotation Quaternion type=Quat4f hidden=1
+  INPUT Module.Invert Rotation Quaternion type=NiagaraBool hidden=1
+  INPUT Module.Additional Yaw / Pitch / Roll type=Vector3f hidden=1
+  INPUT Module.Rotation Matrix type=NiagaraMatrix hidden=1
+  INPUT Module.Origin Offset type=Vector3f hidden=0
+  INPUT Module.Origin Offset Coordinate Space type=ENiagaraCoordinateSpace hidden=0
+  INPUT Module.Velocity Origin type=NiagaraPosition hidden=0
+  INPUT Module.Default Position type=NiagaraPosition hidden=0
+  INPUT Module.Constrain To Radius type=NiagaraFloat hidden=0
+  INPUT Module.Invert Velocity Falloff type=NiagaraBool hidden=0
+  INPUT Module.Use Falloff Distance type=NiagaraBool hidden=0
+  INPUT Module.Radius Falloff Near / Far type=Vector2f hidden=0
+  INPUT Module.Radius Falloff Exponent type=NiagaraFloat hidden=0
+  PIN NiagaraNodeFunctionCall_4.InputMap default= links=1
+  PIN NiagaraNodeFunctionCall_4.Additional Quaternion Rotation default=false links=0
+  PIN NiagaraNodeFunctionCall_4.Cone Angle Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_4.Fixed Random Seed default=false links=0
+  PIN NiagaraNodeFunctionCall_4.Override Seed default=false links=0
+  PIN NiagaraNodeFunctionCall_4.Randomness Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_4.Rotation Angle Type default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_4.Rotation Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_4.Velocity Mode default=NewEnumerator1 links=0
+  PIN NiagaraNodeParameterMapSet_1.Source default= links=1
+  PIN NiagaraNodeParameterMapSet_1.AddVelocity.Velocity Speed default=300.0 links=0
+ MODULE RandomRangeFloat script=/Niagara/DynamicInputs/UniformRange/V2/RandomRangeFloat.RandomRangeFloat
+  PIN NiagaraNodeFunctionCall_11.InputMap default= links=1
+  PIN NiagaraNodeFunctionCall_11.Evaluation Type default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_11.Fixed Random Seed default=false links=0
+  PIN NiagaraNodeFunctionCall_11.Override Seed default=false links=0
+  PIN NiagaraNodeFunctionCall_11.Randomness Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_11.Recalculate Random Each Loop default=true links=0
+  PIN NiagaraNodeParameterMapSet_2.Source default= links=1
+  PIN NiagaraNodeParameterMapSet_2.SpawnBurst_Instantaneous.Spawn Count default=11 links=0
+  PIN NiagaraNodeParameterMapSet_2.SpawnBurst_Instantaneous.Spawn Time default=0.0 links=0
+  PIN NiagaraNodeParameterMapSet_3.Source default= links=1
+  PIN NiagaraNodeParameterMapSet_3.InitializeParticle.Lifetime Min default=0.12350000000000001 links=0
+  PIN NiagaraNodeParameterMapSet_3.InitializeParticle.Lifetime Max default=0.19 links=0
+  PIN NiagaraNodeParameterMapSet_4.Source default= links=1
+  PIN NiagaraNodeParameterMapSet_4.EmitterState.Loop Duration default=0.19 links=0
+  PIN NiagaraNodeParameterMapSet_7.Source default= links=1
+  PIN NiagaraNodeParameterMapSet_7.ShapeLocation.Non Uniform Scale default=(X=0.02,Y=0.02,Z=0.02) links=0
+
+SYSTEM /Game/Combat/VFX/NS_FinalParryFlash.NS_FinalParryFlash valid=1 ready=1
+EMITTER SimpleSpriteBurst enabled=1
+ RENDERER NiagaraSpriteRendererProperties enabled=1
+  MATERIAL /Game/Combat/VFX/M_CombatReleaseGlint.M_CombatReleaseGlint
+  PIN NiagaraNodeOutput_2.Out default= links=1
+  PIN NiagaraNodeOutput_3.Out default= links=1
+  PIN NiagaraNodeOutput_4.Out default= links=1
+  PIN NiagaraNodeOutput_5.Out default= links=1
+ MODULE SolveForcesAndVelocity script=/Niagara/Modules/Solvers/SolveForcesAndVelocity.SolveForcesAndVelocity
+  INPUT Module.DeltaTime type=NiagaraFloat hidden=0
+  INPUT Module.Force type=Vector3f hidden=0
+  INPUT Module.Velocity type=Vector3f hidden=0
+  INPUT Module.Mass type=NiagaraFloat hidden=0
+  INPUT Module.Position type=NiagaraPosition hidden=0
+  INPUT Module.Speed Limit type=NiagaraFloat hidden=0
+  INPUT Module.PreviousVelocity type=Vector3f hidden=0
+  INPUT Module.Acceleration Limit type=NiagaraFloat hidden=0
+  INPUT Module.Write to Intrinsic Properties type=NiagaraBool hidden=0
+  INPUT Module.Rotational Force type=Vector3f hidden=1
+  INPUT Module.Rotational Inertia type=NiagaraFloat hidden=1
+  INPUT Module.Mesh Orientation type=Quat4f hidden=1
+  INPUT Module.Rotational Velocity type=Vector3f hidden=1
+  INPUT Module.Manually Enable Rotational Solver type=NiagaraBool hidden=0
+  PIN NiagaraNodeFunctionCall_8.InputMap default= links=1
+  PIN NiagaraNodeFunctionCall_8.Clamp Velocity default=false links=0
+  PIN NiagaraNodeFunctionCall_8.Limit Acceleration default=false links=0
+  PIN NiagaraNodeFunctionCall_8.Rotational Solver Is Enabled default=true links=0
+  PIN NiagaraNodeFunctionCall_8.Write to Presolve Properties default=true links=0
+ MODULE SpawnBurst_Instantaneous script=/Niagara/Modules/Emitter/SpawnBurst_Instantaneous.SpawnBurst_Instantaneous
+  INPUT Module.Spawn Count type=NiagaraInt32 hidden=0
+  INPUT Module.Spawn Time type=NiagaraFloat hidden=0
+  INPUT Module.Age type=NiagaraFloat hidden=0
+  INPUT Module.Spawn Probability type=NiagaraFloat hidden=0
+  INPUT Module.Loop Count Limit type=NiagaraInt32 hidden=0
+  INPUT Module.Spawn Group type=NiagaraInt32 hidden=0
+  PIN NiagaraNodeFunctionCall_2.InputMap default= links=1
+  PIN NiagaraNodeFunctionCall_2.Use Spawn Probability default=false links=0
+  PIN NiagaraNodeFunctionCall_2.UseLoopCountLimit default=false links=0
+ MODULE ScaleColor script=/Niagara/Modules/Update/Color/ScaleColor.ScaleColor
+  INPUT Module.Color Value To Scale type=LinearColor hidden=0
+  INPUT Module.Scale RGB type=Vector3f hidden=0
+  INPUT Module.Scale Alpha type=NiagaraFloat hidden=0
+  INPUT Module.Scale RGBA type=Vector4f hidden=1
+  INPUT Module.Linear Color Curve type=NiagaraDataInterfaceColorCurve hidden=1
+  INPUT Module.Curve Index type=NiagaraFloat hidden=1
+  PIN NiagaraNodeFunctionCall_5.InputMap default= links=1
+  PIN NiagaraNodeFunctionCall_5.Scale Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_5.ScaleA default=true links=0
+  PIN NiagaraNodeFunctionCall_5.ScaleRGB default=false links=0
+  PIN NiagaraNodeFunctionCall_5.ScaleRGBA default=true links=0
+  PIN NiagaraNodeParameterMapSet_3.Source default= links=1
+  PIN NiagaraNodeParameterMapSet_3.ScaleColor.Scale Alpha default= links=1
+ MODULE FloatFromCurve001 script=/Niagara/DynamicInputs/ValueFromCurve/FloatFromCurve.FloatFromCurve
+  INPUT Module.FloatCurve type=NiagaraDataInterfaceCurve hidden=0
+  INPUT Module.CurveIndex type=NiagaraFloat hidden=0
+  INPUT Module.Scale Curve type=NiagaraFloat hidden=0
+  PIN NiagaraNodeFunctionCall_6.InputMap default= links=1
+  PIN NiagaraNodeParameterMapSet_4.Source default= links=1
+  PIN NiagaraNodeParameterMapSet_4.FloatFromCurve001.FloatCurve default= links=1
+ MODULE ParticleState script=/Niagara/Modules/Update/Lifetime/ParticleState.ParticleState
+  INPUT Module.DeltaTime type=NiagaraFloat hidden=0
+  INPUT Module.Lifetime type=NiagaraFloat hidden=0
+  INPUT Module.Loop Particles Lifetime type=NiagaraBool hidden=1
+  INPUT Module.Let Infinitely Lived Particles Die When Emitter Deactivates type=NiagaraBool hidden=1
+  PIN NiagaraNodeFunctionCall_1.InputMap default= links=1
+  PIN NiagaraNodeFunctionCall_1.Kill Particles When Lifetime Has Elapsed default=true links=0
+ MODULE EmitterState script=/Niagara/Modules/Emitter/EmitterState.EmitterState
+  INPUT Module.Loop Duration type=NiagaraFloat hidden=0
+  INPUT Module.Loop Delay type=NiagaraFloat hidden=0
+  INPUT Module.Recalculate Duration Each Loop type=NiagaraBool hidden=1
+  INPUT Module.Delay First Loop Only type=NiagaraBool hidden=1
+  INPUT Module.bUseMinDistance type=NiagaraBool hidden=1
+  INPUT Module.MinDistance type=NiagaraFloat hidden=1
+  INPUT Module.bUseMaxDistance type=NiagaraBool hidden=1
+  INPUT Module.MaxDistance type=NiagaraFloat hidden=1
+  INPUT Module.Min Distance Response type=ENiagaraExecutionStateManagement hidden=1
+  INPUT Module.Max Distance Response type=ENiagaraExecutionStateManagement hidden=1
+  INPUT Module.Visibility Cull Delay type=NiagaraFloat hidden=1
+  INPUT Module.Visibility Cull Response type=ENiagaraExecutionStateManagement hidden=1
+  INPUT Module.Spawn Count Scale type=NiagaraFloat hidden=1
+  INPUT Module.bApplySpawnCountScaleByDistance type=NiagaraBool hidden=1
+  INPUT Module.Spawn Count Scale By Distance type=NiagaraDataInterfaceCurve hidden=1
+  INPUT Module.Loop Count type=NiagaraInt32 hidden=1
+  INPUT Module.Reset Age On Awaken type=NiagaraBool hidden=1
+  PIN NiagaraNodeFunctionCall_3.InputMap default= links=1
+  PIN NiagaraNodeFunctionCall_3.Enable Distance Culling default=false links=0
+  PIN NiagaraNodeFunctionCall_3.Enable Visibility Culling default=false links=0
+  PIN NiagaraNodeFunctionCall_3.Inactive Response default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_3.Life Cycle Mode default=NewEnumerator1 links=0
+  PIN NiagaraNodeFunctionCall_3.Loop Behavior default=NewEnumerator1 links=0
+  PIN NiagaraNodeFunctionCall_3.Loop Duration Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_3.Scalability Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_3.Scale Spawn Count default=false links=0
+  PIN NiagaraNodeFunctionCall_3.UseLoopDelay default=false links=0
+ MODULE InitializeParticle script=/Niagara/Modules/Spawn/Initialization/V2/InitializeParticle.InitializeParticle
+  INPUT Module.Material Random type=NiagaraFloat hidden=0
+  INPUT Module.Lifetime type=NiagaraFloat hidden=0
+  INPUT Module.Lifetime Min type=NiagaraFloat hidden=1
+  INPUT Module.Lifetime Max type=NiagaraFloat hidden=1
+  INPUT Module.Color type=LinearColor hidden=0
+  INPUT Module.Color Minimum type=LinearColor hidden=1
+  INPUT Module.Color Maximum type=LinearColor hidden=1
+  INPUT Module.Hue Shift Range type=Vector2f hidden=1
+  INPUT Module.Saturation Range type=Vector2f hidden=1
+  INPUT Module.Value Range type=Vector2f hidden=1
+  INPUT Module.Alpha Scale Range type=Vector2f hidden=1
+  INPUT Module.Mass type=NiagaraFloat hidden=1
+  INPUT Module.Mass Min type=NiagaraFloat hidden=1
+  INPUT Module.Mass Max type=NiagaraFloat hidden=1
+  INPUT Module.Uniform Sprite Size type=NiagaraFloat hidden=0
+  INPUT Module.Uniform Sprite Size Min type=NiagaraFloat hidden=1
+  INPUT Module.Uniform Sprite Size Max type=NiagaraFloat hidden=1
+  INPUT Module.Sprite Size type=Vector2f hidden=1
+  INPUT Module.Sprite Size Min type=Vector2f hidden=1
+  INPUT Module.Sprite Size Max type=Vector2f hidden=1
+  INPUT Module.Sprite UV Scale type=Vector2f hidden=1
+  INPUT Module.Sprite Rotation Angle Min type=NiagaraFloat hidden=1
+  INPUT Module.Sprite Rotation Angle Max type=NiagaraFloat hidden=1
+  INPUT Module.Sprite Rotation Angle type=NiagaraFloat hidden=1
+  INPUT Module.Mesh Uniform Scale type=NiagaraFloat hidden=1
+  INPUT Module.Mesh Uniform Scale Min type=NiagaraFloat hidden=1
+  INPUT Module.Mesh Uniform Scale Max type=NiagaraFloat hidden=1
+  INPUT Module.Mesh Scale type=Vector3f hidden=1
+  INPUT Module.Mesh Scale Min type=Vector3f hidden=1
+  INPUT Module.Mesh Scale Max type=Vector3f hidden=1
+  INPUT Module.Position type=NiagaraPosition hidden=1
+  INPUT Module.Position Offset type=Vector3f hidden=0
+  INPUT Module.Position Offset Coordinate Space type=ENiagaraCoordinateSpace hidden=0
+  INPUT Module.Mesh Renderer Mesh Index type=NiagaraInt32 hidden=1
+  INPUT Module.Mesh Renderer Info type=NiagaraDataInterfaceMeshRendererInfo hidden=1
+  INPUT Module.Mesh Renderer Random Seed type=NiagaraInt32 hidden=1
+  INPUT Module.Ribbon Width type=NiagaraFloat hidden=1
+  INPUT Module.Ribbon Twist  type=NiagaraFloat hidden=1
+  INPUT Module.Ribbon Facing Vector type=Vector3f hidden=1
+  PIN NiagaraNodeFunctionCall_0.InputMap default= links=1
+  PIN NiagaraNodeFunctionCall_0.AdjustAlpha default=false links=0
+  PIN NiagaraNodeFunctionCall_0.AdjustHue default=true links=0
+  PIN NiagaraNodeFunctionCall_0.AdjustSaturation default=false links=0
+  PIN NiagaraNodeFunctionCall_0.AdjustValue default=false links=0
+  PIN NiagaraNodeFunctionCall_0.Color Channel Mode default=NewEnumerator1 links=0
+  PIN NiagaraNodeFunctionCall_0.Color Mode default=NewEnumerator1 links=0
+  PIN NiagaraNodeFunctionCall_0.Color Randomness Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Lifetime Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Lifetime Randomness Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Mass Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Mass Randomness Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Mesh Renderer Array Visibility Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Mesh Scale Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Mesh Scale Randomness Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Position Mode default=NewEnumerator2 links=0
+  PIN NiagaraNodeFunctionCall_0.Ribbon Facing Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Ribbon Twist Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Ribbon Width Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Sprite Rotation Mode default=NewEnumerator3 links=0
+  PIN NiagaraNodeFunctionCall_0.Sprite Rotation Randomness Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Sprite Size Mode default=NewEnumerator3 links=0
+  PIN NiagaraNodeFunctionCall_0.Sprite Size Randomness Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Sprite UV Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Sprite UV Randomness Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.UsePositionOffset default=false links=0
+  PIN NiagaraNodeFunctionCall_0.Wrap Index By Mesh Count default=true links=0
+  PIN NiagaraNodeFunctionCall_0.Write Material Random default=true links=0
+  PIN NiagaraNodeParameterMapSet_0.Source default= links=1
+  PIN NiagaraNodeParameterMapSet_0.SpawnBurst_Instantaneous.Spawn Count default=1 links=0
+  PIN NiagaraNodeParameterMapSet_0.SpawnBurst_Instantaneous.Spawn Time default=0.0 links=0
+  PIN NiagaraNodeParameterMapSet_1.Source default= links=1
+  PIN NiagaraNodeParameterMapSet_1.InitializeParticle.Lifetime default=0.11 links=0
+  PIN NiagaraNodeParameterMapSet_2.Source default= links=1
+  PIN NiagaraNodeParameterMapSet_2.EmitterState.Loop Duration default=0.11 links=0
+
+SYSTEM /Game/Combat/VFX/NS_FinalAOERelease.NS_FinalAOERelease valid=1 ready=1
+EMITTER SimpleSpriteBurst enabled=1
+ RENDERER NiagaraSpriteRendererProperties enabled=1
+  MATERIAL /Game/Combat/VFX/M_CombatReleaseGlint.M_CombatReleaseGlint
+  PIN NiagaraNodeOutput_2.Out default= links=1
+  PIN NiagaraNodeOutput_3.Out default= links=1
+  PIN NiagaraNodeOutput_4.Out default= links=1
+  PIN NiagaraNodeOutput_5.Out default= links=1
+ MODULE SolveForcesAndVelocity script=/Niagara/Modules/Solvers/SolveForcesAndVelocity.SolveForcesAndVelocity
+  INPUT Module.DeltaTime type=NiagaraFloat hidden=0
+  INPUT Module.Force type=Vector3f hidden=0
+  INPUT Module.Velocity type=Vector3f hidden=0
+  INPUT Module.Mass type=NiagaraFloat hidden=0
+  INPUT Module.Position type=NiagaraPosition hidden=0
+  INPUT Module.Speed Limit type=NiagaraFloat hidden=0
+  INPUT Module.PreviousVelocity type=Vector3f hidden=0
+  INPUT Module.Acceleration Limit type=NiagaraFloat hidden=0
+  INPUT Module.Write to Intrinsic Properties type=NiagaraBool hidden=0
+  INPUT Module.Rotational Force type=Vector3f hidden=1
+  INPUT Module.Rotational Inertia type=NiagaraFloat hidden=1
+  INPUT Module.Mesh Orientation type=Quat4f hidden=1
+  INPUT Module.Rotational Velocity type=Vector3f hidden=1
+  INPUT Module.Manually Enable Rotational Solver type=NiagaraBool hidden=0
+  PIN NiagaraNodeFunctionCall_8.InputMap default= links=1
+  PIN NiagaraNodeFunctionCall_8.Clamp Velocity default=false links=0
+  PIN NiagaraNodeFunctionCall_8.Limit Acceleration default=false links=0
+  PIN NiagaraNodeFunctionCall_8.Rotational Solver Is Enabled default=true links=0
+  PIN NiagaraNodeFunctionCall_8.Write to Presolve Properties default=true links=0
+ MODULE SpawnBurst_Instantaneous script=/Niagara/Modules/Emitter/SpawnBurst_Instantaneous.SpawnBurst_Instantaneous
+  INPUT Module.Spawn Count type=NiagaraInt32 hidden=0
+  INPUT Module.Spawn Time type=NiagaraFloat hidden=0
+  INPUT Module.Age type=NiagaraFloat hidden=0
+  INPUT Module.Spawn Probability type=NiagaraFloat hidden=0
+  INPUT Module.Loop Count Limit type=NiagaraInt32 hidden=0
+  INPUT Module.Spawn Group type=NiagaraInt32 hidden=0
+  PIN NiagaraNodeFunctionCall_2.InputMap default= links=1
+  PIN NiagaraNodeFunctionCall_2.Use Spawn Probability default=false links=0
+  PIN NiagaraNodeFunctionCall_2.UseLoopCountLimit default=false links=0
+ MODULE ScaleColor script=/Niagara/Modules/Update/Color/ScaleColor.ScaleColor
+  INPUT Module.Color Value To Scale type=LinearColor hidden=0
+  INPUT Module.Scale RGB type=Vector3f hidden=0
+  INPUT Module.Scale Alpha type=NiagaraFloat hidden=0
+  INPUT Module.Scale RGBA type=Vector4f hidden=1
+  INPUT Module.Linear Color Curve type=NiagaraDataInterfaceColorCurve hidden=1
+  INPUT Module.Curve Index type=NiagaraFloat hidden=1
+  PIN NiagaraNodeFunctionCall_5.InputMap default= links=1
+  PIN NiagaraNodeFunctionCall_5.Scale Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_5.ScaleA default=true links=0
+  PIN NiagaraNodeFunctionCall_5.ScaleRGB default=false links=0
+  PIN NiagaraNodeFunctionCall_5.ScaleRGBA default=true links=0
+  PIN NiagaraNodeParameterMapSet_3.Source default= links=1
+  PIN NiagaraNodeParameterMapSet_3.ScaleColor.Scale Alpha default= links=1
+ MODULE FloatFromCurve001 script=/Niagara/DynamicInputs/ValueFromCurve/FloatFromCurve.FloatFromCurve
+  INPUT Module.FloatCurve type=NiagaraDataInterfaceCurve hidden=0
+  INPUT Module.CurveIndex type=NiagaraFloat hidden=0
+  INPUT Module.Scale Curve type=NiagaraFloat hidden=0
+  PIN NiagaraNodeFunctionCall_6.InputMap default= links=1
+  PIN NiagaraNodeParameterMapSet_4.Source default= links=1
+  PIN NiagaraNodeParameterMapSet_4.FloatFromCurve001.FloatCurve default= links=1
+ MODULE ParticleState script=/Niagara/Modules/Update/Lifetime/ParticleState.ParticleState
+  INPUT Module.DeltaTime type=NiagaraFloat hidden=0
+  INPUT Module.Lifetime type=NiagaraFloat hidden=0
+  INPUT Module.Loop Particles Lifetime type=NiagaraBool hidden=1
+  INPUT Module.Let Infinitely Lived Particles Die When Emitter Deactivates type=NiagaraBool hidden=1
+  PIN NiagaraNodeFunctionCall_1.InputMap default= links=1
+  PIN NiagaraNodeFunctionCall_1.Kill Particles When Lifetime Has Elapsed default=true links=0
+ MODULE EmitterState script=/Niagara/Modules/Emitter/EmitterState.EmitterState
+  INPUT Module.Loop Duration type=NiagaraFloat hidden=0
+  INPUT Module.Loop Delay type=NiagaraFloat hidden=0
+  INPUT Module.Recalculate Duration Each Loop type=NiagaraBool hidden=1
+  INPUT Module.Delay First Loop Only type=NiagaraBool hidden=1
+  INPUT Module.bUseMinDistance type=NiagaraBool hidden=1
+  INPUT Module.MinDistance type=NiagaraFloat hidden=1
+  INPUT Module.bUseMaxDistance type=NiagaraBool hidden=1
+  INPUT Module.MaxDistance type=NiagaraFloat hidden=1
+  INPUT Module.Min Distance Response type=ENiagaraExecutionStateManagement hidden=1
+  INPUT Module.Max Distance Response type=ENiagaraExecutionStateManagement hidden=1
+  INPUT Module.Visibility Cull Delay type=NiagaraFloat hidden=1
+  INPUT Module.Visibility Cull Response type=ENiagaraExecutionStateManagement hidden=1
+  INPUT Module.Spawn Count Scale type=NiagaraFloat hidden=1
+  INPUT Module.bApplySpawnCountScaleByDistance type=NiagaraBool hidden=1
+  INPUT Module.Spawn Count Scale By Distance type=NiagaraDataInterfaceCurve hidden=1
+  INPUT Module.Loop Count type=NiagaraInt32 hidden=1
+  INPUT Module.Reset Age On Awaken type=NiagaraBool hidden=1
+  PIN NiagaraNodeFunctionCall_3.InputMap default= links=1
+  PIN NiagaraNodeFunctionCall_3.Enable Distance Culling default=false links=0
+  PIN NiagaraNodeFunctionCall_3.Enable Visibility Culling default=false links=0
+  PIN NiagaraNodeFunctionCall_3.Inactive Response default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_3.Life Cycle Mode default=NewEnumerator1 links=0
+  PIN NiagaraNodeFunctionCall_3.Loop Behavior default=NewEnumerator1 links=0
+  PIN NiagaraNodeFunctionCall_3.Loop Duration Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_3.Scalability Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_3.Scale Spawn Count default=false links=0
+  PIN NiagaraNodeFunctionCall_3.UseLoopDelay default=false links=0
+ MODULE InitializeParticle script=/Niagara/Modules/Spawn/Initialization/V2/InitializeParticle.InitializeParticle
+  INPUT Module.Material Random type=NiagaraFloat hidden=0
+  INPUT Module.Lifetime type=NiagaraFloat hidden=0
+  INPUT Module.Lifetime Min type=NiagaraFloat hidden=1
+  INPUT Module.Lifetime Max type=NiagaraFloat hidden=1
+  INPUT Module.Color type=LinearColor hidden=0
+  INPUT Module.Color Minimum type=LinearColor hidden=1
+  INPUT Module.Color Maximum type=LinearColor hidden=1
+  INPUT Module.Hue Shift Range type=Vector2f hidden=1
+  INPUT Module.Saturation Range type=Vector2f hidden=1
+  INPUT Module.Value Range type=Vector2f hidden=1
+  INPUT Module.Alpha Scale Range type=Vector2f hidden=1
+  INPUT Module.Mass type=NiagaraFloat hidden=1
+  INPUT Module.Mass Min type=NiagaraFloat hidden=1
+  INPUT Module.Mass Max type=NiagaraFloat hidden=1
+  INPUT Module.Uniform Sprite Size type=NiagaraFloat hidden=0
+  INPUT Module.Uniform Sprite Size Min type=NiagaraFloat hidden=1
+  INPUT Module.Uniform Sprite Size Max type=NiagaraFloat hidden=1
+  INPUT Module.Sprite Size type=Vector2f hidden=1
+  INPUT Module.Sprite Size Min type=Vector2f hidden=1
+  INPUT Module.Sprite Size Max type=Vector2f hidden=1
+  INPUT Module.Sprite UV Scale type=Vector2f hidden=1
+  INPUT Module.Sprite Rotation Angle Min type=NiagaraFloat hidden=1
+  INPUT Module.Sprite Rotation Angle Max type=NiagaraFloat hidden=1
+  INPUT Module.Sprite Rotation Angle type=NiagaraFloat hidden=1
+  INPUT Module.Mesh Uniform Scale type=NiagaraFloat hidden=1
+  INPUT Module.Mesh Uniform Scale Min type=NiagaraFloat hidden=1
+  INPUT Module.Mesh Uniform Scale Max type=NiagaraFloat hidden=1
+  INPUT Module.Mesh Scale type=Vector3f hidden=1
+  INPUT Module.Mesh Scale Min type=Vector3f hidden=1
+  INPUT Module.Mesh Scale Max type=Vector3f hidden=1
+  INPUT Module.Position type=NiagaraPosition hidden=1
+  INPUT Module.Position Offset type=Vector3f hidden=0
+  INPUT Module.Position Offset Coordinate Space type=ENiagaraCoordinateSpace hidden=0
+  INPUT Module.Mesh Renderer Mesh Index type=NiagaraInt32 hidden=1
+  INPUT Module.Mesh Renderer Info type=NiagaraDataInterfaceMeshRendererInfo hidden=1
+  INPUT Module.Mesh Renderer Random Seed type=NiagaraInt32 hidden=1
+  INPUT Module.Ribbon Width type=NiagaraFloat hidden=1
+  INPUT Module.Ribbon Twist  type=NiagaraFloat hidden=1
+  INPUT Module.Ribbon Facing Vector type=Vector3f hidden=1
+  PIN NiagaraNodeFunctionCall_0.InputMap default= links=1
+  PIN NiagaraNodeFunctionCall_0.AdjustAlpha default=false links=0
+  PIN NiagaraNodeFunctionCall_0.AdjustHue default=true links=0
+  PIN NiagaraNodeFunctionCall_0.AdjustSaturation default=false links=0
+  PIN NiagaraNodeFunctionCall_0.AdjustValue default=false links=0
+  PIN NiagaraNodeFunctionCall_0.Color Channel Mode default=NewEnumerator1 links=0
+  PIN NiagaraNodeFunctionCall_0.Color Mode default=NewEnumerator1 links=0
+  PIN NiagaraNodeFunctionCall_0.Color Randomness Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Lifetime Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Lifetime Randomness Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Mass Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Mass Randomness Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Mesh Renderer Array Visibility Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Mesh Scale Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Mesh Scale Randomness Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Position Mode default=NewEnumerator2 links=0
+  PIN NiagaraNodeFunctionCall_0.Ribbon Facing Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Ribbon Twist Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Ribbon Width Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Sprite Rotation Mode default=NewEnumerator3 links=0
+  PIN NiagaraNodeFunctionCall_0.Sprite Rotation Randomness Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Sprite Size Mode default=NewEnumerator3 links=0
+  PIN NiagaraNodeFunctionCall_0.Sprite Size Randomness Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Sprite UV Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Sprite UV Randomness Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.UsePositionOffset default=false links=0
+  PIN NiagaraNodeFunctionCall_0.Wrap Index By Mesh Count default=true links=0
+  PIN NiagaraNodeFunctionCall_0.Write Material Random default=true links=0
+  PIN NiagaraNodeParameterMapSet_0.Source default= links=1
+  PIN NiagaraNodeParameterMapSet_0.SpawnBurst_Instantaneous.Spawn Count default=1 links=0
+  PIN NiagaraNodeParameterMapSet_0.SpawnBurst_Instantaneous.Spawn Time default=0.0 links=0
+  PIN NiagaraNodeParameterMapSet_1.Source default= links=1
+  PIN NiagaraNodeParameterMapSet_1.InitializeParticle.Lifetime default=0.16 links=0
+  PIN NiagaraNodeParameterMapSet_2.Source default= links=1
+  PIN NiagaraNodeParameterMapSet_2.EmitterState.Loop Duration default=0.16 links=0
+
+SYSTEM /Game/Combat/VFX/NS_PlayerBladeRibbon.NS_PlayerBladeRibbon valid=1 ready=1
+EMITTER LocationBasedRibbon enabled=1
+ RENDERER NiagaraRibbonRendererProperties enabled=1
+  MATERIAL /Game/Combat/VFX/MI_PlayerBladeRibbon.MI_PlayerBladeRibbon
+  PIN NiagaraNodeOutput_2.Out default= links=1
+  PIN NiagaraNodeOutput_3.Out default= links=1
+  PIN NiagaraNodeOutput_4.Out default= links=1
+  PIN NiagaraNodeOutput_5.Out default= links=1
+ MODULE SolveForcesAndVelocity script=/Niagara/Modules/Solvers/SolveForcesAndVelocity.SolveForcesAndVelocity
+  INPUT Module.DeltaTime type=NiagaraFloat hidden=0
+  INPUT Module.Force type=Vector3f hidden=0
+  INPUT Module.Velocity type=Vector3f hidden=0
+  INPUT Module.Mass type=NiagaraFloat hidden=0
+  INPUT Module.Position type=NiagaraPosition hidden=0
+  INPUT Module.Speed Limit type=NiagaraFloat hidden=0
+  INPUT Module.PreviousVelocity type=Vector3f hidden=0
+  INPUT Module.Acceleration Limit type=NiagaraFloat hidden=0
+  INPUT Module.Write to Intrinsic Properties type=NiagaraBool hidden=0
+  INPUT Module.Rotational Force type=Vector3f hidden=1
+  INPUT Module.Rotational Inertia type=NiagaraFloat hidden=1
+  INPUT Module.Mesh Orientation type=Quat4f hidden=1
+  INPUT Module.Rotational Velocity type=Vector3f hidden=1
+  INPUT Module.Manually Enable Rotational Solver type=NiagaraBool hidden=0
+  PIN NiagaraNodeFunctionCall_8.InputMap default= links=1
+  PIN NiagaraNodeFunctionCall_8.Clamp Velocity default=false links=0
+  PIN NiagaraNodeFunctionCall_8.Limit Acceleration default=false links=0
+  PIN NiagaraNodeFunctionCall_8.Rotational Solver Is Enabled default=true links=0
+  PIN NiagaraNodeFunctionCall_8.Write to Presolve Properties default=true links=0
+  PIN NiagaraNodeOutput_0.Out default= links=1
+ MODULE ReceiveLocationEvent script=/Niagara/Modules/Events/ReceiveLocationEvent.ReceiveLocationEvent
+  INPUT Module.Apply RGB type=NiagaraBool hidden=1
+  INPUT Module.Apply Alpha type=NiagaraBool hidden=1
+  INPUT Module.Inherited Velocity Scale type=NiagaraFloat hidden=1
+  INPUT Module.Inherit Parent Normalized Age type=NiagaraBool hidden=1
+  PIN NiagaraNodeFunctionCall_2.InputMap default= links=1
+  PIN NiagaraNodeFunctionCall_2.Acceleration (Vector 3) default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_2.Color (Linear Color) default=NewEnumerator1 links=0
+  PIN NiagaraNodeFunctionCall_2.Coordinate Space Transform (Bool) default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_2.Interpolate Spawned Positions default=true links=0
+  PIN NiagaraNodeFunctionCall_2.Normalized Age (Float 1) default=NewEnumerator1 links=0
+  PIN NiagaraNodeFunctionCall_2.Position (Vector 1) default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_2.Random Normalized Float (Float 2) default=NewEnumerator1 links=0
+  PIN NiagaraNodeFunctionCall_2.Ribbon ID (Niagara ID) default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_2.Ribbon UV DIstance (Float 3) default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_2.Velocity (Vector 2) default=NewEnumerator1 links=0
+  PIN NiagaraNodeParameterMapSet_1.Source default= links=1
+  PIN NiagaraNodeParameterMapSet_1.ReceiveLocationEvent.Inherit Parent Normalized Age default=true links=0
+ MODULE ParticleState script=/Niagara/Modules/Update/Lifetime/ParticleState.ParticleState
+  INPUT Module.DeltaTime type=NiagaraFloat hidden=0
+  INPUT Module.Lifetime type=NiagaraFloat hidden=0
+  INPUT Module.Loop Particles Lifetime type=NiagaraBool hidden=1
+  INPUT Module.Let Infinitely Lived Particles Die When Emitter Deactivates type=NiagaraBool hidden=1
+  PIN NiagaraNodeFunctionCall_4.InputMap default= links=1
+  PIN NiagaraNodeFunctionCall_4.Kill Particles When Lifetime Has Elapsed default=true links=0
+ MODULE EmitterState script=/Niagara/Modules/Emitter/EmitterState.EmitterState
+  INPUT Module.Loop Duration type=NiagaraFloat hidden=0
+  INPUT Module.Loop Delay type=NiagaraFloat hidden=0
+  INPUT Module.Recalculate Duration Each Loop type=NiagaraBool hidden=1
+  INPUT Module.Delay First Loop Only type=NiagaraBool hidden=1
+  INPUT Module.bUseMinDistance type=NiagaraBool hidden=1
+  INPUT Module.MinDistance type=NiagaraFloat hidden=1
+  INPUT Module.bUseMaxDistance type=NiagaraBool hidden=1
+  INPUT Module.MaxDistance type=NiagaraFloat hidden=1
+  INPUT Module.Min Distance Response type=ENiagaraExecutionStateManagement hidden=1
+  INPUT Module.Max Distance Response type=ENiagaraExecutionStateManagement hidden=1
+  INPUT Module.Visibility Cull Delay type=NiagaraFloat hidden=1
+  INPUT Module.Visibility Cull Response type=ENiagaraExecutionStateManagement hidden=1
+  INPUT Module.Spawn Count Scale type=NiagaraFloat hidden=1
+  INPUT Module.bApplySpawnCountScaleByDistance type=NiagaraBool hidden=1
+  INPUT Module.Spawn Count Scale By Distance type=NiagaraDataInterfaceCurve hidden=1
+  INPUT Module.Loop Count type=NiagaraInt32 hidden=1
+  INPUT Module.Reset Age On Awaken type=NiagaraBool hidden=1
+  PIN NiagaraNodeFunctionCall_5.InputMap default= links=1
+  PIN NiagaraNodeFunctionCall_5.Enable Distance Culling default=false links=0
+  PIN NiagaraNodeFunctionCall_5.Enable Visibility Culling default=false links=0
+  PIN NiagaraNodeFunctionCall_5.Inactive Response default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_5.Life Cycle Mode default=NewEnumerator1 links=0
+  PIN NiagaraNodeFunctionCall_5.Loop Behavior default=NewEnumerator1 links=0
+  PIN NiagaraNodeFunctionCall_5.Loop Duration Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_5.Scalability Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_5.Scale Spawn Count default=false links=0
+  PIN NiagaraNodeFunctionCall_5.UseLoopDelay default=false links=0
+ MODULE InitializeParticle script=/Niagara/Modules/Spawn/Initialization/V2/InitializeParticle.InitializeParticle
+  INPUT Module.Material Random type=NiagaraFloat hidden=0
+  INPUT Module.Lifetime type=NiagaraFloat hidden=0
+  INPUT Module.Lifetime Min type=NiagaraFloat hidden=1
+  INPUT Module.Lifetime Max type=NiagaraFloat hidden=1
+  INPUT Module.Color type=LinearColor hidden=0
+  INPUT Module.Color Minimum type=LinearColor hidden=1
+  INPUT Module.Color Maximum type=LinearColor hidden=1
+  INPUT Module.Hue Shift Range type=Vector2f hidden=1
+  INPUT Module.Saturation Range type=Vector2f hidden=1
+  INPUT Module.Value Range type=Vector2f hidden=1
+  INPUT Module.Alpha Scale Range type=Vector2f hidden=1
+  INPUT Module.Mass type=NiagaraFloat hidden=1
+  INPUT Module.Mass Min type=NiagaraFloat hidden=1
+  INPUT Module.Mass Max type=NiagaraFloat hidden=1
+  INPUT Module.Uniform Sprite Size type=NiagaraFloat hidden=1
+  INPUT Module.Uniform Sprite Size Min type=NiagaraFloat hidden=1
+  INPUT Module.Uniform Sprite Size Max type=NiagaraFloat hidden=1
+  INPUT Module.Sprite Size type=Vector2f hidden=1
+  INPUT Module.Sprite Size Min type=Vector2f hidden=1
+  INPUT Module.Sprite Size Max type=Vector2f hidden=1
+  INPUT Module.Sprite UV Scale type=Vector2f hidden=1
+  INPUT Module.Sprite Rotation Angle Min type=NiagaraFloat hidden=1
+  INPUT Module.Sprite Rotation Angle Max type=NiagaraFloat hidden=1
+  INPUT Module.Sprite Rotation Angle type=NiagaraFloat hidden=1
+  INPUT Module.Mesh Uniform Scale type=NiagaraFloat hidden=1
+  INPUT Module.Mesh Uniform Scale Min type=NiagaraFloat hidden=1
+  INPUT Module.Mesh Uniform Scale Max type=NiagaraFloat hidden=1
+  INPUT Module.Mesh Scale type=Vector3f hidden=1
+  INPUT Module.Mesh Scale Min type=Vector3f hidden=1
+  INPUT Module.Mesh Scale Max type=Vector3f hidden=1
+  INPUT Module.Position type=NiagaraPosition hidden=1
+  INPUT Module.Position Offset type=Vector3f hidden=0
+  INPUT Module.Position Offset Coordinate Space type=ENiagaraCoordinateSpace hidden=0
+  INPUT Module.Mesh Renderer Mesh Index type=NiagaraInt32 hidden=1
+  INPUT Module.Mesh Renderer Info type=NiagaraDataInterfaceMeshRendererInfo hidden=1
+  INPUT Module.Mesh Renderer Random Seed type=NiagaraInt32 hidden=1
+  INPUT Module.Ribbon Width type=NiagaraFloat hidden=1
+  INPUT Module.Ribbon Twist  type=NiagaraFloat hidden=1
+  INPUT Module.Ribbon Facing Vector type=Vector3f hidden=1
+  PIN NiagaraNodeFunctionCall_0.InputMap default= links=1
+  PIN NiagaraNodeFunctionCall_0.AdjustAlpha default=false links=0
+  PIN NiagaraNodeFunctionCall_0.AdjustHue default=true links=0
+  PIN NiagaraNodeFunctionCall_0.AdjustSaturation default=false links=0
+  PIN NiagaraNodeFunctionCall_0.AdjustValue default=false links=0
+  PIN NiagaraNodeFunctionCall_0.Color Channel Mode default=NewEnumerator1 links=0
+  PIN NiagaraNodeFunctionCall_0.Color Mode default=NewEnumerator1 links=0
+  PIN NiagaraNodeFunctionCall_0.Color Randomness Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Lifetime Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Lifetime Randomness Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Mass Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Mass Randomness Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Mesh Renderer Array Visibility Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Mesh Scale Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Mesh Scale Randomness Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Position Mode default=NewEnumerator2 links=0
+  PIN NiagaraNodeFunctionCall_0.Ribbon Facing Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Ribbon Twist Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Ribbon Width Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Sprite Rotation Mode default=NewEnumerator3 links=0
+  PIN NiagaraNodeFunctionCall_0.Sprite Rotation Randomness Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Sprite Size Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Sprite Size Randomness Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Sprite UV Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Sprite UV Randomness Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.UsePositionOffset default=false links=0
+  PIN NiagaraNodeFunctionCall_0.Wrap Index By Mesh Count default=true links=0
+  PIN NiagaraNodeFunctionCall_0.Write Material Random default=true links=0
+  PIN NiagaraNodeParameterMapSet_0.Source default= links=1
+  PIN NiagaraNodeParameterMapSet_0.InitializeParticle.Lifetime default=0.1 links=0
+ MODULE SpawnRate script=/Niagara/Modules/Emitter/SpawnRate.SpawnRate
+  INPUT Module.SpawnRate type=NiagaraFloat hidden=0
+  INPUT Module.Spawn Probability type=NiagaraFloat hidden=0
+  INPUT Module.SpawnGroup type=NiagaraInt32 hidden=0
+  PIN NiagaraNodeFunctionCall_1.InputMap default= links=1
+  PIN NiagaraNodeFunctionCall_1.Use Spawn Probability default=false links=0
+  PIN NiagaraNodeParameterMapSet_2.Source default= links=1
+  PIN NiagaraNodeParameterMapSet_2.SpawnRate.SpawnRate default=120.0 links=0
+  PIN NiagaraNodeParameterMapSet_3.Source default= links=1
+  PIN NiagaraNodeParameterMapSet_3.EmitterState.Loop Duration default=0.5 links=0
+
+SYSTEM /Game/Combat/VFX/NS_BossBladeRibbon.NS_BossBladeRibbon valid=1 ready=1
+EMITTER LocationBasedRibbon enabled=1
+ RENDERER NiagaraRibbonRendererProperties enabled=1
+  MATERIAL /Game/Combat/VFX/MI_BossBladeRibbon.MI_BossBladeRibbon
+  PIN NiagaraNodeOutput_2.Out default= links=1
+  PIN NiagaraNodeOutput_3.Out default= links=1
+  PIN NiagaraNodeOutput_4.Out default= links=1
+  PIN NiagaraNodeOutput_5.Out default= links=1
+ MODULE SolveForcesAndVelocity script=/Niagara/Modules/Solvers/SolveForcesAndVelocity.SolveForcesAndVelocity
+  INPUT Module.DeltaTime type=NiagaraFloat hidden=0
+  INPUT Module.Force type=Vector3f hidden=0
+  INPUT Module.Velocity type=Vector3f hidden=0
+  INPUT Module.Mass type=NiagaraFloat hidden=0
+  INPUT Module.Position type=NiagaraPosition hidden=0
+  INPUT Module.Speed Limit type=NiagaraFloat hidden=0
+  INPUT Module.PreviousVelocity type=Vector3f hidden=0
+  INPUT Module.Acceleration Limit type=NiagaraFloat hidden=0
+  INPUT Module.Write to Intrinsic Properties type=NiagaraBool hidden=0
+  INPUT Module.Rotational Force type=Vector3f hidden=1
+  INPUT Module.Rotational Inertia type=NiagaraFloat hidden=1
+  INPUT Module.Mesh Orientation type=Quat4f hidden=1
+  INPUT Module.Rotational Velocity type=Vector3f hidden=1
+  INPUT Module.Manually Enable Rotational Solver type=NiagaraBool hidden=0
+  PIN NiagaraNodeFunctionCall_8.InputMap default= links=1
+  PIN NiagaraNodeFunctionCall_8.Clamp Velocity default=false links=0
+  PIN NiagaraNodeFunctionCall_8.Limit Acceleration default=false links=0
+  PIN NiagaraNodeFunctionCall_8.Rotational Solver Is Enabled default=true links=0
+  PIN NiagaraNodeFunctionCall_8.Write to Presolve Properties default=true links=0
+  PIN NiagaraNodeOutput_0.Out default= links=1
+ MODULE ReceiveLocationEvent script=/Niagara/Modules/Events/ReceiveLocationEvent.ReceiveLocationEvent
+  INPUT Module.Apply RGB type=NiagaraBool hidden=1
+  INPUT Module.Apply Alpha type=NiagaraBool hidden=1
+  INPUT Module.Inherited Velocity Scale type=NiagaraFloat hidden=1
+  INPUT Module.Inherit Parent Normalized Age type=NiagaraBool hidden=1
+  PIN NiagaraNodeFunctionCall_2.InputMap default= links=1
+  PIN NiagaraNodeFunctionCall_2.Acceleration (Vector 3) default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_2.Color (Linear Color) default=NewEnumerator1 links=0
+  PIN NiagaraNodeFunctionCall_2.Coordinate Space Transform (Bool) default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_2.Interpolate Spawned Positions default=true links=0
+  PIN NiagaraNodeFunctionCall_2.Normalized Age (Float 1) default=NewEnumerator1 links=0
+  PIN NiagaraNodeFunctionCall_2.Position (Vector 1) default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_2.Random Normalized Float (Float 2) default=NewEnumerator1 links=0
+  PIN NiagaraNodeFunctionCall_2.Ribbon ID (Niagara ID) default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_2.Ribbon UV DIstance (Float 3) default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_2.Velocity (Vector 2) default=NewEnumerator1 links=0
+  PIN NiagaraNodeParameterMapSet_1.Source default= links=1
+  PIN NiagaraNodeParameterMapSet_1.ReceiveLocationEvent.Inherit Parent Normalized Age default=true links=0
+ MODULE ParticleState script=/Niagara/Modules/Update/Lifetime/ParticleState.ParticleState
+  INPUT Module.DeltaTime type=NiagaraFloat hidden=0
+  INPUT Module.Lifetime type=NiagaraFloat hidden=0
+  INPUT Module.Loop Particles Lifetime type=NiagaraBool hidden=1
+  INPUT Module.Let Infinitely Lived Particles Die When Emitter Deactivates type=NiagaraBool hidden=1
+  PIN NiagaraNodeFunctionCall_4.InputMap default= links=1
+  PIN NiagaraNodeFunctionCall_4.Kill Particles When Lifetime Has Elapsed default=true links=0
+ MODULE EmitterState script=/Niagara/Modules/Emitter/EmitterState.EmitterState
+  INPUT Module.Loop Duration type=NiagaraFloat hidden=0
+  INPUT Module.Loop Delay type=NiagaraFloat hidden=0
+  INPUT Module.Recalculate Duration Each Loop type=NiagaraBool hidden=1
+  INPUT Module.Delay First Loop Only type=NiagaraBool hidden=1
+  INPUT Module.bUseMinDistance type=NiagaraBool hidden=1
+  INPUT Module.MinDistance type=NiagaraFloat hidden=1
+  INPUT Module.bUseMaxDistance type=NiagaraBool hidden=1
+  INPUT Module.MaxDistance type=NiagaraFloat hidden=1
+  INPUT Module.Min Distance Response type=ENiagaraExecutionStateManagement hidden=1
+  INPUT Module.Max Distance Response type=ENiagaraExecutionStateManagement hidden=1
+  INPUT Module.Visibility Cull Delay type=NiagaraFloat hidden=1
+  INPUT Module.Visibility Cull Response type=ENiagaraExecutionStateManagement hidden=1
+  INPUT Module.Spawn Count Scale type=NiagaraFloat hidden=1
+  INPUT Module.bApplySpawnCountScaleByDistance type=NiagaraBool hidden=1
+  INPUT Module.Spawn Count Scale By Distance type=NiagaraDataInterfaceCurve hidden=1
+  INPUT Module.Loop Count type=NiagaraInt32 hidden=1
+  INPUT Module.Reset Age On Awaken type=NiagaraBool hidden=1
+  PIN NiagaraNodeFunctionCall_5.InputMap default= links=1
+  PIN NiagaraNodeFunctionCall_5.Enable Distance Culling default=false links=0
+  PIN NiagaraNodeFunctionCall_5.Enable Visibility Culling default=false links=0
+  PIN NiagaraNodeFunctionCall_5.Inactive Response default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_5.Life Cycle Mode default=NewEnumerator1 links=0
+  PIN NiagaraNodeFunctionCall_5.Loop Behavior default=NewEnumerator1 links=0
+  PIN NiagaraNodeFunctionCall_5.Loop Duration Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_5.Scalability Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_5.Scale Spawn Count default=false links=0
+  PIN NiagaraNodeFunctionCall_5.UseLoopDelay default=false links=0
+ MODULE InitializeParticle script=/Niagara/Modules/Spawn/Initialization/V2/InitializeParticle.InitializeParticle
+  INPUT Module.Material Random type=NiagaraFloat hidden=0
+  INPUT Module.Lifetime type=NiagaraFloat hidden=0
+  INPUT Module.Lifetime Min type=NiagaraFloat hidden=1
+  INPUT Module.Lifetime Max type=NiagaraFloat hidden=1
+  INPUT Module.Color type=LinearColor hidden=0
+  INPUT Module.Color Minimum type=LinearColor hidden=1
+  INPUT Module.Color Maximum type=LinearColor hidden=1
+  INPUT Module.Hue Shift Range type=Vector2f hidden=1
+  INPUT Module.Saturation Range type=Vector2f hidden=1
+  INPUT Module.Value Range type=Vector2f hidden=1
+  INPUT Module.Alpha Scale Range type=Vector2f hidden=1
+  INPUT Module.Mass type=NiagaraFloat hidden=1
+  INPUT Module.Mass Min type=NiagaraFloat hidden=1
+  INPUT Module.Mass Max type=NiagaraFloat hidden=1
+  INPUT Module.Uniform Sprite Size type=NiagaraFloat hidden=1
+  INPUT Module.Uniform Sprite Size Min type=NiagaraFloat hidden=1
+  INPUT Module.Uniform Sprite Size Max type=NiagaraFloat hidden=1
+  INPUT Module.Sprite Size type=Vector2f hidden=1
+  INPUT Module.Sprite Size Min type=Vector2f hidden=1
+  INPUT Module.Sprite Size Max type=Vector2f hidden=1
+  INPUT Module.Sprite UV Scale type=Vector2f hidden=1
+  INPUT Module.Sprite Rotation Angle Min type=NiagaraFloat hidden=1
+  INPUT Module.Sprite Rotation Angle Max type=NiagaraFloat hidden=1
+  INPUT Module.Sprite Rotation Angle type=NiagaraFloat hidden=1
+  INPUT Module.Mesh Uniform Scale type=NiagaraFloat hidden=1
+  INPUT Module.Mesh Uniform Scale Min type=NiagaraFloat hidden=1
+  INPUT Module.Mesh Uniform Scale Max type=NiagaraFloat hidden=1
+  INPUT Module.Mesh Scale type=Vector3f hidden=1
+  INPUT Module.Mesh Scale Min type=Vector3f hidden=1
+  INPUT Module.Mesh Scale Max type=Vector3f hidden=1
+  INPUT Module.Position type=NiagaraPosition hidden=1
+  INPUT Module.Position Offset type=Vector3f hidden=0
+  INPUT Module.Position Offset Coordinate Space type=ENiagaraCoordinateSpace hidden=0
+  INPUT Module.Mesh Renderer Mesh Index type=NiagaraInt32 hidden=1
+  INPUT Module.Mesh Renderer Info type=NiagaraDataInterfaceMeshRendererInfo hidden=1
+  INPUT Module.Mesh Renderer Random Seed type=NiagaraInt32 hidden=1
+  INPUT Module.Ribbon Width type=NiagaraFloat hidden=1
+  INPUT Module.Ribbon Twist  type=NiagaraFloat hidden=1
+  INPUT Module.Ribbon Facing Vector type=Vector3f hidden=1
+  PIN NiagaraNodeFunctionCall_0.InputMap default= links=1
+  PIN NiagaraNodeFunctionCall_0.AdjustAlpha default=false links=0
+  PIN NiagaraNodeFunctionCall_0.AdjustHue default=true links=0
+  PIN NiagaraNodeFunctionCall_0.AdjustSaturation default=false links=0
+  PIN NiagaraNodeFunctionCall_0.AdjustValue default=false links=0
+  PIN NiagaraNodeFunctionCall_0.Color Channel Mode default=NewEnumerator1 links=0
+  PIN NiagaraNodeFunctionCall_0.Color Mode default=NewEnumerator1 links=0
+  PIN NiagaraNodeFunctionCall_0.Color Randomness Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Lifetime Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Lifetime Randomness Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Mass Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Mass Randomness Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Mesh Renderer Array Visibility Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Mesh Scale Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Mesh Scale Randomness Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Position Mode default=NewEnumerator2 links=0
+  PIN NiagaraNodeFunctionCall_0.Ribbon Facing Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Ribbon Twist Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Ribbon Width Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Sprite Rotation Mode default=NewEnumerator3 links=0
+  PIN NiagaraNodeFunctionCall_0.Sprite Rotation Randomness Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Sprite Size Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Sprite Size Randomness Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Sprite UV Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.Sprite UV Randomness Mode default=NewEnumerator0 links=0
+  PIN NiagaraNodeFunctionCall_0.UsePositionOffset default=false links=0
+  PIN NiagaraNodeFunctionCall_0.Wrap Index By Mesh Count default=true links=0
+  PIN NiagaraNodeFunctionCall_0.Write Material Random default=true links=0
+  PIN NiagaraNodeParameterMapSet_0.Source default= links=1
+  PIN NiagaraNodeParameterMapSet_0.InitializeParticle.Lifetime default=0.1 links=0
+ MODULE SpawnRate script=/Niagara/Modules/Emitter/SpawnRate.SpawnRate
+  INPUT Module.SpawnRate type=NiagaraFloat hidden=0
+  INPUT Module.Spawn Probability type=NiagaraFloat hidden=0
+  INPUT Module.SpawnGroup type=NiagaraInt32 hidden=0
+  PIN NiagaraNodeFunctionCall_1.InputMap default= links=1
+  PIN NiagaraNodeFunctionCall_1.Use Spawn Probability default=false links=0
+  PIN NiagaraNodeParameterMapSet_2.Source default= links=1
+  PIN NiagaraNodeParameterMapSet_2.SpawnRate.SpawnRate default=120.0 links=0
+  PIN NiagaraNodeParameterMapSet_3.Source default= links=1
+  PIN NiagaraNodeParameterMapSet_3.EmitterState.Loop Duration default=0.5 links=0

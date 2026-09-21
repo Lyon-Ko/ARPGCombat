@@ -32,7 +32,7 @@ Public: RequestSkillByTag, RequestSkillByInputTag, ReceiveCombatHit(FCombatHit),
 
 FCombatHit.AttackInstance must be unique for a new manual test hit from the same attacker. Reusing it intentionally tests deduplication. Exact-time defense checks use world elapsed time at hit receipt, so they do not rely only on tick-updated loose-tag state.
 
-Not yet accepted: full compile after second batch, rendered skill/weapon/HUD inspection, all functional acceptance scenarios, twenty fight/reset cycles, audio/VFX tuning and cold reload. This document records implementation, not a passing visual/functional result.
+This document records the implemented interfaces. Actual build, gameplay, audio, visual and cold-start evidence is tracked in [DeliveryVerification](DeliveryVerification.md); later sections describe successive implementation batches rather than separate pending deliverables.
 
 ## Third runtime batch: presentation and lifecycle
 
@@ -51,17 +51,17 @@ GameMode adds `BattleMusic` (USoundBase), `MusicVolume` (.35), `MusicComponent` 
 
 Lifecycle: deduplication remembers the most recent64attack IDs per source actor, so interleaved old projectiles and new melee windows cannot reapply the same recent hit. Death and Reset destroy *all* world projectiles whose Owner is that character, including those released by previously completed skills. PhaseText now displays only phase, allowing the WBP's separate BossName label.
 
-This batch is source-ready pending coordinator build/cold launch and rendered verification. Native property hooks are not evidence that the matching assets have already been assigned or visually accepted.
+The matching assets have been assigned and checked in the later integration passes. See the delivery record for each check's actual build and scope.
 
 ## Sword wave and input correction batch
 
-- SkillDefinition exposes `ProjectileMesh`, `ProjectileMaterial`, and `ProjectileCollisionHalfExtent` (default half size `(24, 85, 20)` cm). Assign the sword wave mesh with local +X propagation and Y width 180 cm; `WaveMesh` follows the projectile root and has no collision. The root `Collision` is now a box, with full default dimensions 48 x 170 x 40 cm. It blocks walls, overlaps opposing characters, ignores the owner during movement, and consumes one hit before calling the receiver. Existing `CastEffect` remains the accompanying Niagara effect. Mesh assignment and wing-contact/wall tests remain pending.
+- SkillDefinition exposes `ProjectileMesh`, `ProjectileMaterial`, and `ProjectileCollisionHalfExtent` (default half size `(24, 85, 20)` cm). The assigned sword wave mesh uses local +X propagation and Y width 180 cm; `WaveMesh` follows the projectile root and has no collision. The root `Collision` is a box, with full default dimensions 48 x 170 x 40 cm. It blocks walls, overlaps opposing characters, ignores the owner during movement, and consumes one hit before calling the receiver. Existing `CastEffect` remains the accompanying Niagara effect. Contact and wall checks are included in the arena regression suite.
 - `InitializeProjectile` now accepts Mesh, Material, and CollisionHalfExtent after Effect. The native character emitter supplies these from its skill definition; existing Blueprint calls to this function need those inputs reviewed after recompilation.
 - Dash clears existing horizontal velocity and temporarily suppresses normal horizontal acceleration while its controlled movement runs. Vertical velocity and falling physics continue. Completion, blocking, interruption, death and reset restore normal acceleration through skill cleanup.
 - `IsTargetLocked()` is BlueprintPure. The existing HUD controls line displays either `Q 已锁定` or `Q 自由镜头`.
 - Pause entry clears held attack/jump state, and their release bindings execute while paused. Required regression cases: running airborne forward/reverse Dash (about 250 cm horizontal displacement), hold LMB/Space then pause/release/resume (no stale plunge/jump hold), and visible Q state transitions.
 - Default startup/game map is `/Game/Combat/Maps/L_CombatArena.L_CombatArena`, default mode is `/Game/Combat/Blueprints/BP_CombatGameMode.BP_CombatGameMode_C`, and split screen is disabled.
 
-This correction batch is source-only and awaits the coordinator's build and PIE validation.
+These corrections are included in the current built runtime and arena regression checks.
 
-AI reaction: when the delayed observation snapshot contains the player's executed `Combat.Skill.Dash`, eligible `Combat.Skill.Boss.DashSlash` choices receive a 1.7 weight multiplier. Range, cooldown and movement-space filters still apply before weighting; prior-action repetition penalty and phase-two weighting remain multiplicative. This reads the observed active skill, never raw input, and does not force a chase action. Distribution validation remains pending.
+AI reaction: when the delayed observation snapshot contains the player's executed `Combat.Skill.Dash`, eligible `Combat.Skill.Boss.DashSlash` choices receive a 1.7 weight multiplier. Range, cooldown and movement-space filters still apply before weighting; prior-action repetition penalty and phase-two weighting remain multiplicative. This reads the observed active skill, never raw input, and does not force a chase action. Independent AI scenario and near-range paired-sample results are linked in the delivery record.

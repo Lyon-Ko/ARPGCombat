@@ -1,0 +1,90 @@
+{
+  "status": "passed",
+  "utc": "20260921T195055491298Z",
+  "before": "Combat.Skill.Example.CrescentBurst",
+  "after_reloaded": "Combat.Skill.Attack4",
+  "cause": "Legacy probe retained a live GameplayTag property wrapper instead of an independent value.",
+  "scope": "Repair and disk reload of defaults; actual input-chain test remains separate.",
+  "definitions": {
+    "Player": [
+      {
+        "asset": "/Game/Combat/Skills/DA_Air1.DA_Air1",
+        "next_tag": "Combat.Skill.Air2"
+      },
+      {
+        "asset": "/Game/Combat/Skills/DA_Air2.DA_Air2",
+        "next_tag": "None"
+      },
+      {
+        "asset": "/Game/Combat/Skills/DA_Attack1.DA_Attack1",
+        "next_tag": "Combat.Skill.Attack2"
+      },
+      {
+        "asset": "/Game/Combat/Skills/DA_Attack2.DA_Attack2",
+        "next_tag": "Combat.Skill.Attack3"
+      },
+      {
+        "asset": "/Game/Combat/Skills/DA_Attack3.DA_Attack3",
+        "next_tag": "Combat.Skill.Attack4"
+      },
+      {
+        "asset": "/Game/Combat/Skills/DA_Attack4.DA_Attack4",
+        "next_tag": "None"
+      },
+      {
+        "asset": "/Game/Combat/Skills/DA_Dash.DA_Dash",
+        "next_tag": "None"
+      },
+      {
+        "asset": "/Game/Combat/Skills/DA_DashStrike.DA_DashStrike",
+        "next_tag": "None"
+      },
+      {
+        "asset": "/Game/Combat/Skills/DA_Parry.DA_Parry",
+        "next_tag": "None"
+      },
+      {
+        "asset": "/Game/Combat/Skills/DA_Plunge.DA_Plunge",
+        "next_tag": "None"
+      },
+      {
+        "asset": "/Game/Combat/Skills/DA_Riposte.DA_Riposte",
+        "next_tag": "None"
+      }
+    ],
+    "Boss": [
+      {
+        "asset": "/Game/Combat/Skills/DA_Boss_AOE.DA_Boss_AOE",
+        "next_tag": "None"
+      },
+      {
+        "asset": "/Game/Combat/Skills/DA_Boss_Combo1.DA_Boss_Combo1",
+        "next_tag": "Combat.Skill.Boss.Combo2"
+      },
+      {
+        "asset": "/Game/Combat/Skills/DA_Boss_Combo2.DA_Boss_Combo2",
+        "next_tag": "Combat.Skill.Boss.Combo3"
+      },
+      {
+        "asset": "/Game/Combat/Skills/DA_Boss_Combo3.DA_Boss_Combo3",
+        "next_tag": "None"
+      },
+      {
+        "asset": "/Game/Combat/Skills/DA_Boss_DashSlash.DA_Boss_DashSlash",
+        "next_tag": "None"
+      },
+      {
+        "asset": "/Game/Combat/Skills/DA_Boss_LeapBack.DA_Boss_LeapBack",
+        "next_tag": "None"
+      },
+      {
+        "asset": "/Game/Combat/Skills/DA_Boss_LeapLeft.DA_Boss_LeapLeft",
+        "next_tag": "None"
+      },
+      {
+        "asset": "/Game/Combat/Skills/DA_Boss_LeapRight.DA_Boss_LeapRight",
+        "next_tag": "None"
+      }
+    ]
+  }
+}

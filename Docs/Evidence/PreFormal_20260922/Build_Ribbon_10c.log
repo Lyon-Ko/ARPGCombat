@@ -1,0 +1,31 @@
+Using bundled DotNet SDK version: 10.0 win-x64
+Running UnrealBuildTool: dotnet "..\..\Engine\Binaries\DotNET\UnrealBuildTool\UnrealBuildTool.dll" CombatEditor Win64 Development -Project=D:\UEproject\Combat\Combat.uproject -WaitMutex -NoHotReloadFromIDE
+Log file: C:\Users\Administrator\AppData\Local\UnrealBuildTool\Log.txt
+Determining max actions to execute in parallel (8 physical cores, 8 logical cores)
+  Executing up to 8 processes, one per physical core
+Using 'git status' to determine working set for adaptive non-unity build (D:\UEproject\Combat).
+UbaServer - Listening on 0.0.0.0:1345
+Building CombatEditor...
+===== Toolchain Information =====
+Using ISPC compiler (D:\UE5.8\UE_5.8\Engine\Source\ThirdParty\Intel\ISPC\bin\Windows\ispc.exe)
+  Intel(r) Implicit SPMD Program Compiler (Intel(r) ISPC), 1.24.0 (build commit  @ 20250404, LLVM 18.1.2) 
+Using Visual Studio 14.44.35225 toolchain (D:\VSCODE\Products\VC\Tools\MSVC\14.44.35207) and Windows 10.0.22621.0 SDK (C:\Program Files (x86)\Windows Kits\10).
+[Adaptive Build] Excluded from Combat unity file: CombatCharacter.cpp
+[Adaptive Build] Excluded from CombatEditor unity file: CombatEditorLibrary.cpp, CombatNiagaraAuthoring.cpp
+=================================
+Using Unreal Build Accelerator local executor to run 4 action(s)
+  CPU 8 physical cores, 8 logical cores
+  Memory 47.06 GB physical, 36.37 GB/50.06 GB committed
+  UBA Storage capacity 40 GB
+[1/4] Compile [x64] CombatNiagaraAuthoring.cpp
+[2/4] Link [x64] UnrealEditor-CombatEditor.lib
+  正在创建库 D:/UEproject/Combat/Intermediate/Build/Win64/x64/UnrealEditor/Development/CombatEditor/UnrealEditor-CombatEditor.lib 和对象 D:/UEproject/Combat/Intermediate/Build/Win64/x64/UnrealEditor/Development/CombatEditor/UnrealEditor-CombatEditor.exp
+[3/4] Link [x64] UnrealEditor-CombatEditor.dll
+[4/4] WriteMetadata CombatEditor.target [NoUba]
+
+Total time in Unreal Build Accelerator local executor: 6.30 seconds
+Output binary: D:\UE5.8\UE_5.8\Engine\Binaries\Win64\UnrealEditor.exe
+
+Result: Succeeded
+Total execution time: 7.79 seconds
+Trace written to file C:\Users\Administrator\AppData\Local\UnrealBuildTool\Trace.uba with size 5.9kb

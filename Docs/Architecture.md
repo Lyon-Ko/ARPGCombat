@@ -13,7 +13,7 @@ UE 5.8.2, local single player PIE, keyboard/mouse, Chinese HUD, 50 m flat walled
 Never overwrite another worker's in-progress files. Build.cs changes go through the environment/editor owner. Only one live editor and one build at a time.
 
 ## Runtime conventions
-Use centimeters, seconds, Z-up, UE forward +X; Manny skeleton. Actors have capsule movement and mesh relative yaw -90 as appropriate for imported Manny. Independent normal AnimInstance with locomotion and DefaultSlot montage; never switch to SingleNode for attacks.
+Use centimeters, seconds, Z-up, UE forward +X. Final actors use the acquired Kwang and Greystone native skeletons, meshes and sword animation copies; the original Manny-based art is retained as backup source material. Each actor has capsule movement and a skeleton-specific AnimInstance with locomotion and a DefaultSlot montage. Attacks do not switch the mesh into SingleNode mode.
 
 GAS is authoritative for skill activation, tags, cooldown/buffs and attributes. UCombatGameplayAbility is Blueprintable. Skill definition data assets carry montage, skill tag, ability class, damage/poise, movement and cue configuration. Actual blueprint graphs call composable native blocks and handle tagged montage events; don't reduce the blueprint to a single opaque full-skill function.
 

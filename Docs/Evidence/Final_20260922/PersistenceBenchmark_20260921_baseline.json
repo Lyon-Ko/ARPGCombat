@@ -1,0 +1,120 @@
+{
+  "python": "3.11.8 (tags/v3.11.8:db85d51, Feb  6 2024, 22:03:32) [MSC v.1937 64 bit (AMD64)]",
+  "source": "D:\\UEproject\\Combat\\Saved\\Acceptance\\arena_acceptance_20260921T185232088295Z.json",
+  "source_bytes": 3281219,
+  "source_sha256": "afaf8a66c42af6606c1a46f6298eb270c41515d735f59f832e02142c7a395888",
+  "repetitions": 9,
+  "measurement": "Same object/fields, UTF-8 write_text+close+replace in Saved/Acceptance; no fsync, matches harness.",
+  "results": {
+    "indent2": {
+      "bytes": 3158159,
+      "samples": [
+        {
+          "serialization_ms": 74.38049999836949,
+          "write_replace_ms": 4.649999998946441,
+          "total_ms": 79.03049999731593
+        },
+        {
+          "serialization_ms": 75.688100001571,
+          "write_replace_ms": 17.136599999503233,
+          "total_ms": 92.82470000107423
+        },
+        {
+          "serialization_ms": 77.70919999893522,
+          "write_replace_ms": 5.975100000796374,
+          "total_ms": 83.68429999973159
+        },
+        {
+          "serialization_ms": 88.78859999822453,
+          "write_replace_ms": 5.045700003392994,
+          "total_ms": 93.83430000161752
+        },
+        {
+          "serialization_ms": 83.10480000000098,
+          "write_replace_ms": 7.1070000012696255,
+          "total_ms": 90.2118000012706
+        },
+        {
+          "serialization_ms": 75.10980000006384,
+          "write_replace_ms": 5.328400002326816,
+          "total_ms": 80.43820000239066
+        },
+        {
+          "serialization_ms": 75.69099999818718,
+          "write_replace_ms": 5.0518000025476795,
+          "total_ms": 80.74280000073486
+        },
+        {
+          "serialization_ms": 74.32129999870085,
+          "write_replace_ms": 4.873599998973077,
+          "total_ms": 79.19489999767393
+        },
+        {
+          "serialization_ms": 72.00010000087786,
+          "write_replace_ms": 5.162500001461012,
+          "total_ms": 77.16260000233888
+        }
+      ],
+      "median_ms": {
+        "serialization_ms": 75.688100001571,
+        "write_replace_ms": 5.162500001461012,
+        "total_ms": 80.74280000073486
+      }
+    },
+    "compact_default_encoder": {
+      "bytes": 1881691,
+      "samples": [
+        {
+          "serialization_ms": 17.40809999682824,
+          "write_replace_ms": 2.0480000021052547,
+          "total_ms": 19.456099998933496
+        },
+        {
+          "serialization_ms": 18.18999999886728,
+          "write_replace_ms": 2.118299998983275,
+          "total_ms": 20.308299997850554
+        },
+        {
+          "serialization_ms": 18.010299998422852,
+          "write_replace_ms": 2.337500001885928,
+          "total_ms": 20.34780000030878
+        },
+        {
+          "serialization_ms": 18.17490000030375,
+          "write_replace_ms": 1.9811999991361517,
+          "total_ms": 20.156099999439903
+        },
+        {
+          "serialization_ms": 17.20779999959632,
+          "write_replace_ms": 2.1663999978045467,
+          "total_ms": 19.374199997400865
+        },
+        {
+          "serialization_ms": 17.511199999717064,
+          "write_replace_ms": 1.8851999993785284,
+          "total_ms": 19.396399999095593
+        },
+        {
+          "serialization_ms": 17.351700000290293,
+          "write_replace_ms": 1.752100000885548,
+          "total_ms": 19.10380000117584
+        },
+        {
+          "serialization_ms": 18.142199998692377,
+          "write_replace_ms": 1.7767000026651658,
+          "total_ms": 19.918900001357542
+        },
+        {
+          "serialization_ms": 16.905599997699028,
+          "write_replace_ms": 1.956899999640882,
+          "total_ms": 18.86249999733991
+        }
+      ],
+      "median_ms": {
+        "serialization_ms": 17.511199999717064,
+        "write_replace_ms": 1.9811999991361517,
+        "total_ms": 19.456099998933496
+      }
+    }
+  }
+}

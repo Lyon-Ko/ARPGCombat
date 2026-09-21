@@ -1,0 +1,130 @@
+{
+  "input_csv": "D:\\UEproject\\Combat\\Saved\\Profiling\\CSV\\Combat_1080pHigh_60_20260921T192140351854Z.csv",
+  "unit": "milliseconds",
+  "input_samples": 22910,
+  "warmup_frames_requested": 0,
+  "excluded_warmup_frames": 0,
+  "retained_frame_samples": 22910,
+  "ignored_metadata_or_header_lines": [
+    22912,
+    22913
+  ],
+  "extended_final_headers": [
+    {
+      "line": 22912,
+      "additional_columns": [
+        "Scheduler/StallDetectorThread/SignalStandbyThread",
+        "Scheduler/RenderThread/SignalStandbyThread",
+        "Scheduler/AudioMixerRenderThread(2)/SignalStandbyThread",
+        "Scheduler/BackgroundThreadPool #0/SignalStandbyThread",
+        "Scheduler/RHIInterruptThread/SignalStandbyThread",
+        "Scheduler/RHIThread/SignalStandbyThread",
+        "Exclusive/GameThread/GarbageCollection",
+        "Exclusive/GameThread/EventWait/WorldTickMisc",
+        "FMsgLogf/FMsgLogfCount",
+        "GC/Count",
+        "Scheduler/BackgroundThreadPool #1/SignalStandbyThread",
+        "Scheduler/AudioMixerRenderThread(1)/SignalStandbyThread",
+        "Exclusive/GameThread/ActorSpawning",
+        "Exclusive/GameThread/ProjectileMovement",
+        "Ticks/ProjectileMovementComponent",
+        "Ticks/CombatProjectile",
+        "Exclusive/GameThread/ActorDestroying"
+      ]
+    }
+  ],
+  "percentile_definition": "linear interpolation at (N-1)*p over sorted frame times",
+  "one_percent_low_definition": "1000 / mean of the slowest ceil(N*0.01) retained timing samples; frame metric is FPS, thread/GPU metrics are timing-equivalent rates, not delivered FPS",
+  "threshold_definition": "strictly greater than 16.7,20,33.3 milliseconds; fractions in [0,1]",
+  "long_frame_policy": "No clipping, outlier removal or long-frame exclusion",
+  "metrics": {
+    "frame": {
+      "status": "present",
+      "column": "FrameTime",
+      "missing_sample_lines": [],
+      "statistics": {
+        "samples": 22910,
+        "mean_ms": 16.80929097773898,
+        "median_ms": 16.6668,
+        "p95_ms": 16.6732,
+        "p99_ms": 19.693029,
+        "max_ms": 122.4849,
+        "one_percent_low_fps": 33.7397169777581,
+        "one_percent_tail_samples": 230,
+        "over_threshold_fraction": {
+          "16.7": 0.027586206896551724,
+          "20.0": 0.009166302924487123,
+          "33.3": 0.0018332605848974247
+        },
+        "zero_samples": 0
+      },
+      "warning": null
+    },
+    "gpu": {
+      "status": "present",
+      "column": "GPUTime",
+      "missing_sample_lines": [],
+      "statistics": {
+        "samples": 22910,
+        "mean_ms": 3.072695176778699,
+        "median_ms": 3.0142,
+        "p95_ms": 3.5701199999999997,
+        "p99_ms": 4.068065999999999,
+        "max_ms": 5.9751,
+        "one_percent_low_fps": 226.73718390248803,
+        "one_percent_tail_samples": 230,
+        "over_threshold_fraction": {
+          "16.7": 0.0,
+          "20.0": 0.0,
+          "33.3": 0.0
+        },
+        "zero_samples": 0
+      },
+      "warning": null
+    },
+    "render_thread": {
+      "status": "present",
+      "column": "RenderThreadTime",
+      "missing_sample_lines": [],
+      "statistics": {
+        "samples": 22910,
+        "mean_ms": 0.051118166739415105,
+        "median_ms": 0.0007,
+        "p95_ms": 0.0011,
+        "p99_ms": 3.624146,
+        "max_ms": 6.0275,
+        "one_percent_low_fps": 238.15398767625595,
+        "one_percent_tail_samples": 230,
+        "over_threshold_fraction": {
+          "16.7": 0.0,
+          "20.0": 0.0,
+          "33.3": 0.0
+        },
+        "zero_samples": 0
+      },
+      "warning": null
+    },
+    "game_thread": {
+      "status": "present",
+      "column": "GameThreadTime",
+      "missing_sample_lines": [],
+      "statistics": {
+        "samples": 22910,
+        "mean_ms": 7.606762989960716,
+        "median_ms": 7.0886,
+        "p95_ms": 9.957365,
+        "p99_ms": 19.880764999999993,
+        "max_ms": 122.8516,
+        "one_percent_low_fps": 34.19973708134299,
+        "one_percent_tail_samples": 230,
+        "over_threshold_fraction": {
+          "16.7": 0.016455696202531647,
+          "20.0": 0.009559144478393714,
+          "33.3": 0.001789611523352248
+        },
+        "zero_samples": 0
+      },
+      "warning": null
+    }
+  }
+}

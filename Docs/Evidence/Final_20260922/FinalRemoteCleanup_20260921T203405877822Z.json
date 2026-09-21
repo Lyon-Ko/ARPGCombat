@@ -1,0 +1,32 @@
+{
+  "utc": "2026-09-21T20:34:05.877822+00:00",
+  "runners": [
+    {
+      "runner": "_combat_arena_regression",
+      "status": "passed",
+      "callback_active": false,
+      "held_keys": [],
+      "delegate_bindings": 0,
+      "cleanup_errors": null
+    }
+  ],
+  "pie_valid": true,
+  "paused": false,
+  "viewport_actual": [
+    1920,
+    1080
+  ],
+  "global_time_dilation": 1.0,
+  "gpu_csv": 0.0,
+  "python_gc_enabled": true,
+  "python_gc_threshold": [
+    700,
+    10,
+    10
+  ],
+  "trace_connected": false,
+  "named_events": 0.0,
+  "mass_fully_parallel": 0,
+  "gc_observer_hook_removed": true,
+  "clean": true
+}

@@ -1,0 +1,142 @@
+{
+  "status": "captured",
+  "mode": "isolated actual skills, stopped AI, game dilation .3",
+  "events": [
+    {
+      "case": "hit",
+      "cue": "Combat.Cue.Hit",
+      "time": 9.79657249408774,
+      "source": "BP_CombatPlayer_C_0",
+      "location": [
+        144.48662159560436,
+        24.244586085705023,
+        107.10912001708869
+      ]
+    },
+    {
+      "case": "aoe",
+      "cue": "Combat.Cue.AreaWarning",
+      "time": 13.225682645104825,
+      "source": "BP_CombatBoss_C_0",
+      "location": [
+        180.0,
+        0.0,
+        106.15000677108765
+      ]
+    },
+    {
+      "case": "aoe",
+      "cue": "Combat.Cue.AreaRelease",
+      "time": 14.057375119999051,
+      "source": "BP_CombatBoss_C_0",
+      "location": [
+        180.0,
+        0.0,
+        106.15000677108765
+      ]
+    },
+    {
+      "case": "aoe",
+      "cue": "Combat.Cue.Hit",
+      "time": 14.237397653749213,
+      "source": "BP_CombatBoss_C_0",
+      "location": [
+        0.0,
+        0.0,
+        94.14999914169312
+      ]
+    },
+    {
+      "case": "parry",
+      "cue": "Combat.Cue.AreaWarning",
+      "time": 16.77787589537911,
+      "source": "BP_CombatBoss_C_0",
+      "location": [
+        180.0,
+        0.0,
+        106.15000677108765
+      ]
+    },
+    {
+      "case": "parry",
+      "cue": "Combat.Cue.AreaRelease",
+      "time": 17.608920705271885,
+      "source": "BP_CombatBoss_C_0",
+      "location": [
+        180.0,
+        0.0,
+        106.15000677108765
+      ]
+    },
+    {
+      "case": "parry",
+      "cue": "Combat.Cue.Parry",
+      "time": 17.789303389843553,
+      "source": "BP_CombatPlayer_C_0",
+      "location": [
+        0.0,
+        0.0,
+        94.14999914169312
+      ]
+    },
+    {
+      "case": "wave",
+      "cue": "Combat.Cue.Hit",
+      "time": 20.90920878201723,
+      "source": "BP_CombatBoss_C_0",
+      "location": [
+        64.94504676728037,
+        -2.1754648302007954e-15,
+        106.70904174190926
+      ]
+    }
+  ],
+  "screenshot_requests": [
+    {
+      "label": "hit",
+      "path": "D:\\UEproject\\Combat\\Saved\\Acceptance\\VFX_final_hit.png",
+      "request_time": 9.851580614456907
+    },
+    {
+      "label": "hit_settled",
+      "path": "D:\\UEproject\\Combat\\Saved\\Acceptance\\VFX_final_hit_settled.png",
+      "request_time": 12.79301219410263
+    },
+    {
+      "label": "warning",
+      "path": "D:\\UEproject\\Combat\\Saved\\Acceptance\\VFX_final_warning.png",
+      "request_time": 13.375684776809067
+    },
+    {
+      "label": "aoe",
+      "path": "D:\\UEproject\\Combat\\Saved\\Acceptance\\VFX_final_aoe.png",
+      "request_time": 14.082375560654327
+    },
+    {
+      "label": "aoe_settled",
+      "path": "D:\\UEproject\\Combat\\Saved\\Acceptance\\VFX_final_aoe_settled.png",
+      "request_time": 16.34686462022364
+    },
+    {
+      "label": "parry",
+      "path": "D:\\UEproject\\Combat\\Saved\\Acceptance\\VFX_final_parry.png",
+      "request_time": 17.814319219440222
+    },
+    {
+      "label": "parry_settled",
+      "path": "D:\\UEproject\\Combat\\Saved\\Acceptance\\VFX_final_parry_settled.png",
+      "request_time": 19.899426304735243
+    },
+    {
+      "label": "wave",
+      "path": "D:\\UEproject\\Combat\\Saved\\Acceptance\\VFX_final_wave.png",
+      "request_time": 20.538356960285455
+    },
+    {
+      "label": "wave_settled",
+      "path": "D:\\UEproject\\Combat\\Saved\\Acceptance\\VFX_final_wave_settled.png",
+      "request_time": 23.454079796094447
+    }
+  ],
+  "limitation": "Requests must be verified by opening actual PNG files; this is not final acceptance."
+}

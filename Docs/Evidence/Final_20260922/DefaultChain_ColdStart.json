@@ -1,0 +1,9 @@
+{
+  "utc": "2026-09-21T19:55:33.629497+00:00",
+  "default_editor_world": "/Game/Combat/Maps/L_CombatArena.L_CombatArena",
+  "attack3_next": "Combat.Skill.Attack4",
+  "dlls": {
+    "UnrealEditor-Combat.dll": "6a342f29753325a62bf1fe1982214c1031b1d203f2ae7d231d8164454f6b441a",
+    "UnrealEditor-CombatEditor.dll": "aa2822f0597f988aadd99d34add025847f3fe33ce1be211eb8c5ce81de26d35d"
+  }
+}
