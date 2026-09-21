@@ -397,6 +397,8 @@ void ACombatCharacter::Die()
     DestroyOwnedProjectiles();
     AbilitySystem->SetLooseGameplayTagCount(CombatTags::State_Dead, 1);
     AbilitySystem->SetLooseGameplayTagCount(CombatTags::State_RiposteReady, 0);
+    GetCharacterMovement()->ClearAccumulatedForces();
+    ConsumeMovementInputVector();
     GetCharacterMovement()->StopMovementImmediately();
     GetCharacterMovement()->DisableMovement();
     if(DeathSound) UGameplayStatics::PlaySoundAtLocation(this, DeathSound, GetActorLocation(), MasterVolume);
@@ -437,6 +439,8 @@ void ACombatCharacter::ResetCombatState()
     RiposteUntil = StunnedUntil = MovementRemaining = PoiseImmuneUntil = LastDamageAt = 0; bPhaseTwo = bAirDashUsed = bAttackHeld = false;
     ComboIndex = AirComboIndex = 0; AirHangBudgetUsed = AirHangRemaining = 0; SetActorTransform(InitialTransform, false, nullptr, ETeleportType::TeleportPhysics);
     GetCharacterMovement()->SetMovementMode(MOVE_Walking); GetCharacterMovement()->StopMovementImmediately();
+    GetCharacterMovement()->ClearAccumulatedForces();
+    ConsumeMovementInputVector();
     PreviousStepLocation = GetActorLocation(); StepDistanceAccumulator = 0; StepIndex = 0;
     if(auto* AI = Cast<ACombatAIController>(Controller)) AI->ResetBrain();
 }

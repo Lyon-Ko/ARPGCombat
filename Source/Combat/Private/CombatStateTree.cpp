@@ -3,11 +3,12 @@
 #include "CombatCharacter.h"
 #include "StateTreeExecutionContext.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Engine/World.h"
 static ACombatAIController* GetCombatAI(FStateTreeExecutionContext& Context) { return Cast<ACombatAIController>(Context.GetOwner()); }
 EStateTreeRunStatus FCombatStateTreeSelectTask::EnterState(FStateTreeExecutionContext& Context, const FStateTreeTransitionResult& Transition) const
 {
     auto& Data = Context.GetInstanceData(*this); Data = FInstanceDataType();
-    if(auto* AI = GetCombatAI(Context)) { Data.Deadline = AI->RandomRange(AI->ReactionMin, AI->ReactionMax); AI->ObserveTarget(); return EStateTreeRunStatus::Running; }
+    if(auto* AI = GetCombatAI(Context)) { Data.EnteredAt = AI->GetWorld()->GetTimeSeconds(); Data.Deadline = AI->RandomRange(AI->ReactionMin, AI->ReactionMax); AI->ObserveTarget(); return EStateTreeRunStatus::Running; }
     return EStateTreeRunStatus::Failed;
 }
 EStateTreeRunStatus FCombatStateTreeSelectTask::Tick(FStateTreeExecutionContext& Context, float DeltaTime) const
@@ -18,9 +19,10 @@ EStateTreeRunStatus FCombatStateTreeSelectTask::Tick(FStateTreeExecutionContext&
     if(!Pawn->CombatTarget || !Pawn->CombatTarget->IsAlive())
     {
         if(!AI->ObserveTarget()) return EStateTreeRunStatus::Running;
-        auto& RetryData = Context.GetInstanceData(*this); RetryData.Elapsed = 0.f;
+        auto& RetryData = Context.GetInstanceData(*this); RetryData.Elapsed = 0.f; RetryData.EnteredAt = AI->GetWorld()->GetTimeSeconds();
     }
-    auto& Data = Context.GetInstanceData(*this); Data.Elapsed += DeltaTime;
+    // A tree restarted during this frame must not inherit time before EnterState.
+    auto& Data = Context.GetInstanceData(*this); Data.Elapsed = static_cast<float>(FMath::Max(0.0, AI->GetWorld()->GetTimeSeconds() - Data.EnteredAt));
     if(Data.Elapsed < Data.Deadline || Pawn->IsBusy()) return EStateTreeRunStatus::Running;
     // Decisions use the delayed observed snapshot, never the player's button state.
     if(AI->SelectAction()) return EStateTreeRunStatus::Succeeded;
@@ -38,6 +40,7 @@ EStateTreeRunStatus FCombatStateTreeExecuteTask::EnterState(FStateTreeExecutionC
     auto& Data = Context.GetInstanceData(*this); Data = FInstanceDataType();
     auto* AI = GetCombatAI(Context); auto* Pawn = AI ? AI->GetCombatPawn() : nullptr;
     if(!Pawn || !Pawn->IsAlive()) return EStateTreeRunStatus::Succeeded;
+    Data.EnteredAt = AI->GetWorld()->GetTimeSeconds();
     Pawn->GetCharacterMovement()->StopMovementImmediately();
     Data.bStarted = Pawn->RequestSkillByTag(AI->SelectedSkill);
     if(Data.bStarted) { AI->PreviousSkill = AI->SelectedSkill; ++AI->ActionsExecuted; if(auto* Skill = Pawn->GetActiveSkillDefinition()) Data.NextSkill = Skill->NextSkillTag; }
@@ -47,7 +50,7 @@ EStateTreeRunStatus FCombatStateTreeExecuteTask::Tick(FStateTreeExecutionContext
 {
     auto* AI = GetCombatAI(Context); auto* Pawn = AI ? AI->GetCombatPawn() : nullptr;
     if(!Pawn || !Pawn->IsAlive()) return EStateTreeRunStatus::Succeeded;
-    auto& Data = Context.GetInstanceData(*this); Data.Elapsed += DeltaTime;
+    auto& Data = Context.GetInstanceData(*this); Data.Elapsed = static_cast<float>(FMath::Max(0.0, AI->GetWorld()->GetTimeSeconds() - Data.EnteredAt));
     if(Data.Elapsed > 6.f) { Pawn->CancelCurrentSkill(); return EStateTreeRunStatus::Succeeded; }
     if(Pawn->IsBusy()) return EStateTreeRunStatus::Running;
     if(Pawn->bLastSkillInterrupted) return EStateTreeRunStatus::Succeeded;
@@ -65,7 +68,7 @@ void FCombatStateTreeExecuteTask::ExitState(FStateTreeExecutionContext& Context,
 EStateTreeRunStatus FCombatStateTreeRecoverTask::EnterState(FStateTreeExecutionContext& Context, const FStateTreeTransitionResult& Transition) const
 {
     auto& Data = Context.GetInstanceData(*this); Data = FInstanceDataType();
-    if(auto* AI = GetCombatAI(Context)) { Data.Deadline = AI->RandomRange(AI->RecoveryMin, AI->RecoveryMax); if(auto* Pawn = AI->GetCombatPawn(); Pawn && Pawn->bPhaseTwo) Data.Deadline *= .8f; AI->StopMovement(); }
+    if(auto* AI = GetCombatAI(Context)) { Data.EnteredAt = AI->GetWorld()->GetTimeSeconds(); Data.Deadline = AI->RandomRange(AI->RecoveryMin, AI->RecoveryMax); if(auto* Pawn = AI->GetCombatPawn(); Pawn && Pawn->bPhaseTwo) Data.Deadline *= .8f; AI->StopMovement(); }
     return EStateTreeRunStatus::Running;
 }
 EStateTreeRunStatus FCombatStateTreeRecoverTask::Tick(FStateTreeExecutionContext& Context, float DeltaTime) const
@@ -73,6 +76,6 @@ EStateTreeRunStatus FCombatStateTreeRecoverTask::Tick(FStateTreeExecutionContext
     auto* AI = GetCombatAI(Context); auto* Pawn = AI ? AI->GetCombatPawn() : nullptr;
     if(!Pawn) return EStateTreeRunStatus::Failed;
     if(!Pawn->IsAlive()) return EStateTreeRunStatus::Running;
-    auto& Data = Context.GetInstanceData(*this); Data.Elapsed += DeltaTime;
+    auto& Data = Context.GetInstanceData(*this); Data.Elapsed = static_cast<float>(FMath::Max(0.0, AI->GetWorld()->GetTimeSeconds() - Data.EnteredAt));
     return Data.Elapsed >= Data.Deadline ? EStateTreeRunStatus::Succeeded : EStateTreeRunStatus::Running;
 }

@@ -8,6 +8,7 @@ struct COMBAT_API FCombatStateTreeTaskData
 {
     GENERATED_BODY()
     UPROPERTY() float Elapsed = 0.f;
+    UPROPERTY() double EnteredAt = 0.0;
     UPROPERTY() float Deadline = 0.f;
     UPROPERTY() bool bStarted = false;
     UPROPERTY() FGameplayTag NextSkill;
