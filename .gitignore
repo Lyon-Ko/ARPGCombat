@@ -1,0 +1,13 @@
+Binaries/
+DerivedDataCache/
+Intermediate/
+Saved/
+.vs/
+.vscode/
+*.sln
+*.suo
+*.opensdf
+*.sdf
+Tools/.venv/
+**/__pycache__/
+Tools/logs/
