@@ -5,7 +5,7 @@
 ## 在编辑器中启动
 
 1. 使用 Unreal Engine 5.8.2 打开 `D:/UEproject/Combat/Combat.uproject`。
-2. 在内容浏览器打开 `/Game/Combat/Maps/L_CombatArena`。当前默认启动地图可能仍是 ThirdPerson 示例地图；试玩请确认打开的是战斗竞技场。
+2. 默认启动地图和游戏地图均已配置为 `/Game/Combat/Maps/L_CombatArena`，默认 GameMode 为 `/Game/Combat/Blueprints/BP_CombatGameMode`，分屏已关闭。若编辑器恢复了旧会话，请手动打开战斗竞技场。
 3. 点击编辑器工具栏的“运行 / Play”，使用单人 PIE。点击游戏视口，使键盘与鼠标输入进入游戏。
 4. 看到玩家、Boss 和中文血条后开始。按 `Esc` 结束 PIE；需要把鼠标交还编辑器时可使用 `Shift + F1`。
 
@@ -54,5 +54,11 @@ HUD 显示双方生命值、Boss 韧性和阶段。“破韧”提示代表出�
 暂停后可使用现有设置项调整音量、镜头灵敏度和镜头震动；按 P 继续。再次试玩时若仍处于编辑器输入状态，先点击 PIE 视口。
 
 ## 当前说明的边界
+
+当前角色为原生骨架 Kwang（玩家）和 Greystone（Boss）。角色蓝图位于 `/Game/Combat/Characters/BP_CombatPlayer`、`BP_CombatBoss`；2D 动画蓝图分别为 `/Game/Combat/Animations/Native/Kwang/ABP_CombatKwang2D` 和 `/Game/Combat/Animations/Native/Greystone/ABP_CombatGreystone2D`。最终技能 Montage 以各角色 Native 子目录下的 `AM_Attack1`、`AM_Boss_AOE` 等为准，不使用早期 Manny 模板作为当前绑定说明。
+
+剑刃拖尾使用真实 Niagara Ribbon。范围预警使用原创 `/Game/Combat/VFX/SM_WarningRing` 与 `/Game/Combat/Materials/M_WarningRing`；剑气使用 `/Game/Combat/VFX/SM_SwordWave` 与 `/Game/Combat/Materials/M_SwordWave`，伴随 Niagara 火花。这些绑定说明不等于最终视觉验收通过。
+
+独立新增技能 CrescentBurst 已有一次 PIE 接链及结束记录：`Saved/Acceptance/SkillExtensionNewTagPIE.json` 记录 Attack1→Attack2→Attack3→新标签、整链累计 130 点伤害、正常清理及测试后默认配置恢复。它是独立扩展示例验收，不代表完整战斗验收。重复运行生成 pipeline 会覆盖基础资产；自定义技能、动画和数据请复制到独立 Custom 路径再编辑。
 
 本文中的时间和距离来自当前 Runtime 与技能配置，可随调优变化。完整验收要求包括冷启动、Blueprint 编译、全部招式的实际 PIE 演示、30/60 fps 判定一致性、前后格挡、墙边行为、死亡取消清理和至少 20 次战斗重试；本文不把这些尚未最终汇总的项目标记为已通过。

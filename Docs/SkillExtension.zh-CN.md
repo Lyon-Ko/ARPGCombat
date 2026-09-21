@@ -2,7 +2,7 @@
 
 本文针对当前 Combat 工程的实际接口和 `Tools/editor/generate_skills.py`。扩展普通近战、位移、投射物或范围技能，可以复制现有资源并组合现有节点，不需要修改 C++。新增 Gameplay Tag 应在项目设置中登记，不必加入原生标签源码。
 
-**状态说明：** 本文核对的是当前源码与生成脚本。第三批运行时新增字段仍需协调构建、重启后才会出现在编辑器中。编译、保存资源不等于技能已通过实战验收；本文不宣称 CrescentBurst 或完整技能库已经通过 PIE、取消/死亡和视觉测试。
+**状态说明：** 本文涉及的运行时字段已完成构建。CrescentBurst 独立新标签已有一次 PIE 接链、伤害和正常结束验证，范围见第 8 节。完整 20 场、取消/死亡回归与最终视觉验收仍需分别核对，不能由单例或蓝图编译推断通过。
 
 ## 1. 找到可复制的模板
 
@@ -14,11 +14,12 @@
 | 第四段终结剑击 GA | `/Game/Combat/Abilities/GA_Attack4` |
 | 范围攻击 GA | `/Game/Combat/Abilities/GA_Boss_AOE` |
 | 侧跃投射物 GA | `/Game/Combat/Abilities/GA_Boss_LeapLeft` |
-| 对应剑击 Montage | `/Game/Combat/Animations/Montages/AM_Attack1`、`AM_Attack4` |
+| 对应剑击 Montage | `/Game/Combat/Animations/Native/Kwang/AM_Attack1`、`/Game/Combat/Animations/Native/Kwang/AM_Attack4` |
 | 对应剑击数据 | `/Game/Combat/Skills/DA_Attack1`、`DA_Attack4` |
 | 玩家角色蓝图 | `/Game/Combat/Characters/BP_CombatPlayer` |
 | Boss 角色蓝图 | `/Game/Combat/Characters/BP_CombatBoss` |
-| 普通动画蓝图 | `/Game/Combat/Animations/ABP_Combat` |
+| 玩家 2D 动画蓝图 | `/Game/Combat/Animations/Native/Kwang/ABP_CombatKwang2D` |
+| Boss 2D 动画蓝图 | `/Game/Combat/Animations/Native/Greystone/ABP_CombatGreystone2D` |
 
 生成器定义了 19 个 GA，每个图都使用同一套可编辑事件分支，差异主要来自 Montage 和数据：
 
@@ -29,7 +30,9 @@
 | Boss 三连 | `Boss.Combo1`、`Boss.Combo2`、`Boss.Combo3`；文件名用 `Boss_Combo1` 等 |
 | Boss 特殊动作 | `Boss.AOE`、`Boss.DashSlash`、`Boss.LeapLeft`、`Boss.LeapRight`、`Boss.LeapBack`；文件名中的点同样改成下划线 |
 
-完整标签均以 `Combat.Skill.` 开头。例如 `Combat.Skill.Boss.AOE` 对应 `/Game/Combat/Abilities/GA_Boss_AOE`、`/Game/Combat/Skills/DA_Boss_AOE`、`/Game/Combat/Animations/Montages/AM_Boss_AOE`。
+完整标签均以 `Combat.Skill.` 开头。例如 `Combat.Skill.Boss.AOE` 对应 `/Game/Combat/Abilities/GA_Boss_AOE`、`/Game/Combat/Skills/DA_Boss_AOE`、`/Game/Combat/Animations/Native/Greystone/AM_Boss_AOE`。`generate_skills.py` 生成基础 GA 图，`generate_native_characters.py` 再绑定最终 Kwang/Greystone 原生 Montage 和 2D 动画蓝图；早期 `/Animations/Montages` 模板不能替代当前数据中的实际 Montage 引用。
+
+生成 pipeline 会重写基础 GA、数据、动画或表现绑定。扩展资源请复制到各自的 `Custom` 子目录，并保存自定义接入步骤；不要直接修改会被生成器覆盖的基础资源后又无保护地重跑 pipeline。
 
 ## 2. 建立一个真正独立的新技能
 
@@ -115,7 +118,7 @@ Montage 必须走当前角色普通 AnimInstance 的 `DefaultSlot`。不要为�
 | `MovementDistance` / `MovementDuration` | 位移距离（厘米）和持续时间（秒），通过碰撞扫掠移动。 |
 | `MovementDirectionLocal` / `LaunchVelocityZ` | 角色局部方向及起跳初速度。+X 前、±Y 侧、-X 后；向下劈可用世界 Direction `(0,0,-1)`。 |
 | `TraceRadius` | 每个剑刃采样点的扫掠半径。实际剑长/端点由角色武器配置决定；`TraceReach` 当前并不控制剑刃扫描长度，不要靠改它扩展攻击距离。 |
-| `bGroundOnly` / `bAirOnly` | 分别限制地面/空中，勿同时勾选。地面剑技应设置 bGroundOnly；新增字段需要对应 DLL 已构建。 |
+| `bGroundOnly` / `bAirOnly` | 分别限制地面/空中，勿同时勾选。地面剑技应设置 bGroundOnly。 |
 | `AirAttackIndex` / `AirHangTime` | 两次空中轻击使用 1、2；角色按次序消费预算，落地复位。0 表示不属于这两次轻击，不能用它另做无限空中轻击入口。滞空共享角色 `MaxAirHangBudget`，默认总计 0.25 秒。 |
 | `bFaceTarget` | 是否使用目标朝向辅助；短冲/精准格挡通常设 false，避免防御动作自动扭向 Boss。 |
 | `bParryable` | 本技能生成的命中是否允许精准格挡。 |
@@ -128,11 +131,12 @@ Montage 必须走当前角色普通 AnimInstance 的 `DefaultSlot`。不要为�
 
 | 数据字段 | 现有资源及行为 |
 | --- | --- |
-| `TrailEffect` | `/Game/Combat/VFX/NS_BladeTrail`；Boss 可用 `NS_BossBladeTrail`。跟随剑端，HitOpen 开始、HitClose/结束销毁。资源是否已正确形成 ribbon 仍需视觉检查。 |
+| `TrailEffect` | `/Game/Combat/VFX/NS_BladeTrail`；Boss 可用 `NS_BossBladeTrail`。已使用真实 Niagara Ribbon，跟随剑端，HitOpen 开始、HitClose/结束销毁；最终画面仍需视觉验收。 |
 | `HitEffect` | `/Game/Combat/VFX/NS_HitSparks`，确认命中/格挡等反馈时使用。 |
 | `CastEffect` | `/Game/Combat/VFX/NS_Projectile` 可作为投射物表现；当前实现也会在技能开始生成一次 CastEffect，纯发射效果需注意不要形成多余的起手爆发。 |
-| `AreaReleaseEffect` | `/Game/Combat/VFX/NS_AOEFlash`；第三批字段，在实际 AreaRelease 时生成。 |
-| `AreaMesh` / `AreaMaterial` | `/Engine/BasicShapes/Cylinder` 与 `/Game/Combat/Materials/M_AreaWarning`。当前缩放以直径/高度 100cm 的柱体为基准；材质支持 Tint、Opacity 参数。 |
+| `AreaReleaseEffect` | `/Game/Combat/VFX/NS_AOEFlash`，在实际 AreaRelease 时生成。 |
+| `AreaMesh` / `AreaMaterial` | 原创 `/Game/Combat/VFX/SM_WarningRing` 与 `/Game/Combat/Materials/M_WarningRing`。半径 50cm 的薄 XY 环按 AreaRadius 缩放，保持地面位置；释放时 Opacity 从 .2 升至 .65，结束清理。AreaHeight 只控制实际伤害纵向范围，不拉高地环。 |
+| `ProjectileMesh` / `ProjectileMaterial` | 原创 `/Game/Combat/VFX/SM_SwordWave` 与 `/Game/Combat/Materials/M_SwordWave`；局部 +X 传播，Y 宽约 180cm，模型无碰撞。实际伤害盒由 ProjectileCollisionHalfExtent 控制，默认 `(24,85,20)` cm。 |
 | `CastSound` | `/Game/Combat/Audio/SW_SwordSwing_01`，其他序号为 02–04；短冲可用 `SW_Dash`，范围爆发可选 `SW_Burst`。默认在首次 HitOpen/Projectile/AreaRelease 播放一次；`bPlayCastSoundAtActivation=true` 才在激活时播放。 |
 | `HitSound` / `ParrySound` | `/Game/Combat/Audio/SW_MetalClash_01` 与 `/Game/Combat/Audio/SW_Parry`。 |
 | `CueColor` | 范围材质等反馈颜色；Niagara 模板仍须检查其实际暴露的颜色参数。 |
@@ -141,7 +145,7 @@ Montage 必须走当前角色普通 AnimInstance 的 `DefaultSlot`。不要为�
 
 ## 7. 命中去重、取消和 Buff 的作用域
 
-每次 `OpenHitWindow` 都创建新 AttackInstance，并清空本窗口目标集合。相同目标在该窗口只受一次命中；再次关闭并打开才是新一段。第三批还记住同一攻击者最近 64 个 ID，防止旧投射物与新窗口交错时重复处理。手工构造 `FCombatHit` 做测试时，新攻击必须提供新 ID；重复 ID 是去重测试，不是连续伤害。
+每次 `OpenHitWindow` 都创建新 AttackInstance，并清空本窗口目标集合。相同目标在该窗口只受一次命中；再次关闭并打开才是新一段。运行时还记住同一攻击者最近 64 个 ID，防止旧投射物与新窗口交错时重复处理。手工构造 `FCombatHit` 做测试时，新攻击必须提供新 ID；重复 ID 是去重测试，不是连续伤害。
 
 技能正常结束与中断都会关闭命中窗口、停止技能位移、清理任务监听、临时标签、拖尾和预警，取消尚未结算的范围计时器。中断还销毁该角色记录的在途技能投射物；角色死亡/重试会扫描并删除其拥有的全部投射物。正常完成后已经释放的投射物可继续飞行，不应因此把正常完成也接成 Interrupted。
 
@@ -161,11 +165,13 @@ Montage 必须走当前角色普通 AnimInstance 的 `DefaultSlot`。不要为�
 
 初版脚本保留了复制数据中的 `Combat.Skill.Attack4`，只能通过替换玩家 SkillDefinitions 中的 DA_Attack4 来替换终结技行为。现在项目已在 `Config/DefaultGameplayTags.ini` 登记独立标签 `Combat.Skill.Example.CrescentBurst`，无需修改 C++。
 
-独立新增技能的资源接入仍待编辑器执行和 PIE 验收：将 `/Game/Combat/Skills/Examples/DA_Example_CrescentBurst` 的 SkillTag 改为 `Combat.Skill.Example.CrescentBurst`，InputTag 留空；把这份数据加入玩家 SkillDefinitions，保留原 DA_Attack4；临时将 `/Game/Combat/Skills/DA_Attack3` 的 NextSkillTag 指向新标签。这样前三段之后可以进入独立的 CrescentBurst，而两份终结技仍各有唯一身份。测试后恢复 DA_Attack3 原来的 `Combat.Skill.Attack4` 后继即可恢复原四连。确认角色已授予新定义中的 AbilityClass，再测试通知、伤害、取消和冷却；仅登记标签不代表资源已经接通或新增技能已通过实战。
+独立新增技能的接入方式为：将 `/Game/Combat/Skills/Examples/DA_Example_CrescentBurst` 的 SkillTag 设为 `Combat.Skill.Example.CrescentBurst`，InputTag 留空；把数据加入玩家 SkillDefinitions，保留原 DA_Attack4；临时将 `/Game/Combat/Skills/DA_Attack3` 的 NextSkillTag 指向新标签。测试后恢复原后继和默认技能表。
+
+`Saved/Acceptance/SkillExtensionNewTagPIE.json` 已记录真实 Attack1→Attack2→Attack3→Combat.Skill.Example.CrescentBurst，整条链累计伤害 130（并非 CrescentBurst 单独伤害），`ended_cleanly=true`、`defaults_restored=true`。这证明独立标签接链与该次正常结束，默认玩家未永久替换为此示例。它不覆盖所有中断时机、冷却拒绝、死亡、30/60fps 或最终视觉效果。
 
 复制 Montage 时原有通知会保留，因此示例可能同时包含第四剑的近战命中和新增范围爆发；若设计只需要范围伤害，应检查并移除不需要的 HitOpen/HitClose。复制的 GA 已含九类事件分支，脚本主要增加说明注释，没有新增 C++ 逻辑。
 
-本次文档任务没有操作编辑器或运行该示例。请在内容浏览器确认输出是否已生成，再进行真实 PIE 验证，不能把脚本的 `EXTENSION_CREATED` 输出或蓝图编译成功当成验收通过。
+上述通过范围来自已保存的 PIE 记录；本次文档更新未运行编辑器。后续修改示例需重新验证，不能用 `EXTENSION_CREATED` 或蓝图编译成功替代运行证据。
 
 ## 9. 新技能交付前的检查
 

@@ -389,6 +389,7 @@ void ACombatCharacter::HandleMontageEvent(FGameplayTag EventTag)
 void ACombatCharacter::BroadcastCue(FGameplayTag Tag, ACombatCharacter* Target, FVector Location, float Intensity) { OnCombatFeedback.Broadcast(this, Target, Tag, Location, Intensity); }
 void ACombatCharacter::Die()
 {
+    SetHiddenForCloseCamera(false);
     CancelCurrentSkill(); AbilitySystem->CancelAllAbilities();
     AbilitySystem->RemoveActiveGameplayEffect(RiposteEffectHandle);
     for(auto Projectile : SkillProjectiles) if(Projectile.IsValid()) Projectile->Destroy();
@@ -415,6 +416,7 @@ void ACombatCharacter::Die()
 }
 void ACombatCharacter::ResetCombatState()
 {
+    SetHiddenForCloseCamera(false);
     CancelCurrentSkill(); AbilitySystem->CancelAllAbilities();
     DestroyOwnedProjectiles();
     CustomTimeDilation = SavedTimeDilation; HitStopUntilReal = 0.f;
@@ -441,6 +443,7 @@ void ACombatCharacter::ResetCombatState()
 void ACombatCharacter::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
+    UpdateCloseCameraVisibility();
     if(HitStopUntilReal > 0 && GetWorld()->GetRealTimeSeconds() >= HitStopUntilReal) { CustomTimeDilation = SavedTimeDilation; HitStopUntilReal = 0; }
     if(!IsAlive())
     {
@@ -507,6 +510,40 @@ void ACombatCharacter::Tick(float DeltaSeconds)
             if(bAttackHeld && bAir && Now - AttackPressedAt > .28f) { bAttackHeld = false; RequestSkillByTag(CT(TEXT("Combat.Skill.Plunge"))); }
         }
     }
+}
+void ACombatCharacter::SetHiddenForCloseCamera(bool bHide)
+{
+    if(bHiddenForCloseCamera == bHide) return;
+    if(bHide)
+    {
+        bSavedMeshOwnerNoSee = GetMesh()->bOwnerNoSee;
+        bSavedMeshHiddenShadow = GetMesh()->bCastHiddenShadow;
+        if(WeaponMesh)
+        {
+            bSavedWeaponOwnerNoSee = WeaponMesh->bOwnerNoSee;
+            bSavedWeaponHiddenShadow = WeaponMesh->bCastHiddenShadow;
+        }
+    }
+    GetMesh()->SetOwnerNoSee(bHide || bSavedMeshOwnerNoSee);
+    GetMesh()->SetCastHiddenShadow(bHide || bSavedMeshHiddenShadow);
+    if(WeaponMesh)
+    {
+        WeaponMesh->SetOwnerNoSee(bHide || bSavedWeaponOwnerNoSee);
+        WeaponMesh->SetCastHiddenShadow(bHide || bSavedWeaponHiddenShadow);
+    }
+    bHiddenForCloseCamera = bHide;
+}
+void ACombatCharacter::UpdateCloseCameraVisibility()
+{
+    if(bIsBoss || !IsPlayerControlled() || !IsLocallyControlled() || !IsAlive() || !Camera)
+    {
+        SetHiddenForCloseCamera(false);
+        return;
+    }
+    const float Distance = FVector::Distance(Camera->GetComponentLocation(), GetActorLocation());
+    const float RevealDistance = FMath::Max(CameraHideDistance + 1.f, CameraRevealDistance);
+    if(!bHiddenForCloseCamera && Distance < CameraHideDistance) SetHiddenForCloseCamera(true);
+    else if(bHiddenForCloseCamera && Distance > RevealDistance) SetHiddenForCloseCamera(false);
 }
 void ACombatCharacter::SetupPlayerInputComponent(UInputComponent* Input)
 {

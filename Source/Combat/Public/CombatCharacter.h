@@ -47,6 +47,9 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Feedback") TArray<TObjectPtr<USoundBase>> FootstepSounds;
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Feedback") float FootstepDistance = 160.f;
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Camera") float DefaultCameraDistance = 560.f;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Camera", meta=(ClampMin="0")) float CameraHideDistance = 220.f;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Camera", meta=(ClampMin="0")) float CameraRevealDistance = 270.f;
+    UFUNCTION(BlueprintPure, Category="Camera") bool IsHiddenForCloseCamera() const { return bHiddenForCloseCamera; }
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Camera") float SoftLockRange = 650.f;
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Camera") float SoftLockViewDot = .4f;
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Combat") FName WeaponAttachSocket = "hand_r";
@@ -145,6 +148,11 @@ private:
     float MovementRemaining = 0.f;
     float MovementSpeed = 0.f;
     bool bDashHorizontalOverride = false;
+    bool bHiddenForCloseCamera = false;
+    bool bSavedMeshOwnerNoSee = false;
+    bool bSavedWeaponOwnerNoSee = false;
+    bool bSavedMeshHiddenShadow = false;
+    bool bSavedWeaponHiddenShadow = false;
     float SavedDashMaxAcceleration = 0.f;
     float LastDamageAt = 0.f;
     float AirHangBudgetUsed = 0.f;
@@ -172,6 +180,8 @@ private:
     void JumpPressed();
     void PausePressed();
     void EndDashHorizontalOverride();
+    void SetHiddenForCloseCamera(bool bHide);
+    void UpdateCloseCameraVisibility();
     void TraceHitWindow();
     void GetBladeEndpoints(FVector& Start, FVector& End) const;
     void DestroyOwnedProjectiles();
