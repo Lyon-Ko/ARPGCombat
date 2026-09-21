@@ -125,6 +125,7 @@ bool ACombatCharacter::RequestSkillByTag(FGameplayTag SkillTag)
 }
 void ACombatCharacter::BeginSkill(UCombatSkillDefinition* Definition, UCombatGameplayAbility* Ability)
 {
+    ++SkillExecutionSerial;
     ActiveSkill = Definition; ActiveAbility = Ability;
     bLastSkillInterrupted = false;
     SkillStartedAt = GetWorld()->GetTimeSeconds();
@@ -209,7 +210,7 @@ void ACombatCharacter::EndSkill(bool bInterrupted)
 void ACombatCharacter::OpenHitWindow()
 {
     if(!ActiveSkill) return;
-    bHitWindow = true; HitActors.Reset(); ++AttackInstance;
+    bHitWindow = true; HitActors.Reset(); HitWindowAttackInstance = ++AttackInstance;
     GetBladeEndpoints(LastTraceStart, LastTraceEnd);
     FeedbackComponent->BeginTrail();
 }
@@ -220,9 +221,9 @@ void ACombatCharacter::GetBladeEndpoints(FVector& Start, FVector& End) const
     Start = Source->DoesSocketExist(TraceStartSocket) ? Source->GetSocketLocation(TraceStartSocket) : Source->GetComponentLocation();
     End = Source->DoesSocketExist(TraceEndSocket) ? Source->GetSocketLocation(TraceEndSocket) : Start + Source->GetComponentTransform().TransformVectorNoScale(WeaponBladeAxis.GetSafeNormal()) * WeaponBladeLength;
 }
-FCombatHit ACombatCharacter::MakeHit() const
+FCombatHit ACombatCharacter::MakeHit(int32 HitInstance) const
 {
-    FCombatHit Hit; Hit.Attacker = const_cast<ACombatCharacter*>(this); Hit.AttackInstance = AttackInstance;
+    FCombatHit Hit; Hit.Attacker = const_cast<ACombatCharacter*>(this); Hit.AttackInstance = HitInstance;
     Hit.Direction = GetActorForwardVector(); Hit.Location = GetActorLocation();
     if(ActiveSkill) { Hit.Damage = ActiveSkill->Damage * (bPhaseTwo ? 1.15f : 1.f); Hit.PoiseDamage = ActiveSkill->PoiseDamage; Hit.bParryable = ActiveSkill->bParryable; }
     return Hit;
@@ -230,6 +231,7 @@ FCombatHit ACombatCharacter::MakeHit() const
 void ACombatCharacter::TraceHitWindow()
 {
     if(!bHitWindow || !ActiveSkill) return;
+    const uint64 ExecutionSerial = SkillExecutionSerial;
     FVector Start, End; GetBladeEndpoints(Start, End);
     FCollisionQueryParams Params(SCENE_QUERY_STAT(CombatBlade), false, this);
     FCollisionObjectQueryParams Objects; Objects.AddObjectTypesToQuery(ECC_Pawn);
@@ -243,8 +245,8 @@ void ACombatCharacter::TraceHitWindow()
         for(const auto& Result : Hits)
             if(auto* Target = Cast<ACombatCharacter>(Result.GetActor()); Target && Target->bIsBoss != bIsBoss && !HitActors.Contains(Target))
             {
-                HitActors.Add(Target); auto Hit = MakeHit(); Hit.Location = Result.ImpactPoint; Hit.Direction = (Target->GetActorLocation() - GetActorLocation()).GetSafeNormal(); Target->ReceiveCombatHit(Hit);
-                if(!bHitWindow || !ActiveSkill) return;
+                HitActors.Add(Target); auto Hit = MakeHit(HitWindowAttackInstance); Hit.Location = Result.ImpactPoint; Hit.Direction = (Target->GetActorLocation() - GetActorLocation()).GetSafeNormal(); Target->ReceiveCombatHit(Hit);
+                if(!bHitWindow || !ActiveSkill || SkillExecutionSerial != ExecutionSerial) return;
             }
     }
     LastTraceStart = Start; LastTraceEnd = End;
@@ -325,15 +327,25 @@ void ACombatCharacter::StartSkillMovement(float Distance, float Duration, FVecto
 }
 void ACombatCharacter::EmitSkillProjectile()
 {
-    if(!ActiveSkill) return;
-    ++AttackInstance;
+    if(!ActiveSkill || !IsAlive()) return;
+    const uint64 ExecutionSerial = SkillExecutionSerial;
+    const UCombatSkillDefinition* Definition = ActiveSkill;
+    const UCombatGameplayAbility* Ability = ActiveAbility;
+    const FCombatHit Hit = MakeHit(++AttackInstance);
+    const float Speed = Definition->ProjectileSpeed;
     FeedbackComponent->PlayReleaseSound();
-    OnProjectileRequested(MakeHit(), ActiveSkill->ProjectileSpeed);
+    OnProjectileRequested(Hit, Speed);
+    if(!IsAlive() || bLastSkillInterrupted || ActiveSkill != Definition || ActiveAbility != Ability || SkillExecutionSerial != ExecutionSerial) return;
     const FVector Origin = GetActorLocation() + GetActorForwardVector() * 90.f + FVector(0,0,35.f);
     const FVector Direction = CombatTarget && CombatTarget->IsAlive() ? (CombatTarget->GetActorLocation() - Origin).GetSafeNormal() : GetActorForwardVector();
     FActorSpawnParameters Params; Params.Owner = this; Params.Instigator = this; Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
     if(auto* Projectile = GetWorld()->SpawnActor<ACombatProjectile>(ProjectileClass, Origin, Direction.Rotation(), Params))
-    { Projectile->InitializeProjectile(MakeHit(), ActiveSkill->ProjectileSpeed, Direction, ActiveSkill->CastEffect, ActiveSkill->ProjectileMesh, ActiveSkill->ProjectileMaterial, ActiveSkill->ProjectileCollisionHalfExtent); SkillProjectiles.Add(Projectile); }
+    {
+        // A Blueprint projectile's BeginPlay may also end the owning skill.
+        if(!IsAlive() || bLastSkillInterrupted || ActiveSkill != Definition || ActiveAbility != Ability || SkillExecutionSerial != ExecutionSerial) { Projectile->Destroy(); return; }
+        Projectile->InitializeProjectile(Hit, Speed, Direction, Definition->CastEffect, Definition->ProjectileMesh, Definition->ProjectileMaterial, Definition->ProjectileCollisionHalfExtent);
+        SkillProjectiles.Add(Projectile);
+    }
 }
 void ACombatCharacter::ShowAreaWarning()
 {
@@ -354,13 +366,13 @@ void ACombatCharacter::DetonateArea()
 void ACombatCharacter::DoAreaDamage()
 {
     if(!ActiveSkill || !IsAlive()) return;
-    ++AttackInstance;
+    const uint64 ExecutionSerial = SkillExecutionSerial;
     const UCombatSkillDefinition* Definition = ActiveSkill;
     const UCombatGameplayAbility* Ability = ActiveAbility;
     const float Radius = Definition->AreaRadius;
     const float Height = Definition->AreaHeight;
     const FVector Center = AreaCenter;
-    const FCombatHit BaseHit = MakeHit();
+    const FCombatHit BaseHit = MakeHit(++AttackInstance);
     for(TActorIterator<ACombatCharacter> It(GetWorld()); It; ++It)
     {
         auto* Target = *It;
@@ -368,7 +380,7 @@ void ACombatCharacter::DoAreaDamage()
         if(Target != this && Target->bIsBoss != bIsBoss && Delta.Size2D() <= Radius + Target->GetCapsuleComponent()->GetScaledCapsuleRadius() && FMath::Abs(Delta.Z) <= Height * .5f + Target->GetCapsuleComponent()->GetScaledCapsuleHalfHeight())
         {
             FCombatHit Hit = BaseHit; Hit.Location = Target->GetActorLocation(); Hit.Direction = Delta.GetSafeNormal(); Target->ReceiveCombatHit(Hit);
-            if(!IsAlive() || bLastSkillInterrupted || ActiveSkill != Definition || ActiveAbility != Ability) return;
+            if(!IsAlive() || bLastSkillInterrupted || ActiveSkill != Definition || ActiveAbility != Ability || SkillExecutionSerial != ExecutionSerial) return;
         }
     }
 }

@@ -139,6 +139,8 @@ private:
     int32 ComboIndex = 0;
     int32 AirComboIndex = 0;
     int32 AttackInstance = 0;
+    int32 HitWindowAttackInstance = 0;
+    uint64 SkillExecutionSerial = 0;
     float SkillStartedAt = 0.f;
     float BufferedUntil = 0.f;
     float RiposteUntil = 0.f;
@@ -192,7 +194,7 @@ private:
     void CheckPoiseBreak(float Now);
     FVector SampleMovementDirection() const;
     void ApplyAttributeDelta(const FGameplayAttribute& Attribute, float Delta);
-    FCombatHit MakeHit() const;
+    FCombatHit MakeHit(int32 HitInstance) const;
     void BroadcastCue(FGameplayTag Tag, ACombatCharacter* Target, FVector Location, float Intensity = 1.f);
 };
 
