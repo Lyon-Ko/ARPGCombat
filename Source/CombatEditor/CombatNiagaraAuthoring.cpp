@@ -5,6 +5,8 @@
 #include "NiagaraScriptSource.h"
 #include "NiagaraGraph.h"
 #include "NiagaraNodeFunctionCall.h"
+#include "NiagaraNodeOutput.h"
+#include "NiagaraScript.h"
 #include "NiagaraParameterMapHistory.h"
 #include "NiagaraEditorModule.h"
 #include "INiagaraEditorTypeUtilities.h"
@@ -194,4 +196,56 @@ bool UCombatEditorLibrary::CompileAndSaveNiagara(UNiagaraSystem* System)
     Args.SaveFlags = SAVE_NoError;
     return UPackage::SavePackage(System->GetPackage(), System,
         *FPackageName::LongPackageNameToFilename(System->GetPackage()->GetName(), FPackageName::GetAssetPackageExtension()), Args);
+}
+
+bool UCombatEditorLibrary::AddNiagaraSpawnRate(UNiagaraSystem* System, const FString& EmitterName)
+{
+    if (!CombatNiagara::Owned(System)) return false;
+    auto* SpawnScript = LoadObject<UNiagaraScript>(nullptr, TEXT("/Niagara/Modules/Emitter/SpawnRate.SpawnRate"));
+    if (!SpawnScript) return false;
+    for (auto& Handle : System->GetEmitterHandles())
+    {
+        if (Handle.GetName().ToString() != EmitterName) continue;
+        auto* Data = Handle.GetEmitterData();
+        auto* Graph = CombatNiagara::Graph(Handle);
+        UNiagaraEmitter* Emitter = Handle.GetInstance().Emitter.Get();
+        if (!Data || !Graph || !Emitter) return false;
+        auto* Output = Graph->FindEquivalentOutputNode(ENiagaraScriptUsage::EmitterUpdateScript);
+        if (!Output || Output->GetUsage() != ENiagaraScriptUsage::EmitterUpdateScript) return false;
+        bool bHasRibbon = false;
+        for (auto* Renderer : Data->GetRenderers()) bHasRibbon |= Cast<UNiagaraRibbonRendererProperties>(Renderer) != nullptr;
+        if (!bHasRibbon) return false;
+        TArray<UNiagaraNode*> Traversal;
+        Graph->BuildTraversal(Traversal, Output->GetUsage(), Output->GetUsageId());
+        UNiagaraNodeFunctionCall* SpawnNode = nullptr;
+        for (auto* Node : Traversal)
+        {
+            if (auto* Function = Cast<UNiagaraNodeFunctionCall>(Node))
+            {
+                if (Function->FunctionScript == SpawnScript)
+                {
+                    if (SpawnNode) return false; // Existing duplicate needs explicit repair, never add another.
+                    SpawnNode = Function;
+                }
+            }
+        }
+        System->Modify(); Emitter->Modify(); Graph->Modify();
+        if (!SpawnNode)
+            SpawnNode = FNiagaraStackGraphUtilities::AddScriptModuleToStack(SpawnScript, *Output);
+        if (!SpawnNode) return false;
+        FNiagaraStackGraphUtilities::SetModuleIsEnabled(*SpawnNode, true);
+        // An attached blade moves the source; already-spawned points stay in world space.
+        Data->bLocalSpace = false;
+        // The standalone location-event template has no parent event generator.
+        // Remove its event handlers so absent inherited IDs/positions cannot drive the ribbon.
+        TArray<FGuid> EventIds;
+        for (const auto& Handler : Data->GetEventHandlers())
+            if (Handler.Script) EventIds.Add(Handler.Script->GetUsageId());
+        for (const auto& Id : EventIds)
+            Emitter->RemoveEventHandlerByUsageId(Id, Handle.GetInstance().Version);
+        Graph->NotifyGraphChanged();
+        System->MarkPackageDirty();
+        return true;
+    }
+    return false;
 }

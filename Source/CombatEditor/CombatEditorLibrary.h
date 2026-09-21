@@ -50,4 +50,6 @@ public:
     static bool SetCombatNiagaraRenderers(UNiagaraSystem* System, UMaterialInterface* Material, FLinearColor Color, FVector2D SpriteSize, float RibbonWidth = 3.f);
     UFUNCTION(BlueprintCallable, Category="Combat|Editor")
     static bool CompileAndSaveNiagara(UNiagaraSystem* System);
+    UFUNCTION(BlueprintCallable, Category="Combat|Editor")
+    static bool AddNiagaraSpawnRate(UNiagaraSystem* System, const FString& EmitterName);
 };
