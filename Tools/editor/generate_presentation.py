@@ -72,7 +72,6 @@ world.get_world_settings().set_editor_property('default_game_mode',mode.generate
 actor_subsystem=u.get_editor_subsystem(u.EditorActorSubsystem)
 for actor in actor_subsystem.get_all_level_actors():
     if actor.get_actor_label()=='Combat_Boss': actor_subsystem.destroy_actor(actor)
-boss=actor_subsystem.spawn_actor_from_class(u.load_asset(ROOT+'/Characters/BP_CombatBoss').generated_class(),u.Vector(600,0,100),u.Rotator(pitch=0,yaw=180,roll=0))
-boss.set_actor_label('Combat_Boss')
+# Boss is spawned by the game mode when the player presses R.
 assert u.EditorLoadingAndSavingUtils.save_map(world,ROOT+'/Maps/L_CombatArena')
 print('PRESENTATION_ASSETS',anim.get_path_name(),tree.get_path_name(),widget.get_path_name() if widget else 'STYLED_HUD_PENDING_REBUILD')

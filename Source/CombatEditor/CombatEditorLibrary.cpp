@@ -7,6 +7,22 @@
 #include "PlayInEditorDataTypes.h"
 #include "Settings/LevelEditorPlaySettings.h"
 #include "NiagaraSystemFactoryNew.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "Animation/AnimSequence.h"
+
+bool UCombatEditorLibrary::SampleAnimationPreview(USkeletalMeshComponent* Component, UAnimSequence* Sequence, float Time)
+{
+    if(!IsValid(Component) || !IsValid(Sequence) || !Component->GetWorld() || Component->GetWorld()->IsGameWorld()) return false;
+    Component->SetAnimationMode(EAnimationMode::AnimationSingleNode);
+    Component->SetAnimation(Sequence);
+    Component->Stop();
+    Component->SetPosition(FMath::Clamp(Time, 0.f, Sequence->GetPlayLength()), false);
+    Component->TickAnimation(0.f, false);
+    Component->RefreshBoneTransforms();
+    Component->MarkRenderTransformDirty();
+    Component->MarkRenderDynamicDataDirty();
+    return true;
+}
 
 bool UCombatEditorLibrary::StartPIEWindow(int32 Width, int32 Height)
 {
@@ -49,6 +65,7 @@ bool UCombatEditorLibrary::InjectPlayerKey(APlayerController* Controller, FName 
 #include "Animation/BlendSpace.h"
 #include "Animation/BlendSpace1D.h"
 #include "Animation/AnimSequence.h"
+#include "Animation/AnimMontage.h"
 #include "AnimGraphNode_Root.h"
 #include "AnimGraphNode_StateMachine.h"
 #include "AnimGraphNode_StateResult.h"
@@ -223,12 +240,62 @@ UWidgetBlueprint* UCombatEditorLibrary::CreateHUD(const FString& AssetPath, TSub
     return CompileAndSave(BP)?BP:nullptr;
 }
 
+bool UCombatEditorLibrary::ConfigureLocomotionBlending(UAnimBlueprint* Blueprint)
+{
+    if(!Blueprint || !Blueprint->GetPathName().StartsWith(TEXT("/Game/Combat/"))) return false;
+    TArray<UEdGraph*> Graphs;
+    Blueprint->GetAllGraphs(Graphs);
+    bool bFoundSlot = false;
+    for(UEdGraph* Graph : Graphs)
+    {
+        TArray<UAnimGraphNode_BlendSpacePlayer*> Players;
+        Graph->GetNodesOfClass(Players);
+        for(auto* Player : Players)
+        {
+            for(auto& OptionalPin : Player->ShowPinForProperties)
+                if(OptionalPin.PropertyName == TEXT("PlayRate")) OptionalPin.bShowPin = true;
+            Player->ReconstructNode();
+            auto* RatePin = Player->FindPin(TEXT("PlayRate"));
+            if(!RatePin) return false;
+            bool bAlreadyBound = false;
+            for(auto* LinkedPin : RatePin->LinkedTo)
+                if(auto* Getter = Cast<UK2Node_VariableGet>(LinkedPin->GetOwningNode()))
+                    bAlreadyBound |= Getter->VariableReference.GetMemberName() == TEXT("AnimationPlayRate");
+            if(!bAlreadyBound)
+            {
+                RatePin->BreakAllPinLinks();
+                auto* Rate = CombatAuthoring::Variable(Graph, TEXT("AnimationPlayRate"), Player->NodePosX - 280, Player->NodePosY + 240);
+                if(!CombatAuthoring::Link(Rate->GetValuePin(), RatePin)) return false;
+            }
+        }
+        TArray<UAnimGraphNode_Slot*> Slots;
+        Graph->GetNodesOfClass(Slots);
+        for(auto* Slot : Slots)
+            if(Slot->Node.SlotName == TEXT("DefaultSlot"))
+            {
+                Slot->Node.bAlwaysUpdateSourcePose = true;
+                bFoundSlot = true;
+            }
+    }
+    if(!bFoundSlot) return false;
+    FBlueprintEditorUtils::MarkBlueprintAsModified(Blueprint);
+    return CompileAndSave(Blueprint);
+}
+
+bool UCombatEditorLibrary::RebuildMontage(UAnimMontage* Montage)
+{
+    if(!Montage || !Montage->GetPathName().StartsWith(TEXT("/Game/Combat/"))) return false;
+    Montage->SetCompositeLength(Montage->CalculateSequenceLength());
+    Montage->UpdateLinkableElements();
+    return CombatAuthoring::Save(Montage);
+}
+
 UAnimBlueprint* UCombatEditorLibrary::CreateLocomotion(const FString& AssetPath,TSubclassOf<UAnimInstance> ParentClass,USkeleton* Skeleton,UBlendSpace* BlendSpace,UAnimSequence* AirSequence)
 {
     using namespace CombatAuthoring;
     if (!ParentClass || !Skeleton || !BlendSpace || !AirSequence || !AssetPath.StartsWith(TEXT("/Game/Combat/"))) return nullptr;
     auto* BP=LoadObject<UAnimBlueprint>(nullptr,*AssetPath);
-    if (BP) return CompileAndSave(BP)?BP:nullptr;
+    if (BP) return ConfigureLocomotionBlending(BP)?BP:nullptr;
     BP=Cast<UAnimBlueprint>(FKismetEditorUtilities::CreateBlueprint(ParentClass,CreatePackage(*AssetPath),*FPackageName::GetLongPackageAssetName(AssetPath),BPTYPE_Normal,UAnimBlueprint::StaticClass(),UAnimBlueprintGeneratedClass::StaticClass()));
     if (!BP) return nullptr;
     BP->TargetSkeleton=Skeleton;
@@ -240,6 +307,7 @@ UAnimBlueprint* UCombatEditorLibrary::CreateLocomotion(const FString& AssetPath,
     auto* Machine=Node<UAnimGraphNode_StateMachine>(Graph,-600,0);
     Machine->OnRenameNode(TEXT("Locomotion"));
     auto* Slot=Node<UAnimGraphNode_Slot>(Graph,-240,0); Slot->Node.SlotName=TEXT("DefaultSlot");
+    Slot->Node.bAlwaysUpdateSourcePose = true;
     if (!Link(Machine->FindPin(TEXT("Pose")),Slot->FindPin(TEXT("Source"))) || !Link(Slot->FindPin(TEXT("Pose")),Roots[0]->FindPin(TEXT("Result")))) return nullptr;
     auto* SM=Machine->EditorStateMachineGraph.Get();
     auto* Ground=Node<UAnimStateNode>(SM,180,0); Ground->OnRenameNode(TEXT("Grounded"));

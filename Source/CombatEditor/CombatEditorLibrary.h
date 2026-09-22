@@ -7,6 +7,8 @@ class UBlueprint;
 class UAnimBlueprint;
 class UAnimInstance;
 class UAnimSequence;
+class USkeletalMeshComponent;
+class UAnimMontage;
 class UBlendSpace;
 class USkeleton;
 class APlayerController;
@@ -23,11 +25,17 @@ class COMBATEDITOR_API UCombatEditorLibrary : public UBlueprintFunctionLibrary
     GENERATED_BODY()
 public:
     UFUNCTION(BlueprintCallable, Category="Combat|Editor")
+    static bool SampleAnimationPreview(USkeletalMeshComponent* Component, UAnimSequence* Sequence, float Time);
+    UFUNCTION(BlueprintCallable, Category="Combat|Editor")
     static bool BuildNavBounds(ANavMeshBoundsVolume* Volume, FVector Size);
     UFUNCTION(BlueprintCallable, Category="Combat|Editor")
     static UWidgetBlueprint* CreateHUD(const FString& AssetPath, TSubclassOf<UUserWidget> ParentClass);
     UFUNCTION(BlueprintCallable, Category="Combat|Editor")
     static UAnimBlueprint* CreateLocomotion(const FString& AssetPath, TSubclassOf<UAnimInstance> ParentClass, USkeleton* Skeleton, UBlendSpace* BlendSpace, UAnimSequence* AirSequence);
+    UFUNCTION(BlueprintCallable, Category="Combat|Editor")
+    static bool ConfigureLocomotionBlending(UAnimBlueprint* Blueprint);
+    UFUNCTION(BlueprintCallable, Category="Combat|Editor")
+    static bool RebuildMontage(UAnimMontage* Montage);
     UFUNCTION(BlueprintCallable, Category="Combat|Editor")
     static UStateTree* CreateCombatStateTree(const FString& AssetPath, const TArray<FString>& TaskStructPaths);
     UFUNCTION(BlueprintCallable, Category="Combat|Editor")

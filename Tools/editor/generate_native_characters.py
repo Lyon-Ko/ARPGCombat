@@ -78,7 +78,7 @@ for hero,label,source_mesh in [('Kwang','Player','Kwang_GDC'),('Greystone','Boss
     samples=[]
     for direction,clip in [(-180,'Jog_Bwd'),(-90,'Jog_Left'),(0,'Jog_Fwd'),(90,'Jog_Right'),(180,'Jog_Bwd')]:
         directional=sequence(hero,clip)
-        for speed,source,rate in [(0,idle,1),(350,directional,1),(650,directional,1.65)]:
+        for speed,source,rate in [(0,idle,1),(350,directional,1),(650,directional,1)]:
             sample=u.BlendSample(); sample.set_editor_property('animation',source); sample.set_editor_property('sample_value',u.Vector(speed,direction,0)); sample.set_editor_property('rate_scale',rate)
             samples.append(sample)
     blend.set_editor_property('sample_data',samples)
@@ -152,11 +152,10 @@ for skill,(hero,clip,rate,finish,hit,move) in specs.items():
     u.EditorAssetLibrary.save_loaded_asset(data)
     report.append({'skill':skill,'montage':asset.get_path_name(),'source':clip,'duration':finish/rate,'events':events})
 u.EditorAssetLibrary.save_directory(ROOT,True,True)
-# Replace the placed boss to pick up its regenerated Blueprint component defaults.
+# Keep the arena empty until the player presses R to spawn the boss.
 actors=u.get_editor_subsystem(u.EditorActorSubsystem)
 for actor in actors.get_all_level_actors():
     if actor.get_actor_label()=='Combat_Boss': actors.destroy_actor(actor)
-boss=actors.spawn_actor_from_class(u.load_asset(ROOT+'/Characters/BP_CombatBoss').generated_class(),u.Vector(600,0,110),u.Rotator(pitch=0,yaw=180,roll=0)); boss.set_actor_label('Combat_Boss')
 world=u.get_editor_subsystem(u.UnrealEditorSubsystem).get_editor_world()
 assert u.EditorLoadingAndSavingUtils.save_map(world,ROOT+'/Maps/L_CombatArena')
 out=Path(u.Paths.project_saved_dir())/'Acceptance/NativeSkillAssets.json'; out.write_text(json.dumps(report,indent=2),encoding='utf-8')

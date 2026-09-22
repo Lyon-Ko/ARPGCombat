@@ -20,10 +20,13 @@ protected:
 private:
     UPROPERTY() TObjectPtr<UAnimMontage> MontageToPlay;
     float PlayRate = 1.f;
+    float LocomotionBlendOut = .14f;
+    float InterruptBlendOut = .08f;
     bool bFinishing = false;
     FDelegateHandle EventHandle;
     FDelegateHandle CancelHandle;
     void OnGameplayEvent(FGameplayTag Tag, const FGameplayEventData* Data);
     void OnMontageEnded(UAnimMontage* Montage, bool bInterrupted);
+    void OnMontageBlendingOut(UAnimMontage* Montage, bool bInterrupted);
     void OnCancelled();
 };

@@ -18,17 +18,22 @@ class UCombatFeedbackComponent;
 class UCameraShakeBase;
 class USoundBase;
 class UAnimMontage;
+struct FCombatLocomotionSettings;
+class UCombatLocomotionConfig;
 
 UCLASS(Blueprintable)
 class COMBAT_API ACombatCharacter : public ACharacter, public IAbilitySystemInterface
 {
     GENERATED_BODY()
 public:
-    ACombatCharacter();
+    ACombatCharacter(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+    const FCombatLocomotionSettings& GetLocomotionSettings() const;
+    void DrawLocomotionDebug() const;
     virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override { return AbilitySystem; }
     virtual void Tick(float DeltaSeconds) override;
     virtual void SetupPlayerInputComponent(UInputComponent* Input) override;
     virtual void Landed(const FHitResult& Hit) override;
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Locomotion", meta=(ToolTip="Edit this Data Asset in Details for live player locomotion tuning.")) TObjectPtr<UCombatLocomotionConfig> LocomotionConfig;
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Combat") TObjectPtr<UAbilitySystemComponent> AbilitySystem;
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Combat") TObjectPtr<UCombatAttributeSet> Attributes;
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Combat") TObjectPtr<UMotionWarpingComponent> MotionWarping;
@@ -192,7 +197,8 @@ private:
     void DoAreaDamage();
     void Die();
     void CheckPoiseBreak(float Now);
-    FVector SampleMovementDirection() const;
+    FVector SampleMovementDirection(bool bForDash = false) const;
+    void ApplyLocomotionSettings();
     void ApplyAttributeDelta(const FGameplayAttribute& Attribute, float Delta);
     FCombatHit MakeHit(int32 HitInstance) const;
     void BroadcastCue(FGameplayTag Tag, ACombatCharacter* Target, FVector Location, float Intensity = 1.f);

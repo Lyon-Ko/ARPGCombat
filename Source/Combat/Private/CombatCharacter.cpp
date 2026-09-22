@@ -1,4 +1,11 @@
 #include "CombatCharacter.h"
+#include "CombatAnimInstance.h"
+#include "CombatMovementComponent.h"
+#include "CombatLocomotionSettings.h"
+#include "CombatLocomotionConfig.h"
+#include "Engine/Engine.h"
+#include "DrawDebugHelpers.h"
+#include "CombatGameMode.h"
 #include "CombatAttributeSet.h"
 #include "CombatGameplayAbility.h"
 #include "CombatTags.h"
@@ -23,7 +30,8 @@
 #include "Components/AudioComponent.h"
 
 static FGameplayTag CT(const TCHAR* Name) { return FGameplayTag::RequestGameplayTag(FName(Name)); }
-ACombatCharacter::ACombatCharacter()
+ACombatCharacter::ACombatCharacter(const FObjectInitializer& ObjectInitializer)
+    : Super(ObjectInitializer.SetDefaultSubobjectClass<UCombatMovementComponent>(ACharacter::CharacterMovementComponentName))
 {
     PrimaryActorTick.bCanEverTick = true;
     AbilitySystem = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystem"));
@@ -55,6 +63,7 @@ ACombatCharacter::ACombatCharacter()
 void ACombatCharacter::BeginPlay()
 {
     Super::BeginPlay();
+    ApplyLocomotionSettings();
     InitialTransform = GetActorTransform();
     InitialMeshTransform = GetMesh()->GetRelativeTransform();
     InitialMeshCollisionProfile = GetMesh()->GetCollisionProfileName();
@@ -72,6 +81,33 @@ void ACombatCharacter::BeginPlay()
         }
     for(auto Class : AbilitySet) if(Class) AbilitySystem->GiveAbility(FGameplayAbilitySpec(Class, 1));
     if(bIsBoss) { Camera->Deactivate(); CameraBoom->Deactivate(); }
+}
+const FCombatLocomotionSettings& ACombatCharacter::GetLocomotionSettings() const
+{
+    static const FCombatLocomotionSettings BossDefaults;
+    return bIsBoss ? BossDefaults : UCombatLocomotionSubsystem::For(this);
+}
+void ACombatCharacter::ApplyLocomotionSettings()
+{
+    if(bIsBoss) return;
+    if(LocomotionConfig)
+        if(auto* Config = GetWorld()->GetSubsystem<UCombatLocomotionSubsystem>()) Config->SetConfiguration(LocomotionConfig);
+    const auto& S = GetLocomotionSettings();
+    DefaultCameraDistance = S.CameraDistance;
+    CameraSensitivity = S.CameraSensitivity;
+    CameraHideDistance = S.CameraHideDistance;
+    CameraRevealDistance = S.CameraRevealDistance;
+    SoftLockRange = S.SoftLockRange;
+    SoftLockViewDot = S.SoftLockViewDot;
+    MaxAirHangBudget = S.MaxAirHangBudget;
+    CameraBoom->SocketOffset = FVector(S.CameraOffsetX, S.CameraOffsetY, S.CameraOffsetZ);
+    CameraBoom->bDoCollisionTest = S.CameraCollision;
+    CameraBoom->ProbeSize = S.CameraProbeSize;
+    CameraBoom->bEnableCameraLag = S.CameraLag;
+    CameraBoom->CameraLagSpeed = S.CameraLagSpeed;
+    CameraBoom->bEnableCameraRotationLag = S.CameraRotationLag;
+    CameraBoom->CameraRotationLagSpeed = S.CameraRotationLagSpeed;
+    Camera->SetFieldOfView(S.CameraFOV);
 }
 bool ACombatCharacter::IsAlive() const { return Attributes && GetHealth() > 0.f; }
 bool ACombatCharacter::IsBusy() const { return ActiveSkill != nullptr || AbilitySystem->HasMatchingGameplayTag(CombatTags::State_Stunned); }
@@ -118,13 +154,18 @@ bool ACombatCharacter::RequestSkillByTag(FGameplayTag SkillTag)
     if(ActiveSkill)
     {
         if(!bCancelable && !bComboWindow && !Definition->bCanInterrupt)
-        { BufferedSkill = SkillTag; BufferedUntil = Now + .18f; return false; }
+        { BufferedSkill = SkillTag; BufferedUntil = Now + GetLocomotionSettings().InputBufferTime; return false; }
         CancelCurrentSkill();
     }
     return AbilitySystem->TryActivateAbility(*Handle);
 }
 void ACombatCharacter::BeginSkill(UCombatSkillDefinition* Definition, UCombatGameplayAbility* Ability)
 {
+    if(auto* Anim = Cast<UCombatAnimInstance>(GetMesh()->GetAnimInstance())) Anim->StopGroundPivot();
+    if(!bIsBoss) GetCharacterMovement()->bOrientRotationToMovement = false;
+    ConsumeMovementInputVector();
+    // Ground skills own horizontal displacement; discard the run-in velocity.
+    if(GetCharacterMovement()->IsMovingOnGround() && (bIsBoss || GetLocomotionSettings().StopOnGroundSkill)) GetCharacterMovement()->StopMovementImmediately();
     ++SkillExecutionSerial;
     ActiveSkill = Definition; ActiveAbility = Ability;
     bLastSkillInterrupted = false;
@@ -154,7 +195,7 @@ void ACombatCharacter::BeginSkill(UCombatSkillDefinition* Definition, UCombatGam
     if(Name == TEXT("Combat.Skill.Dash"))
     {
         AbilitySystem->SetLooseGameplayTagCount(CT(TEXT("Combat.State.Dashing")), 1);
-        FVector Direction = SampleMovementDirection();
+        FVector Direction = SampleMovementDirection(true);
         if(Direction.IsNearlyZero()) Direction = -GetActorForwardVector();
         auto* Move = GetCharacterMovement();
         SavedDashMaxAcceleration = Move->MaxAcceleration;
@@ -162,7 +203,7 @@ void ACombatCharacter::BeginSkill(UCombatSkillDefinition* Definition, UCombatGam
         Move->MaxAcceleration = 0.f;
         Move->Velocity.X = Move->Velocity.Y = 0.f;
         ConsumeMovementInputVector();
-        StartSkillMovement(250.f, .23f, Direction);
+        StartSkillMovement(GetLocomotionSettings().DashDistance, GetLocomotionSettings().DashDuration, Direction);
         if(GetCharacterMovement()->IsFalling()) bAirDashUsed = true;
     }
     if(Name == TEXT("Combat.Skill.Parry")) SetParryWindow(true);
@@ -295,6 +336,7 @@ ECombatHitResult ACombatCharacter::ReceiveCombatHit(const FCombatHit& Hit)
     CheckPoiseBreak(Now);
     if(HitReactMontage && (!bIsBoss || !IsBusy()))
     {
+        if(auto* Anim = Cast<UCombatAnimInstance>(GetMesh()->GetAnimInstance())) Anim->StopGroundPivot();
         if(!bIsBoss) CancelCurrentSkill();
         PlayAnimMontage(HitReactMontage);
     }
@@ -416,6 +458,7 @@ void ACombatCharacter::HandleMontageEvent(FGameplayTag EventTag)
 void ACombatCharacter::BroadcastCue(FGameplayTag Tag, ACombatCharacter* Target, FVector Location, float Intensity) { OnCombatFeedback.Broadcast(this, Target, Tag, Location, Intensity); }
 void ACombatCharacter::Die()
 {
+    if(auto* Anim = Cast<UCombatAnimInstance>(GetMesh()->GetAnimInstance())) Anim->StopGroundPivot();
     SetHiddenForCloseCamera(false);
     CancelCurrentSkill(); AbilitySystem->CancelAllAbilities();
     AbilitySystem->RemoveActiveGameplayEffect(RiposteEffectHandle);
@@ -445,6 +488,7 @@ void ACombatCharacter::Die()
 }
 void ACombatCharacter::ResetCombatState()
 {
+    if(auto* Anim = Cast<UCombatAnimInstance>(GetMesh()->GetAnimInstance())) Anim->StopGroundPivot();
     SetHiddenForCloseCamera(false);
     CancelCurrentSkill(); AbilitySystem->CancelAllAbilities();
     DestroyOwnedProjectiles();
@@ -474,6 +518,7 @@ void ACombatCharacter::ResetCombatState()
 void ACombatCharacter::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
+    ApplyLocomotionSettings();
     UpdateCloseCameraVisibility();
     if(HitStopUntilReal > 0 && GetWorld()->GetRealTimeSeconds() >= HitStopUntilReal) { CustomTimeDilation = SavedTimeDilation; HitStopUntilReal = 0; }
     if(!IsAlive())
@@ -522,26 +567,85 @@ void ACombatCharacter::Tick(float DeltaSeconds)
         if(PC)
         {
             if(bTargetLocked && (!CombatTarget || !CombatTarget->IsAlive())) bTargetLocked = false;
-            GetCharacterMovement()->bOrientRotationToMovement = !bTargetLocked;
-            if(bTargetLocked && CombatTarget)
+            const FVector DesiredMovement = SampleMovementDirection();
+            // Buffered combos win above; held movement only releases permitted recovery.
+            const auto& Tuning = GetLocomotionSettings();
+            if(Tuning.AllowMovementRecovery && ActiveSkill && ActiveSkill->bAllowMovementCancel && bCancelable && !bHitWindow &&
+                GetCharacterMovement()->IsMovingOnGround() && !DesiredMovement.IsNearlyZero()) CancelCurrentSkill();
+            auto* Locomotion = Cast<UCombatAnimInstance>(GetMesh()->GetAnimInstance());
+            if(Locomotion) Locomotion->UpdateGroundLocomotion(DeltaSeconds, DesiredMovement);
+            GetCharacterMovement()->bOrientRotationToMovement = !bTargetLocked && !IsBusy() && !(Locomotion && Locomotion->IsPivoting());
+            if(bTargetLocked && CombatTarget && !IsBusy())
             {
                 FVector Facing = CombatTarget->GetActorLocation() - GetActorLocation(); Facing.Z = 0.f;
-                if(!Facing.IsNearlyZero()) SetActorRotation(FMath::RInterpTo(GetActorRotation(), Facing.Rotation(), DeltaSeconds, 12.f));
+                if(!Facing.IsNearlyZero()) SetActorRotation(FMath::RInterpTo(GetActorRotation(), Facing.Rotation(), DeltaSeconds, Tuning.LockedTurnInterpSpeed));
             }
             MoveForward((PC->IsInputKeyDown(EKeys::W) ? 1.f : 0.f) - (PC->IsInputKeyDown(EKeys::S) ? 1.f : 0.f));
             MoveRight((PC->IsInputKeyDown(EKeys::D) ? 1.f : 0.f) - (PC->IsInputKeyDown(EKeys::A) ? 1.f : 0.f));
             if(bTargetLocked && CombatTarget && CombatTarget->IsAlive())
             {
-                const FVector Midpoint = FMath::Lerp(GetActorLocation(), CombatTarget->GetActorLocation(), .4f);
-                FRotator Desired = (Midpoint - Camera->GetComponentLocation()).Rotation(); Desired.Pitch = FMath::Clamp(Desired.Pitch, -35.f, -8.f);
-                PC->SetControlRotation(FMath::RInterpTo(PC->GetControlRotation(), Desired, DeltaSeconds, 4.f));
-                CameraBoom->TargetArmLength = FMath::FInterpTo(CameraBoom->TargetArmLength, FMath::Clamp(FVector::Dist2D(GetActorLocation(), CombatTarget->GetActorLocation()) * .65f + 400.f, 550.f, 1000.f), DeltaSeconds, 3.f);
+                const FVector Midpoint = FMath::Lerp(GetActorLocation(), CombatTarget->GetActorLocation(), Tuning.CameraLockedTargetWeight);
+                FRotator Desired = (Midpoint - Camera->GetComponentLocation()).Rotation(); Desired.Pitch = FMath::Clamp(Desired.Pitch, Tuning.CameraPitchMin, Tuning.CameraPitchMax);
+                PC->SetControlRotation(FMath::RInterpTo(PC->GetControlRotation(), Desired, DeltaSeconds, Tuning.CameraLockedRotationInterp));
+                CameraBoom->TargetArmLength = FMath::FInterpTo(CameraBoom->TargetArmLength, FMath::Clamp(FVector::Dist2D(GetActorLocation(), CombatTarget->GetActorLocation()) * Tuning.CameraDistanceScale + Tuning.CameraDistanceBias, Tuning.CameraLockedMinDistance, Tuning.CameraLockedMaxDistance), DeltaSeconds, Tuning.CameraLockedDistanceInterp);
             }
-            else CameraBoom->TargetArmLength = FMath::FInterpTo(CameraBoom->TargetArmLength, DefaultCameraDistance, DeltaSeconds, 4.f);
-            if(bAttackHeld && bAir && Now - AttackPressedAt > .28f) { bAttackHeld = false; RequestSkillByTag(CT(TEXT("Combat.Skill.Plunge"))); }
+            else CameraBoom->TargetArmLength = FMath::FInterpTo(CameraBoom->TargetArmLength, DefaultCameraDistance, DeltaSeconds, Tuning.CameraFreeDistanceInterp);
+            if(bAttackHeld && bAir && Now - AttackPressedAt > Tuning.PlungeHoldTime) { bAttackHeld = false; RequestSkillByTag(CT(TEXT("Combat.Skill.Plunge"))); }
+            if(GEngine && Tuning.DebugOverlay)
+            {
+                const auto* Config = GetWorld()->GetSubsystem<UCombatLocomotionSubsystem>();
+                const TCHAR* Phase = Locomotion && Locomotion->IsPivoting() ? (Locomotion->IsPivotAccelerating() ? TEXT("Reverse") : TEXT("Brake")) : TEXT("Move");
+                const float Brake = Locomotion && Locomotion->IsPivoting() && !Locomotion->IsPivotAccelerating() ? Tuning.PivotBrakingDeceleration : 0.f;
+                GEngine->AddOnScreenDebugMessage(72103, .3f, FColor::Cyan, FString::Printf(TEXT("Locomotion r%d | Speed %.0f | InputA %.0f | BrakeA %.0f | %s | Pivot %.2f"),
+                    Config ? Config->GetRevision() : 0, GetVelocity().Size2D(), GetCharacterMovement()->GetCurrentAcceleration().Size2D(), Brake, Phase, Locomotion ? Locomotion->PivotProgress : 0.f));
+            }
+            else if(GEngine) GEngine->RemoveOnScreenDebugMessage(72103);
         }
     }
 }
+void ACombatCharacter::DrawLocomotionDebug() const
+{
+#if ENABLE_DRAW_DEBUG
+    if(bIsBoss || !IsPlayerControlled() || !IsLocallyControlled() || !IsAlive()) return;
+    const auto& S = GetLocomotionSettings();
+    if(!S.DebugMovementVectors) return;
+
+    FVector LogicalDirection = FVector::ZeroVector;
+    FColor LogicalColor = FColor::Green;
+    if(MovementRemaining > 0.f)
+    {
+        LogicalDirection = MovementDirection;
+        LogicalColor = FColor::Orange;
+    }
+    else if(!IsBusy())
+    {
+        if(const auto* Anim = Cast<UCombatAnimInstance>(GetMesh()->GetAnimInstance()); Anim && Anim->IsPivoting())
+        {
+            // The desired reversal remains visible while velocity still points
+            // in the incoming direction during braking. This is intent, not yaw.
+            LogicalDirection = Anim->GetPivotDirection();
+            LogicalColor = Anim->IsPivotAccelerating() ? FColor::Magenta : FColor::Yellow;
+        }
+        else LogicalDirection = GetLastMovementInputVector();
+    }
+    const FVector Start = GetActorLocation() + FVector(0, 0, S.DebugMovementVectorHeight - GetCapsuleComponent()->GetScaledCapsuleHalfHeight());
+    const FVector Direction = LogicalDirection.GetSafeNormal2D();
+    // Single-frame, foreground lines: no history trails or global debug flush.
+    if(!Direction.IsNearlyZero())
+        DrawDebugDirectionalArrow(GetWorld(), Start, Start + Direction * S.DebugMovementVectorLength,
+            20.f, LogicalColor, false, 0.f, SDPG_Foreground, 3.f);
+    const FVector Velocity = GetVelocity();
+    const float SpeedRatio = FMath::Clamp(Velocity.Size2D() / FMath::Max(1.f, GetCharacterMovement()->GetMaxSpeed()), 0.f, 1.f);
+    if(!Velocity.IsNearlyZero() && SpeedRatio > UE_KINDA_SMALL_NUMBER)
+    {
+        const FVector VelocityStart = Start + FVector(0, 0, 8.f);
+        const float VelocityLength = S.DebugMovementVectorLength * SpeedRatio;
+        DrawDebugDirectionalArrow(GetWorld(), VelocityStart, VelocityStart + Velocity.GetSafeNormal2D() * VelocityLength,
+            FMath::Min(16.f, VelocityLength * .3f), FColor::Blue, false, 0.f, SDPG_Foreground, 2.f);
+    }
+#endif
+}
+
 void ACombatCharacter::SetHiddenForCloseCamera(bool bHide)
 {
     if(bHiddenForCloseCamera == bHide) return;
@@ -593,13 +697,13 @@ void ACombatCharacter::SetupPlayerInputComponent(UInputComponent* Input)
 }
 void ACombatCharacter::MoveForward(float Value)
 {
-    if(!Controller || IsBusy() || Value == 0.f) return;
+    if(!Controller || IsBusy() || FMath::Abs(Value) <= GetLocomotionSettings().InputDeadZone) return;
     const FRotator Rotation(0, bTargetLocked && CombatTarget ? (CombatTarget->GetActorLocation() - GetActorLocation()).Rotation().Yaw : Controller->GetControlRotation().Yaw, 0);
     AddMovementInput(Rotation.Vector(), Value);
 }
 void ACombatCharacter::MoveRight(float Value)
 {
-    if(!Controller || IsBusy() || Value == 0.f) return;
+    if(!Controller || IsBusy() || FMath::Abs(Value) <= GetLocomotionSettings().InputDeadZone) return;
     const FRotator Rotation(0, bTargetLocked && CombatTarget ? (CombatTarget->GetActorLocation() - GetActorLocation()).Rotation().Yaw : Controller->GetControlRotation().Yaw, 0);
     AddMovementInput(FRotationMatrix(Rotation).GetUnitAxis(EAxis::Y), Value);
 }
@@ -644,13 +748,18 @@ void ACombatCharacter::EndDashHorizontalOverride()
 }
 void ACombatCharacter::RetryEncounter()
 {
-    if(IsAlive() && (!CombatTarget || CombatTarget->IsAlive())) return;
+    if(IsAlive() && (!CombatTarget || CombatTarget->IsAlive()))
+    {
+        if(!UGameplayStatics::IsGamePaused(this))
+            if(auto* GameMode = Cast<ACombatGameMode>(UGameplayStatics::GetGameMode(this))) GameMode->SpawnBoss();
+        return;
+    }
     UGameplayStatics::SetGamePaused(GetWorld(), false);
     for(TActorIterator<ACombatCharacter> It(GetWorld()); It; ++It) It->ResetCombatState();
 }
 
 
-FVector ACombatCharacter::SampleMovementDirection() const
+FVector ACombatCharacter::SampleMovementDirection(bool bForDash) const
 {
     const auto* PC = Cast<APlayerController>(Controller);
     if(!PC) return GetLastMovementInputVector();
@@ -659,7 +768,9 @@ FVector ACombatCharacter::SampleMovementDirection() const
     if(FMath::IsNearlyZero(Forward) && FMath::IsNearlyZero(Right)) return FVector::ZeroVector;
     float BaseYaw = PC->GetControlRotation().Yaw;
     if(bTargetLocked && CombatTarget) BaseYaw = (CombatTarget->GetActorLocation() - GetActorLocation()).Rotation().Yaw;
-    const float InputYaw = FMath::RoundToFloat(FMath::RadiansToDegrees(FMath::Atan2(Right, Forward)) / 45.f) * 45.f;
+    const float Step = GetLocomotionSettings().DashDirectionStep;
+    const float RawYaw = FMath::RadiansToDegrees(FMath::Atan2(Right, Forward));
+    const float InputYaw = bForDash ? FMath::RoundToFloat(RawYaw / Step) * Step : RawYaw;
     return FRotator(0, BaseYaw + InputYaw, 0).Vector();
 }
 

@@ -6,11 +6,21 @@ param(
     [ValidateSet('start','stop','status')][string]$Action = 'status',
     [string]$Code,
     [string]$File,
-    [string]$Engine = 'D:\UE5.8\UE_5.8'
+    [string]$Engine = $env:COMBAT_ENGINE
 )
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path $PSScriptRoot -Parent
 $projectFile = Join-Path $projectRoot 'Combat.uproject'
+if (!$Engine) {
+    $engineVersion = (Get-Content -LiteralPath $projectFile -Raw | ConvertFrom-Json).EngineAssociation
+    $launcherManifest = Join-Path $env:ProgramData 'Epic\UnrealEngineLauncher\LauncherInstalled.dat'
+    if (Test-Path -LiteralPath $launcherManifest) {
+        $installation = (Get-Content -LiteralPath $launcherManifest -Raw | ConvertFrom-Json).InstallationList |
+            Where-Object { $_.AppName -eq "UE_$engineVersion" } | Select-Object -First 1
+        if ($installation) { $Engine = $installation.InstallLocation }
+    }
+    if (!$Engine) { throw "Cannot locate UE $engineVersion. Pass -Engine or set COMBAT_ENGINE to the engine installation directory." }
+}
 $env:COMBAT_ENGINE = $Engine
 $python = Join-Path $Engine 'Engine\Binaries\ThirdParty\Python3\Win64\python.exe'
 $cli = Join-Path $PSScriptRoot 'combat_remote.py'

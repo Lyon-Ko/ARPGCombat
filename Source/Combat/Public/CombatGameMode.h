@@ -12,6 +12,8 @@ class COMBAT_API ACombatGameMode : public AGameModeBase
     GENERATED_BODY()
 public:
     ACombatGameMode();
+    void SpawnBoss();
+    virtual void StartPlay() override;
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Combat") TSubclassOf<UCombatHUDWidget> HUDWidgetClass;
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Combat") TSubclassOf<ACombatCharacter> BossClass;
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Combat") FTransform BossSpawnTransform = FTransform(FRotator(0,180,0), FVector(900,0,100));

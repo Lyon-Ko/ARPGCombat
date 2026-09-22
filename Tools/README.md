@@ -1,6 +1,6 @@
 # Combat editor automation
 
-Engine: `D:\UE5.8\UE_5.8` (5.8.2). Override with `-Engine` on the PowerShell entry point or `COMBAT_ENGINE` for direct Python.
+Engine: UE 5.8.2. The PowerShell entry point resolves the project's engine version from Epic Launcher installation records; override with `-Engine` or `COMBAT_ENGINE`. Set `COMBAT_ENGINE` when invoking Python directly.
 
 ```powershell
 & .\Tools\Combat.ps1 doctor

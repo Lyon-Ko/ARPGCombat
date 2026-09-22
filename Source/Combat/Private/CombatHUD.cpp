@@ -70,6 +70,9 @@ void UCombatHUDWidget::NativeConstruct()
         SettingsBackdrop->SetVisibility(ESlateVisibility::Collapsed);
     }
     BindCharacters();
+    if(BossHealthBar) BossHealthBar->SetVisibility(Boss ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
+    if(BossPoiseBar) BossPoiseBar->SetVisibility(Boss ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
+    if(PhaseText) PhaseText->SetVisibility(Boss ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
 }
 void UCombatHUDWidget::BindCharacters()
 {
@@ -86,6 +89,9 @@ void UCombatHUDWidget::NativeTick(const FGeometry& Geometry, float DeltaSeconds)
 {
     Super::NativeTick(Geometry, DeltaSeconds);
     if(!Player || !Boss) BindCharacters();
+    if(BossHealthBar) BossHealthBar->SetVisibility(Boss ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
+    if(BossPoiseBar) BossPoiseBar->SetVisibility(Boss ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
+    if(PhaseText) PhaseText->SetVisibility(Boss ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
     if(!Player) return;
     if(LockText) LockText->SetText(FText::FromString(Player->IsTargetLocked() ? TEXT("Q · 已锁定目标") : TEXT("Q · 自由镜头")));
     if(HealthBar) HealthBar->SetPercent(Player->GetHealth() / FMath::Max(1.f, Player->GetMaxHealth()));
@@ -106,6 +112,7 @@ void UCombatHUDWidget::NativeTick(const FGeometry& Geometry, float DeltaSeconds)
     CueRemaining = FMath::Max(0.f, CueRemaining - DeltaSeconds);
     const bool bResult = !Player->IsAlive() || (Boss && !Boss->IsAlive());
     if(ResultText) ResultText->SetText(bResult ? FText::FromString(Player->IsAlive() ? TEXT("战斗胜利\nR 再战") : TEXT("战斗失败\nR 再战")) : (bRiposte ? FText::FromString(TEXT("反击！")) : (CueRemaining > 0 ? CenterCue : FText::GetEmpty())));
+    if(ResultText && !Boss && !bResult) ResultText->SetText(FText::FromString(TEXT("R · 召唤 Boss")));
     const bool bPaused = UGameplayStatics::IsGamePaused(this);
     if(PauseText) PauseText->SetText(bPaused ? FText::FromString(TEXT("已暂停")) : FText::GetEmpty());
     if(SettingsBackdrop) SettingsBackdrop->SetVisibility(bPaused ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);

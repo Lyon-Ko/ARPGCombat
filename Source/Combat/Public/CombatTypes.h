@@ -39,6 +39,10 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadOnly) int32 Priority = 0;
     UPROPERTY(EditAnywhere, BlueprintReadOnly) TSubclassOf<UGameplayAbility> AbilityClass;
     UPROPERTY(EditAnywhere, BlueprintReadOnly) TObjectPtr<UAnimMontage> Montage;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Animation", meta=(ClampMin="0")) float LocomotionBlendOut = .14f;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Animation", meta=(ClampMin="0")) float InterruptBlendOut = .08f;
+    // Movement may cancel recovery only after the existing Cancelable notify.
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Animation") bool bAllowMovementCancel = false;
     UPROPERTY(EditAnywhere, BlueprintReadOnly) float Damage = 15.f;
     UPROPERTY(EditAnywhere, BlueprintReadOnly) float PoiseDamage = 15.f;
     UPROPERTY(EditAnywhere, BlueprintReadOnly) float Cooldown = .1f;
