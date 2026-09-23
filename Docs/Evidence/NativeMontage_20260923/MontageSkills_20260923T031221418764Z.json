@@ -1,0 +1,174 @@
+{
+  "status": "failed",
+  "scope": "Native Montage notifications and named graph windows in actual PIE; transient fixtures",
+  "assertions": [
+    {
+      "name": "30.native.single_source",
+      "passed": true,
+      "damage": 20.0
+    },
+    {
+      "name": "30.native.normal_end",
+      "passed": true
+    },
+    {
+      "name": "30.native.named_window_derivation",
+      "passed": true
+    },
+    {
+      "name": "30.native.old_window_closed",
+      "passed": true
+    },
+    {
+      "name": "30.native.buffer_expired",
+      "passed": true
+    },
+    {
+      "name": "30.native.state_open",
+      "passed": true
+    },
+    {
+      "name": "30.native.cancel_closes_state",
+      "passed": true
+    },
+    {
+      "name": "30.native.restart_ignores_outgoing_end",
+      "passed": true
+    },
+    {
+      "name": "30.native.restart_new_window",
+      "passed": true
+    },
+    {
+      "name": "30.native.state_closes_naturally",
+      "passed": true
+    },
+    {
+      "name": "30.native.shared_montage_both_open",
+      "passed": true
+    },
+    {
+      "name": "30.native.shared_montage_isolated",
+      "passed": true
+    },
+    {
+      "name": "30.native.buff_applied",
+      "passed": true
+    },
+    {
+      "name": "30.native.cancel_window_allows_switch",
+      "passed": true
+    },
+    {
+      "name": "30.native.buff_scope_cleanup",
+      "passed": true
+    },
+    {
+      "name": "30.native.burst_first",
+      "passed": true
+    },
+    {
+      "name": "30.native.burst_cancel_cleanup",
+      "passed": true
+    },
+    {
+      "name": "60.native.single_source",
+      "passed": true,
+      "damage": 20.0
+    },
+    {
+      "name": "60.native.normal_end",
+      "passed": true
+    },
+    {
+      "name": "60.native.named_window_derivation",
+      "passed": true
+    },
+    {
+      "name": "60.native.old_window_closed",
+      "passed": true
+    },
+    {
+      "name": "60.native.buffer_expired",
+      "passed": true
+    },
+    {
+      "name": "60.native.state_open",
+      "passed": true
+    },
+    {
+      "name": "60.native.cancel_closes_state",
+      "passed": true
+    },
+    {
+      "name": "60.native.restart_ignores_outgoing_end",
+      "passed": true
+    },
+    {
+      "name": "60.native.restart_new_window",
+      "passed": true
+    },
+    {
+      "name": "60.native.state_closes_naturally",
+      "passed": true
+    },
+    {
+      "name": "60.native.shared_montage_both_open",
+      "passed": true
+    },
+    {
+      "name": "60.native.shared_montage_isolated",
+      "passed": true
+    },
+    {
+      "name": "60.native.buff_applied",
+      "passed": true
+    },
+    {
+      "name": "60.native.cancel_window_allows_switch",
+      "passed": true
+    },
+    {
+      "name": "60.native.buff_scope_cleanup",
+      "passed": true
+    },
+    {
+      "name": "60.native.burst_first",
+      "passed": true
+    },
+    {
+      "name": "60.native.burst_cancel_cleanup",
+      "passed": true
+    },
+    {
+      "name": "native.payload_time_ignored",
+      "passed": true
+    },
+    {
+      "name": "native.end_frame_event",
+      "passed": false
+    },
+    {
+      "name": "native.seek_does_not_replay_skipped_action",
+      "passed": true
+    },
+    {
+      "name": "native.seek_does_not_open_skipped_window",
+      "passed": true
+    },
+    {
+      "name": "native.pause_retains_state",
+      "passed": false
+    },
+    {
+      "name": "native.pause_stops_pending_bursts",
+      "passed": true
+    },
+    {
+      "name": "native.resume_continues_bursts",
+      "passed": true
+    }
+  ],
+  "performance": [],
+  "binary_sha256": "e5d3b73b0c55f52f9a165b928b68e47df59bd6490597b03e0db799b49c5f21e9"
+}

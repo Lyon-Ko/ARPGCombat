@@ -1,0 +1,74 @@
+{
+  "status": "passed",
+  "checks": [
+    {
+      "name": "no_pie_before_check",
+      "passed": true
+    },
+    {
+      "name": "saved_set_loaded",
+      "passed": true
+    },
+    {
+      "name": "six_saved_skills",
+      "passed": true
+    },
+    {
+      "name": "all_data_driven",
+      "passed": true
+    },
+    {
+      "name": "valid_reloaded_assets",
+      "passed": true
+    },
+    {
+      "name": "saved_missile_event_type",
+      "passed": true
+    },
+    {
+      "name": "saved_guidance_mode",
+      "passed": true
+    },
+    {
+      "name": "equipped_example_blueprint",
+      "passed": true
+    },
+    {
+      "name": "original_blueprint_unmodified",
+      "passed": true
+    },
+    {
+      "name": "legacy_execution_mode",
+      "passed": true
+    },
+    {
+      "name": "legacy_next_preserved",
+      "passed": true
+    },
+    {
+      "name": "toolkit_open_close.DA_ExampleSkillSet",
+      "passed": true,
+      "closed_count": 1
+    },
+    {
+      "name": "toolkit_open_close.Projectile_Missile",
+      "passed": true,
+      "closed_count": 1
+    },
+    {
+      "name": "toolkit_open_close.Buff_Burn",
+      "passed": true,
+      "closed_count": 1
+    },
+    {
+      "name": "toolkit_open_close.Skill_1",
+      "passed": true,
+      "closed_count": 1
+    }
+  ],
+  "scope": "Saved asset reload and toolkit open/close in a fresh editor; not visual screenshot approval",
+  "binaries": {
+    "UnrealEditor-Combat.dll": "e80104dae4a6d9219d98f7ea4785d192a13950e5a5a9f5e20ae4a92e591dd33a",
+    "UnrealEditor-CombatEditor.dll": "199032e14dc62ce51bdcaa957df7441ec6054bb0c870ef8c4d8169c5b4895c62"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "status": "passed",
+  "stages": [
+    {
+      "name": "default_chain_only.py",
+      "status": "passed",
+      "report": "F:\\ARPGCombat\\Saved\\Acceptance\\default_chain_only_20260923T032049451166Z.json",
+      "assertions": 29
+    },
+    {
+      "name": "combined_sources.py",
+      "status": "passed",
+      "report": "F:\\ARPGCombat\\Saved\\Acceptance\\CombinedSources_20260923T032059734563Z.json",
+      "assertions": 17
+    }
+  ],
+  "scope": "Native Montage integration: default chain and combined-source targeted regression; no full bouts in this run"
+}

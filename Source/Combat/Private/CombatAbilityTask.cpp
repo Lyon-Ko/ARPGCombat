@@ -4,6 +4,7 @@
 #include "CombatTags.h"
 #include "CombatCharacter.h"
 #include "CombatGameplayAbility.h"
+#include "CombatSkillRuntime.h"
 #include "CombatLocomotionSettings.h"
 #include "Animation/AnimMontage.h"
 UCombatAbilityTask_PlayMontageAndEvents* UCombatAbilityTask_PlayMontageAndEvents::PlayMontageAndEvents(UGameplayAbility* OwningAbility, UAnimMontage* Montage, float Rate)
@@ -27,6 +28,8 @@ void UCombatAbilityTask_PlayMontageAndEvents::Activate()
     EventHandle = ASC->AddGameplayEventTagContainerDelegate(FGameplayTagContainer(CombatTags::Event_Root), FGameplayEventTagMulticastDelegate::FDelegate::CreateUObject(this, &ThisClass::OnGameplayEvent));
     CancelHandle = Ability->OnGameplayAbilityCancelled.AddUObject(this, &ThisClass::OnCancelled);
     if(ASC->PlayMontage(Ability, Ability->GetCurrentActivationInfo(), MontageToPlay, PlayRate) <= 0.f) { OnCancelled(); return; }
+    if(auto* C=Cast<ACombatCharacter>(Ability->GetAvatarActorFromActorInfo()))
+        if(auto* Instance=Anim->GetActiveInstanceForMontage(MontageToPlay)) C->SkillRuntime->BindMontageInstance(Instance->GetInstanceID());
     FOnMontageEnded EndDelegate;
     EndDelegate.BindUObject(this, &ThisClass::OnMontageEnded);
     Anim->Montage_SetEndDelegate(EndDelegate, MontageToPlay);

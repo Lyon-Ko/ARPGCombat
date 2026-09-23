@@ -1,0 +1,21 @@
+{
+  "recorded_utc": "2026-09-22T16:54:23.006918+00:00",
+  "builds": {
+    "CombatEditor Win64 Development": "tool execution exit 0",
+    "Combat Win64 Development": "tool execution exit 0"
+  },
+  "binaries": {
+    "UnrealEditor-Combat.dll": {
+      "sha256": "e80104dae4a6d9219d98f7ea4785d192a13950e5a5a9f5e20ae4a92e591dd33a",
+      "bytes": 1006592
+    },
+    "UnrealEditor-CombatEditor.dll": {
+      "sha256": "199032e14dc62ce51bdcaa957df7441ec6054bb0c870ef8c4d8169c5b4895c62",
+      "bytes": 730112
+    },
+    "Combat.exe": {
+      "sha256": "f7a14822a8f69e3eacdcd6b78ad9c3c3c23fb1129e95e70e015fec352f7be0a4",
+      "bytes": 335599104
+    }
+  }
+}

@@ -4,6 +4,56 @@
 #include "Animation/BlendSpace.h"
 #include "CombatLocomotionSettings.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Animation/AnimClassInterface.h"
+#include "AnimNodes/AnimNode_BlendSpacePlayer.h"
+
+FAnimNode_BlendSpacePlayer* UCombatAnimInstance::FindGroundPlayer()
+{
+    if(const auto* Class = IAnimClassInterface::GetFromClass(GetClass()))
+        for(const FStructProperty* Property : Class->GetAnimNodeProperties())
+            if(Property->Struct->IsChildOf(FAnimNode_BlendSpacePlayer::StaticStruct()))
+            {
+                auto* Node = Property->ContainerPtrToValuePtr<FAnimNode_BlendSpacePlayer>(this);
+                if(Node->GetBlendSpace() == GroundBlendSpace) return Node;
+            }
+    return nullptr;
+}
+
+void UCombatAnimInstance::NativePostEvaluateAnimation()
+{
+    Super::NativePostEvaluateAnimation();
+    if(const auto* Node = FindGroundPlayer()) GroundAnimationPhase = Node->GetAccumulatedTime();
+}
+
+void UCombatAnimInstance::AlignHiddenGroundPhase(float DeltaSeconds)
+{
+    if(!IsAuthoredFreePivot() || ActivePivot->SlotAnimTracks.IsEmpty()) return;
+    auto* Instance = GetPivotDebugInstance();
+    const auto* Character = Cast<ACombatCharacter>(TryGetPawnOwner());
+    if(!Instance || !Character) return;
+    const auto* Segment = ActivePivot->SlotAnimTracks[0].AnimTrack.GetSegmentAtTime(Instance->GetPosition());
+    float Time = 0.f;
+    const auto* Sequence = Segment ? Segment->GetAnimationData(Instance->GetPosition(), Time) : nullptr;
+    if(!Sequence || !Sequence->HasCurveData(TEXT("PivotUpperPhase"))) return;
+    PivotExpectedRunPhase = FMath::Frac(Sequence->EvaluateCurveData(TEXT("PivotUpperPhase"), FAnimExtractContext(Time)));
+    // Only seek while the full-body montage completely hides the base pose.
+    // Once fading starts, the base player continues normally from that phase.
+    if(Instance->GetWeight() < .999f || !bPivotAccelerating ||
+        Character->GetVelocity().Size2D() < Character->GetLocomotionSettings().AnimationJogSpeed ||
+        FMath::Abs(FMath::FindDeltaAngleDegrees(Character->GetActorRotation().Yaw, PivotDesiredDirection.Rotation().Yaw)) > 5.f) return;
+    if(auto* Node = FindGroundPlayer())
+    {
+        const float Length = Node->GetCurrentAssetLength();
+        if(Length > UE_SMALL_NUMBER)
+        {
+            // NativeUpdate follows montage advancement but precedes asset-player
+            // ticking. Subtract the upcoming BS step to sample the same instant.
+            const float BeforeTick = PivotExpectedRunPhase - DeltaSeconds * AnimationPlayRate / Length;
+            Node->SetAccumulatedTime(FMath::Frac(BeforeTick + 1.f));
+            bPivotPhaseAligned = true;
+        }
+    }
+}
 void UCombatAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
     Super::NativeUpdateAnimation(DeltaSeconds);
@@ -34,6 +84,7 @@ void UCombatAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
         AnimationPlayRate = Character->bIsBoss ? 1.f : S.AnimationPlayRate;
         bInAir = Character->GetCharacterMovement()->IsFalling();
         bIsBoss = Character->bIsBoss;
+        if(!Character->bIsBoss) AlignHiddenGroundPhase(DeltaSeconds);
     }
 }
 
@@ -52,6 +103,7 @@ void UCombatAnimInstance::StopGroundPivot()
     PivotElapsed = 0.f;
     bPivotAccelerating = false;
     bAuthoredFreePivot = false;
+    bPivotPhaseAligned = false;
     const auto& S = UCombatLocomotionSubsystem::For(this);
     if(PreviousPivot) Montage_Stop(S.PivotInterruptBlendOut, PreviousPivot);
     PivotCooldownRemaining = S.PivotCooldown;
@@ -153,6 +205,7 @@ void UCombatAnimInstance::UpdateGroundLocomotion(float DeltaSeconds, const FVect
     if(Montage_Play(Montage, S.PivotPlayRate) > 0.f)
     {
         ActivePivot = Montage;
+        bPivotPhaseAligned = false;
         bAuthoredFreePivot = bUseFreePivot;
         PivotStartYaw = Character->GetActorRotation().Yaw;
         PivotTurnAngle = TurnAngle;

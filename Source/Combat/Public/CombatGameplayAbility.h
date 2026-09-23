@@ -4,11 +4,15 @@
 #include "CombatGameplayAbility.generated.h"
 class ACombatCharacter;
 class UCombatSkillDefinition;
+class UCombatAbilityTask_PlayMontageAndEvents;
 UCLASS(Blueprintable)
 class COMBAT_API UCombatGameplayAbility : public UGameplayAbility
 {
     GENERATED_BODY()
 public:
+    UPROPERTY() TObjectPtr<UCombatAbilityTask_PlayMontageAndEvents> DataMontageTask;
+    UFUNCTION() void DataCompleted(FGameplayTag Tag, FGameplayEventData Data);
+    UFUNCTION() void DataInterrupted(FGameplayTag Tag, FGameplayEventData Data);
     UCombatGameplayAbility();
     UFUNCTION(BlueprintPure) ACombatCharacter* GetCombatCharacter() const;
     UFUNCTION(BlueprintPure) UCombatSkillDefinition* GetSkillDefinition() const;

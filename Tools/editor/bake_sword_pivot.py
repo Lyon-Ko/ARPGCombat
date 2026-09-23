@@ -87,6 +87,10 @@ def bake(source_path, output_path, start=0., end=None, upper_phase=0.):
             for destination, value in zip(tracks[bone], values):
                 destination.append(value)
     assert abs(yaws[-1]) > 120, 'Source is not a root-authored reversal turn'
+    # Cropping may begin after a tiny authored turn; preserve a complete 180-degree
+    # output curve while keeping its timing. Runtime scales it to the desired turn.
+    target_yaw = math.copysign(180., yaws[-1])
+    yaws = [value * target_yaw / yaws[-1] for value in yaws]
     factory = u.AnimSequenceFactory()
     factory.target_skeleton = skeleton
     factory.preview_skeletal_mesh = u.load_asset('/Game/Combat/Characters/SK_CombatKwang')

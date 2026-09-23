@@ -1,0 +1,318 @@
+{
+  "status": "failed",
+  "scope": "isolated real PIE runtime; transient definitions; no saved asset edits",
+  "assertions": [
+    {
+      "name": "30.projectile.activate",
+      "passed": true
+    },
+    {
+      "name": "30.projectile.damage_once",
+      "passed": true,
+      "damage": 20.0
+    },
+    {
+      "name": "30.skill.normal_end",
+      "passed": true
+    },
+    {
+      "name": "30.derive.buffered_input",
+      "passed": true
+    },
+    {
+      "name": "30.derive.completed",
+      "passed": true
+    },
+    {
+      "name": "30.buff.stacking",
+      "passed": true
+    },
+    {
+      "name": "30.buff.persistent_on_cancel",
+      "passed": true
+    },
+    {
+      "name": "30.buff.expired",
+      "passed": true
+    },
+    {
+      "name": "30.buff.scoped_cleanup",
+      "passed": true
+    },
+    {
+      "name": "30.buff.periodic_damage",
+      "passed": true,
+      "damage": 15.0
+    },
+    {
+      "name": "30.interrupt.armor_blocks_hit",
+      "passed": true
+    },
+    {
+      "name": "30.interrupt.poise_break",
+      "passed": true
+    },
+    {
+      "name": "30.missile.guided_damage",
+      "passed": true,
+      "damage": 17.06396484375
+    },
+    {
+      "name": "30.missile.destroy_after_impact",
+      "passed": true
+    },
+    {
+      "name": "30.burst.first_spawn",
+      "passed": true
+    },
+    {
+      "name": "30.burst.cancel_cleanup",
+      "passed": true
+    },
+    {
+      "name": "30.projectile.survives_normal_end",
+      "passed": true
+    },
+    {
+      "name": "30.projectile.reset_cleanup",
+      "passed": true
+    },
+    {
+      "name": "60.projectile.activate",
+      "passed": true
+    },
+    {
+      "name": "60.projectile.damage_once",
+      "passed": true,
+      "damage": 20.0
+    },
+    {
+      "name": "60.skill.normal_end",
+      "passed": true
+    },
+    {
+      "name": "60.derive.buffered_input",
+      "passed": true
+    },
+    {
+      "name": "60.derive.completed",
+      "passed": true
+    },
+    {
+      "name": "60.buff.stacking",
+      "passed": true
+    },
+    {
+      "name": "60.buff.persistent_on_cancel",
+      "passed": true
+    },
+    {
+      "name": "60.buff.expired",
+      "passed": true
+    },
+    {
+      "name": "60.buff.scoped_cleanup",
+      "passed": true
+    },
+    {
+      "name": "60.buff.periodic_damage",
+      "passed": true,
+      "damage": 15.0
+    },
+    {
+      "name": "60.interrupt.armor_blocks_hit",
+      "passed": true
+    },
+    {
+      "name": "60.interrupt.poise_break",
+      "passed": true
+    },
+    {
+      "name": "60.missile.guided_damage",
+      "passed": true,
+      "damage": 17.06396484375
+    },
+    {
+      "name": "60.missile.destroy_after_impact",
+      "passed": true
+    },
+    {
+      "name": "60.burst.first_spawn",
+      "passed": true
+    },
+    {
+      "name": "60.burst.cancel_cleanup",
+      "passed": true
+    },
+    {
+      "name": "60.projectile.survives_normal_end",
+      "passed": true
+    },
+    {
+      "name": "60.projectile.reset_cleanup",
+      "passed": true
+    },
+    {
+      "name": "collision.high_speed_thin_wall",
+      "passed": true
+    },
+    {
+      "name": "collision.initial_overlap",
+      "passed": true
+    },
+    {
+      "name": "collision.bounce_damage",
+      "passed": true,
+      "damage": 20.0
+    },
+    {
+      "name": "collision.pierce_two_targets",
+      "passed": true,
+      "damage1": 20.0,
+      "damage2": 20.0
+    },
+    {
+      "name": "explosion.no_direct_double_damage",
+      "passed": true,
+      "damage": 20.0
+    },
+    {
+      "name": "explosion.explicit_stack",
+      "passed": true,
+      "damage": 40.0
+    },
+    {
+      "name": "projectile.lifetime_expiry",
+      "passed": true
+    },
+    {
+      "name": "projectile.distance_expiry",
+      "passed": true
+    },
+    {
+      "name": "projectile.keep_on_cancel",
+      "passed": true
+    },
+    {
+      "name": "projectile.reset_overrides_keep",
+      "passed": true
+    },
+    {
+      "name": "buff.actual_damage_multiplier",
+      "passed": true,
+      "damage": 45.0
+    },
+    {
+      "name": "buff.multiplier_removed",
+      "passed": true,
+      "damage": 20.0
+    },
+    {
+      "name": "interrupt.priority_rejected",
+      "passed": true
+    },
+    {
+      "name": "interrupt.priority_accepted",
+      "passed": true
+    },
+    {
+      "name": "interrupt.exclusion",
+      "passed": true
+    },
+    {
+      "name": "interrupt.reason_denied",
+      "passed": true
+    },
+    {
+      "name": "interrupt.death_forces_cleanup",
+      "passed": true
+    },
+    {
+      "name": "derive.expired_buffer",
+      "passed": false
+    },
+    {
+      "name": "derive.old_projectile_isolation",
+      "passed": true
+    },
+    {
+      "name": "validation.missing_projectile",
+      "passed": true
+    },
+    {
+      "name": "stress.spawn_128",
+      "passed": true,
+      "observed": 128
+    }
+  ],
+  "performance": [
+    {
+      "spawned": 128,
+      "frames_ms": [
+        16.666699200868607,
+        16.666702926158905,
+        16.666699200868607,
+        16.666699200868607,
+        16.666699200868607,
+        16.666702926158905,
+        16.666699200868607,
+        22.25099876523018,
+        18.437601625919342,
+        16.666699200868607,
+        16.666699200868607,
+        16.81319996714592,
+        16.666699200868607,
+        16.666699200868607,
+        16.666702926158905,
+        16.666699200868607,
+        16.666699200868607,
+        16.666699200868607,
+        16.666702926158905,
+        16.6717991232872,
+        16.666699200868607,
+        16.666699200868607,
+        16.666699200868607,
+        16.666702926158905,
+        16.666699200868607,
+        16.666699200868607,
+        16.666699200868607,
+        16.666702926158905,
+        16.666699200868607,
+        16.666699200868607,
+        16.666699200868607,
+        16.666699200868607,
+        16.666702926158905,
+        16.666699200868607,
+        16.666699200868607,
+        16.666699200868607,
+        16.666699200868607,
+        16.666702926158905,
+        16.666699200868607,
+        16.666699200868607,
+        16.666699200868607,
+        16.666699200868607,
+        16.666702926158905,
+        16.666699200868607,
+        16.666699200868607,
+        16.666699200868607,
+        16.666702926158905,
+        16.666699200868607,
+        16.666699200868607,
+        16.666699200868607,
+        16.70220121741295,
+        16.666699200868607,
+        16.666699200868607,
+        16.666702926158905,
+        16.666699200868607,
+        16.666699200868607,
+        16.666699200868607,
+        16.666699200868607,
+        16.666702926158905,
+        16.666699200868607
+      ],
+      "mean_ms": 16.792405024170876,
+      "max_ms": 22.25099876523018
+    }
+  ],
+  "binary_sha256": "79fd79168dc7394139f223a538fe024657c10706bd95d85aab1d4ab077eafc79"
+}

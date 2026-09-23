@@ -19,12 +19,13 @@ light = editor.spawn_actor_from_class(u.DirectionalLight, u.Vector(0, 0, 10500),
                                       u.Rotator(pitch=-55, yaw=135), transient=True)
 actors.append(light)
 light.light_component.set_intensity(5.)
-times = (.05, .4, .7, 1., 1.4)
+times = globals().get('review_times', (.05, .4, .7, 1., 1.4))
 for row, direction in enumerate(('Left', 'Right')):
     sequence = u.load_asset('/Game/Combat/Animations/Native/Kwang/A_FreePivot_' + direction)
     curve_times, curve_yaws = u.AnimationLibrary.get_float_keys(sequence, 'PivotYaw')
     for column, time in enumerate(times):
-        yaw = curve_yaws[round(time * 60)]
+        time = min(time, sequence.get_play_length())
+        yaw = curve_yaws[min(round(time * 60), len(curve_yaws) - 1)]
         actor = editor.spawn_actor_from_class(u.SkeletalMeshActor,
             u.Vector(row * -360, (column - 2) * 250, 10000),
             u.Rotator(yaw=yaw - 90), transient=True)
@@ -39,5 +40,5 @@ actors.append(camera)
 camera.camera_component.set_field_of_view(58.)
 builtins._pivot_preview_camera = camera
 u.AutomationLibrary.take_high_res_screenshot(2200, 1400,
-    str(Path(u.Paths.project_saved_dir()) / 'Acceptance' / 'SwordPivotLineup.png'),
+    str(Path(u.Paths.project_saved_dir()) / 'Acceptance' / globals().get('review_filename', 'SwordPivotLineup.png')),
     camera=camera, delay=1.)

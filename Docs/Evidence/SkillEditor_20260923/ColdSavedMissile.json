@@ -1,0 +1,18 @@
+{
+  "scope": "saved missile example after cold restart",
+  "world": "/Game/Combat/SkillEditorExamples/UEDPIE_0_L_SkillEditorTest.L_SkillEditorTest",
+  "target_health": 1482.484130859375,
+  "target_max_health": 1500.0,
+  "player_busy": false,
+  "projectiles_remaining": 0,
+  "runtime_log": [
+    "0.000 Interrupted",
+    "0.000 Interrupted",
+    "0.000 Start Combat.Skill.Editor.Sample3",
+    "0.000 Request Combat.Skill.Editor.Sample3 = 0",
+    "0.222 Event \u5236\u5bfc\u5bfc\u5f39 [2]",
+    "0.503 Event \u53ef\u53d6\u6d88 [7]",
+    "1.472 Completed"
+  ],
+  "passed": true
+}

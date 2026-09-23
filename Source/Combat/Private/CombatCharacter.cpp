@@ -1,4 +1,5 @@
 #include "CombatCharacter.h"
+#include "CombatSkillRuntime.h"
 #include "CombatAnimInstance.h"
 #include "CombatMovementComponent.h"
 #include "CombatLocomotionSettings.h"
@@ -35,6 +36,7 @@ ACombatCharacter::ACombatCharacter(const FObjectInitializer& ObjectInitializer)
 {
     PrimaryActorTick.bCanEverTick = true;
     AbilitySystem = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystem"));
+    SkillRuntime = CreateDefaultSubobject<UCombatSkillRuntime>(TEXT("SkillRuntime"));
     Attributes = CreateDefaultSubobject<UCombatAttributeSet>(TEXT("Attributes"));
     MotionWarping = CreateDefaultSubobject<UMotionWarpingComponent>(TEXT("MotionWarping"));
     FeedbackComponent = CreateDefaultSubobject<UCombatFeedbackComponent>(TEXT("Feedback"));
@@ -73,10 +75,11 @@ void ACombatCharacter::BeginPlay()
     Attributes->InitMaxHealth(InitialHealth); Attributes->InitHealth(InitialHealth);
     Attributes->InitMaxPoise(InitialPoise); Attributes->InitPoise(InitialPoise);
     WeaponMesh->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, WeaponAttachSocket);
+    if(DesignerSkillSet) for(UCombatSkillDefinition* Definition : DesignerSkillSet->Skills) SkillDefinitions.AddUnique(Definition);
     for(UCombatSkillDefinition* Definition : SkillDefinitions)
-        if(Definition && Definition->AbilityClass && Definition->SkillTag.IsValid())
+        if(Definition && (Definition->AbilityClass || Definition->bDataDriven) && Definition->SkillTag.IsValid())
         {
-            FGameplayAbilitySpec Spec(Definition->AbilityClass, 1, INDEX_NONE, Definition);
+            FGameplayAbilitySpec Spec(Definition->bDataDriven ? UCombatGameplayAbility::StaticClass() : Definition->AbilityClass.Get(), 1, INDEX_NONE, Definition);
             SkillHandles.Add(Definition->SkillTag, AbilitySystem->GiveAbility(Spec));
         }
     for(auto Class : AbilitySet) if(Class) AbilitySystem->GiveAbility(FGameplayAbilitySpec(Class, 1));
@@ -127,6 +130,7 @@ float ACombatCharacter::GetSkillCooldownRemaining(FGameplayTag SkillTag) const
 
 bool ACombatCharacter::RequestSkillByInputTag(FGameplayTag InputTag)
 {
+    if(SkillRuntime->TryDerive(ECombatDerivationTrigger::Input, InputTag)) return true;
     FGameplayTagContainer OwnedTags; AbilitySystem->GetOwnedGameplayTags(OwnedTags);
     TArray<UCombatSkillDefinition*> Candidates;
     for(UCombatSkillDefinition* Definition : SkillDefinitions)
@@ -141,23 +145,47 @@ bool ACombatCharacter::RequestSkillByInputTag(FGameplayTag InputTag)
 }
 bool ACombatCharacter::RequestSkillByTag(FGameplayTag SkillTag)
 {
-    if(!IsAlive() || AbilitySystem->HasMatchingGameplayTag(CombatTags::State_Stunned)) return false;
+    return RequestSkillDetailed(SkillTag) == ECombatSkillRequestResult::Activated;
+}
+void ACombatCharacter::EquipRuntimeSkills(const TArray<UCombatSkillDefinition*>& Skills)
+{
+    CancelCurrentSkill();
+    for(UCombatSkillDefinition* D:Skills)
+    {
+        if(!D || !D->SkillTag.IsValid()) continue;
+        if(auto* Existing=SkillHandles.Find(D->SkillTag)) AbilitySystem->ClearAbility(*Existing);
+        SkillDefinitions.RemoveAll([&](const auto& Item){return Item && Item->SkillTag==D->SkillTag;}); SkillDefinitions.Add(D);
+        UClass* Class=D->bDataDriven?UCombatGameplayAbility::StaticClass():D->AbilityClass.Get();
+        if(Class) SkillHandles.Add(D->SkillTag,AbilitySystem->GiveAbility(FGameplayAbilitySpec(Class,1,INDEX_NONE,D)));
+    }
+}
+ECombatSkillRequestResult ACombatCharacter::RequestSkillDetailed(FGameplayTag SkillTag)
+{
+    auto Result = [&](ECombatSkillRequestResult Value) { SkillRuntime->LastRequest = Value; SkillRuntime->Log(FString::Printf(TEXT("Request %s = %d"), *SkillTag.ToString(),int32(Value))); return Value; };
+    if(!IsAlive()) return Result(ECombatSkillRequestResult::Dead);
+    if(AbilitySystem->HasMatchingGameplayTag(CombatTags::State_Stunned)) return Result(ECombatSkillRequestResult::Blocked);
     const auto* Handle = SkillHandles.Find(SkillTag);
-    if(!Handle) return false;
+    if(!Handle) return Result(ECombatSkillRequestResult::MissingSkill);
     UCombatSkillDefinition* Definition = nullptr;
     for(UCombatSkillDefinition* Item : SkillDefinitions) if(Item && Item->SkillTag == SkillTag) { Definition = Item; break; }
-    const float Now = GetWorld()->GetTimeSeconds();
-    if(!Definition || GetSkillCooldownRemaining(SkillTag) > 0.f || (Definition->bAirOnly && !GetCharacterMovement()->IsFalling()) || (Definition->AirAttackIndex > 0 && (Definition->AirAttackIndex != AirComboIndex + 1 || AirComboIndex >= 2))) return false;
-    if(Definition->bGroundOnly && GetCharacterMovement()->IsFalling()) return false;
-    FGameplayTagContainer OwnedTags; AbilitySystem->GetOwnedGameplayTags(OwnedTags);
-    if(!Definition->ActivationQuery.IsEmpty() && !Definition->ActivationQuery.Matches(OwnedTags)) return false;
+    if(!Definition) return Result(ECombatSkillRequestResult::MissingSkill);
+    if(GetSkillCooldownRemaining(SkillTag) > 0.f) return Result(ECombatSkillRequestResult::Cooldown);
+    const bool Air = GetCharacterMovement()->IsFalling();
+    if((Definition->bAirOnly && !Air) || (Definition->bGroundOnly && Air) || (Definition->AirAttackIndex > 0 && (Definition->AirAttackIndex != AirComboIndex+1 || AirComboIndex >= 2))) return Result(ECombatSkillRequestResult::Conditions);
+    FGameplayTagContainer Owned; AbilitySystem->GetOwnedGameplayTags(Owned);
+    if(!Definition->ActivationQuery.IsEmpty() && !Definition->ActivationQuery.Matches(Owned)) return Result(ECombatSkillRequestResult::Conditions);
+    if(Owned.HasAny(Definition->BlockedByTags)) return Result(ECombatSkillRequestResult::Blocked);
     if(ActiveSkill)
     {
-        if(!bCancelable && !bComboWindow && !Definition->bCanInterrupt)
-        { BufferedSkill = SkillTag; BufferedUntil = Now + GetLocomotionSettings().InputBufferTime; return false; }
+        if(!SkillRuntime->CanInterrupt(ECombatInterruptReason::Skill,Definition)) return Result(ECombatSkillRequestResult::Uninterruptible);
+        if(Definition->ExclusiveTags.HasAny(ActiveSkill->ExclusiveTags)) return Result(ECombatSkillRequestResult::Blocked);
+        const bool NewRules = Definition->bDataDriven || ActiveSkill->bDataDriven;
+        const bool Force = NewRules ? Definition->bForceInterrupt && Definition->InterruptPriority > ActiveSkill->InterruptResistance : Definition->bCanInterrupt;
+        if(!bCancelable && !bComboWindow && !Force && !SkillRuntime->IsDeriving())
+        { BufferedSkill = SkillTag; BufferedUntil = GetWorld()->GetTimeSeconds()+GetLocomotionSettings().InputBufferTime; return Result(ECombatSkillRequestResult::Buffered); }
         CancelCurrentSkill();
     }
-    return AbilitySystem->TryActivateAbility(*Handle);
+    return Result(AbilitySystem->TryActivateAbility(*Handle) ? ECombatSkillRequestResult::Activated : ECombatSkillRequestResult::ActivationFailed);
 }
 void ACombatCharacter::BeginSkill(UCombatSkillDefinition* Definition, UCombatGameplayAbility* Ability)
 {
@@ -168,6 +196,7 @@ void ACombatCharacter::BeginSkill(UCombatSkillDefinition* Definition, UCombatGam
     if(GetCharacterMovement()->IsMovingOnGround() && (bIsBoss || GetLocomotionSettings().StopOnGroundSkill)) GetCharacterMovement()->StopMovementImmediately();
     ++SkillExecutionSerial;
     ActiveSkill = Definition; ActiveAbility = Ability;
+    SkillRuntime->Start(Definition);
     bLastSkillInterrupted = false;
     SkillStartedAt = GetWorld()->GetTimeSeconds();
     if(Definition->Cooldown > 0.f)
@@ -208,7 +237,9 @@ void ACombatCharacter::BeginSkill(UCombatSkillDefinition* Definition, UCombatGam
     }
     if(Name == TEXT("Combat.Skill.Parry")) SetParryWindow(true);
     if(Name == TEXT("Combat.Skill.Riposte")) { RiposteUntil = 0; AbilitySystem->RemoveActiveGameplayEffect(RiposteEffectHandle); }
-    GetWorldTimerManager().SetTimer(SkillTimeout, this, &ThisClass::FinishSkill, FMath::Max(.1f, Definition->Duration + .3f), false);
+    const float WatchdogDuration=Definition->bDataDriven && Definition->Montage ? Definition->Montage->GetPlayLength()/FMath::Max(.01f,FMath::Abs(Definition->Montage->RateScale)) : Definition->Duration;
+    if(Definition->bDataDriven && Definition->bUseMontageNotifies && Definition->Montage) GetWorldTimerManager().ClearTimer(SkillTimeout);
+    else GetWorldTimerManager().SetTimer(SkillTimeout, this, &ThisClass::FinishSkill, FMath::Max(.1f, WatchdogDuration + .3f), false);
     FeedbackComponent->BeginSkillFeedback(Definition);
     OnSkillStarted.Broadcast(this, Definition->SkillTag);
 }
@@ -218,6 +249,19 @@ void ACombatCharacter::CancelCurrentSkill()
     // The spec handle routes cancellation to the active instance and its tasks.
     if(ActiveAbility) AbilitySystem->CancelAbilityHandle(ActiveAbility->GetCurrentAbilitySpecHandle());
     else EndSkill(true);
+}
+bool ACombatCharacter::TryInterruptSkill(ECombatInterruptReason Reason)
+{
+    if(!SkillRuntime->CanInterrupt(Reason)) return false;
+    CancelCurrentSkill(); return true;
+}
+void ACombatCharacter::ApplyPeriodicDamage(float Damage, ACombatCharacter* Source)
+{
+    if(!IsAlive()) return;
+    LastDamageSource=Source;
+    ApplyAttributeDelta(UCombatAttributeSet::GetHealthAttribute(),-FMath::Max(0.f,Damage));
+    LastDamageAt = GetWorld()->GetTimeSeconds();
+    if(!IsAlive()) Die();
 }
 void ACombatCharacter::FinishSkill()
 {
@@ -236,6 +280,7 @@ void ACombatCharacter::EndSkill(bool bInterrupted)
     FeedbackComponent->EndSkillFeedback();
     if(bInterrupted) for(auto Projectile : SkillProjectiles) if(Projectile.IsValid()) Projectile->Destroy();
     if(bInterrupted) SkillProjectiles.Reset();
+    if(bInterrupted) for(TActorIterator<ACombatProjectile> It(GetWorld()); It; ++It) if(It->GetOwner() == this) It->CancelForSkill(SkillRuntime->GetSerial());
     SetParryWindow(false); SetInvulnerable(false);
     AbilitySystem->SetLooseGameplayTagCount(CombatTags::State_Busy, 0);
     AbilitySystem->SetLooseGameplayTagCount(CT(TEXT("Combat.State.Dashing")), 0);
@@ -244,6 +289,7 @@ void ACombatCharacter::EndSkill(bool bInterrupted)
     TemporaryEffects.Reset();
     MotionWarping->RemoveWarpTarget(TEXT("CombatTarget"));
     ActiveSkill = nullptr; ActiveAbility = nullptr; bCancelable = bComboWindow = false;
+    SkillRuntime->Stop(bInterrupted);
     if(OldTag.IsValid()) OnSkillEnded.Broadcast(this, OldTag);
     // RiposteReady belongs to the character reward window, never this skill's cleanup.
     if(bIsBoss && GetHealth() <= GetMaxHealth() * .5f && IsAlive()) bPhaseTwo = true;
@@ -264,9 +310,9 @@ void ACombatCharacter::GetBladeEndpoints(FVector& Start, FVector& End) const
 }
 FCombatHit ACombatCharacter::MakeHit(int32 HitInstance) const
 {
-    FCombatHit Hit; Hit.Attacker = const_cast<ACombatCharacter*>(this); Hit.AttackInstance = HitInstance;
+    FCombatHit Hit; Hit.Attacker = const_cast<ACombatCharacter*>(this); Hit.AttackInstance = HitInstance; Hit.ExecutionSerial = SkillRuntime->GetSerial();
     Hit.Direction = GetActorForwardVector(); Hit.Location = GetActorLocation();
-    if(ActiveSkill) { Hit.Damage = ActiveSkill->Damage * (bPhaseTwo ? 1.15f : 1.f); Hit.PoiseDamage = ActiveSkill->PoiseDamage; Hit.bParryable = ActiveSkill->bParryable; }
+    if(ActiveSkill) { Hit.Damage = ActiveSkill->Damage * (bPhaseTwo ? 1.15f : 1.f) * Attributes->GetDamageMultiplier(); Hit.PoiseDamage = ActiveSkill->PoiseDamage; Hit.bParryable = ActiveSkill->bParryable; }
     return Hit;
 }
 void ACombatCharacter::TraceHitWindow()
@@ -318,7 +364,7 @@ ECombatHitResult ACombatCharacter::ReceiveCombatHit(const FCombatHit& Hit)
         AbilitySystem->RemoveActiveGameplayEffect(RiposteEffectHandle);
         RiposteEffectHandle = AbilitySystem->ApplyGameplayEffectToSelf(GetDefault<UCombatRiposteEffect>(), 1.f, AbilitySystem->MakeEffectContext());
         for(auto Handle : AbilitySystem->GetActiveEffects(FGameplayEffectQuery::MakeQuery_MatchAnyEffectTags(FGameplayTagContainer(CT(TEXT("Combat.Skill.Parry")))))) AbilitySystem->RemoveActiveGameplayEffect(Handle);
-        Hit.Attacker->CancelCurrentSkill();
+        Hit.Attacker->TryInterruptSkill(ECombatInterruptReason::Parry);
         if(Now >= Hit.Attacker->PoiseImmuneUntil) Hit.Attacker->ApplyAttributeDelta(UCombatAttributeSet::GetPoiseAttribute(), -Hit.PoiseDamage * 1.6f);
         Hit.Attacker->CheckPoiseBreak(Now);
         Hit.Attacker->StunnedUntil = FMath::Max(Hit.Attacker->StunnedUntil, Now + .3f);
@@ -328,25 +374,27 @@ ECombatHitResult ACombatCharacter::ReceiveCombatHit(const FCombatHit& Hit)
         return ECombatHitResult::Parried;
     }
     ApplyAttributeDelta(UCombatAttributeSet::GetHealthAttribute(), -FMath::Max(0.f, Hit.Damage));
+    LastDamageSource=Hit.Attacker;
     if(Now >= PoiseImmuneUntil) ApplyAttributeDelta(UCombatAttributeSet::GetPoiseAttribute(), -FMath::Max(0.f, Hit.PoiseDamage));
     LastDamageAt = Now;
     ApplyHitStop(HitStopDuration); Hit.Attacker->ApplyHitStop(HitStopDuration);
     Hit.Attacker->BroadcastCue(CombatTags::Cue_Hit, this, Hit.Location, Hit.Damage / 20.f);
-    if(!IsAlive()) { Die(); return ECombatHitResult::Killed; }
+    if(!IsAlive()) { Die(); if(Hit.Attacker->IsAlive()) Hit.Attacker->SkillRuntime->NotifyHit(Hit.ExecutionSerial); return ECombatHitResult::Killed; }
     CheckPoiseBreak(Now);
     if(HitReactMontage && (!bIsBoss || !IsBusy()))
     {
         if(auto* Anim = Cast<UCombatAnimInstance>(GetMesh()->GetAnimInstance())) Anim->StopGroundPivot();
-        if(!bIsBoss) CancelCurrentSkill();
-        PlayAnimMontage(HitReactMontage);
+        if(bIsBoss || TryInterruptSkill(ECombatInterruptReason::Hit)) PlayAnimMontage(HitReactMontage);
     }
+    if(Hit.Attacker->IsAlive()) Hit.Attacker->SkillRuntime->NotifyHit(Hit.ExecutionSerial);
     return ECombatHitResult::Damaged;
 }
 void ACombatCharacter::CheckPoiseBreak(float Now)
 {
     if(GetPoise() <= 0.f && Now >= PoiseImmuneUntil)
     {
-        CancelCurrentSkill(); StunnedUntil = Now + (bIsBoss ? .9f : .5f); PoiseImmuneUntil = Now + 3.f;
+        if(!TryInterruptSkill(ECombatInterruptReason::PoiseBreak)) return;
+        StunnedUntil = Now + (bIsBoss ? .9f : .5f); PoiseImmuneUntil = Now + 3.f;
         AbilitySystem->SetLooseGameplayTagCount(CombatTags::State_Stunned, 1);
         ApplyAttributeDelta(UCombatAttributeSet::GetPoiseAttribute(), GetMaxPoise());
         BroadcastCue(CombatTags::Cue_PoiseBreak, this, GetActorLocation(), 1.5f);
@@ -458,6 +506,7 @@ void ACombatCharacter::HandleMontageEvent(FGameplayTag EventTag)
 void ACombatCharacter::BroadcastCue(FGameplayTag Tag, ACombatCharacter* Target, FVector Location, float Intensity) { OnCombatFeedback.Broadcast(this, Target, Tag, Location, Intensity); }
 void ACombatCharacter::Die()
 {
+    SkillRuntime->ClearBuffs();
     if(auto* Anim = Cast<UCombatAnimInstance>(GetMesh()->GetAnimInstance())) Anim->StopGroundPivot();
     SetHiddenForCloseCamera(false);
     CancelCurrentSkill(); AbilitySystem->CancelAllAbilities();
@@ -488,6 +537,7 @@ void ACombatCharacter::Die()
 }
 void ACombatCharacter::ResetCombatState()
 {
+    SkillRuntime->ClearBuffs();
     if(auto* Anim = Cast<UCombatAnimInstance>(GetMesh()->GetAnimInstance())) Anim->StopGroundPivot();
     SetHiddenForCloseCamera(false);
     CancelCurrentSkill(); AbilitySystem->CancelAllAbilities();
@@ -518,6 +568,7 @@ void ACombatCharacter::ResetCombatState()
 void ACombatCharacter::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
+    SkillRuntime->Advance(DeltaSeconds);
     ApplyLocomotionSettings();
     UpdateCloseCameraVisibility();
     if(HitStopUntilReal > 0 && GetWorld()->GetRealTimeSeconds() >= HitStopUntilReal) { CustomTimeDilation = SavedTimeDilation; HitStopUntilReal = 0; }
@@ -714,7 +765,7 @@ void ACombatCharacter::Landed(const FHitResult& Hit) { Super::Landed(Hit); bAirD
 void ACombatCharacter::AttackPressed()
 {
     bAttackHeld = true; AttackPressedAt = GetWorld()->GetTimeSeconds();
-    if(ActiveSkill && ActiveSkill->NextSkillTag.IsValid()) { RequestSkillByTag(ActiveSkill->NextSkillTag); return; }
+    if(ActiveSkill && !ActiveSkill->bDataDriven && ActiveSkill->NextSkillTag.IsValid()) { RequestSkillByTag(ActiveSkill->NextSkillTag); return; }
     RequestSkillByInputTag(CT(TEXT("Combat.Input.Attack")));
 }
 void ACombatCharacter::AttackReleased() { bAttackHeld = false; }

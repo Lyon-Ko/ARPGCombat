@@ -7,6 +7,7 @@ public class CombatEditor : ModuleRules
         PrivateDependencyModuleNames.AddRange(new [] { "Core", "CoreUObject", "Engine", "UnrealEd", "Combat",
             "AssetRegistry", "Kismet", "KismetCompiler", "BlueprintGraph", "AnimGraph", "AnimGraphRuntime",
             "UMG", "UMGEditor", "Slate", "SlateCore", "InputCore", "NavigationSystem", "AIModule",
-            "StateTreeModule", "StateTreeEditorModule", "GameplayStateTreeModule", "PropertyBindingUtils", "Niagara", "NiagaraEditor" });
+            "StateTreeModule", "StateTreeEditorModule", "GameplayStateTreeModule", "PropertyBindingUtils", "Niagara", "NiagaraEditor",
+            "AssetTools", "ContentBrowser", "PropertyEditor", "GraphEditor", "EditorFramework", "ToolMenus", "ApplicationCore", "Json", "JsonUtilities", "GameplayTags", "GameplayAbilities", "AnimationEditor", "Persona" });
     }
 }

@@ -3,6 +3,10 @@ import unreal as u
 from pathlib import Path
 import json
 import hashlib
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from arena_checker_floor import create_checker_material
 
 ROOT = '/Game/Combat'
 assets = u.AssetToolsHelpers.get_asset_tools()
@@ -43,15 +47,15 @@ def arena(material):
         if actor.get_actor_label().startswith('Combat_'):
             actors.destroy_actor(actor)
     cube = u.load_asset('/Engine/BasicShapes/Cube')
-    def block(label, loc, size):
+    def block(label, loc, size, block_material=None):
         a=actors.spawn_actor_from_class(u.StaticMeshActor,u.Vector(*loc))
         a.set_actor_label('Combat_'+label)
         a.static_mesh_component.set_static_mesh(cube)
-        a.static_mesh_component.set_material(0,material)
+        a.static_mesh_component.set_material(0,block_material or material)
         a.static_mesh_component.set_collision_profile_name('BlockAll')
         a.set_actor_scale3d(u.Vector(*(v/100 for v in size)))
         return a
-    block('Floor',(0,0,-50),(5000,5000,100))
+    block('Floor',(0,0,-50),(5000,5000,100),create_checker_material())
     block('WallNorth',(0,2550,200),(5200,100,400))
     block('WallSouth',(0,-2550,200),(5200,100,400))
     block('WallEast',(2550,0,200),(100,5000,400))

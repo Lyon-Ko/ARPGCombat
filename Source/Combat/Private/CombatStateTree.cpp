@@ -1,6 +1,7 @@
 #include "CombatStateTree.h"
 #include "CombatAIController.h"
 #include "CombatCharacter.h"
+#include "CombatSkillRuntime.h"
 #include "StateTreeExecutionContext.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Engine/World.h"
@@ -43,7 +44,7 @@ EStateTreeRunStatus FCombatStateTreeExecuteTask::EnterState(FStateTreeExecutionC
     Data.EnteredAt = AI->GetWorld()->GetTimeSeconds();
     Pawn->GetCharacterMovement()->StopMovementImmediately();
     Data.bStarted = Pawn->RequestSkillByTag(AI->SelectedSkill);
-    if(Data.bStarted) { AI->PreviousSkill = AI->SelectedSkill; ++AI->ActionsExecuted; if(auto* Skill = Pawn->GetActiveSkillDefinition()) Data.NextSkill = Skill->NextSkillTag; }
+    if(Data.bStarted) { AI->PreviousSkill = AI->SelectedSkill; ++AI->ActionsExecuted; if(auto* Skill = Pawn->GetActiveSkillDefinition()) Data.NextSkill = Skill->bDataDriven ? FGameplayTag() : Skill->NextSkillTag; }
     return Data.bStarted ? EStateTreeRunStatus::Running : EStateTreeRunStatus::Succeeded;
 }
 EStateTreeRunStatus FCombatStateTreeExecuteTask::Tick(FStateTreeExecutionContext& Context, float DeltaTime) const
@@ -52,12 +53,12 @@ EStateTreeRunStatus FCombatStateTreeExecuteTask::Tick(FStateTreeExecutionContext
     if(!Pawn || !Pawn->IsAlive()) return EStateTreeRunStatus::Succeeded;
     auto& Data = Context.GetInstanceData(*this); Data.Elapsed = static_cast<float>(FMath::Max(0.0, AI->GetWorld()->GetTimeSeconds() - Data.EnteredAt));
     if(Data.Elapsed > 6.f) { Pawn->CancelCurrentSkill(); return EStateTreeRunStatus::Succeeded; }
-    if(Pawn->IsBusy()) return EStateTreeRunStatus::Running;
+    if(Pawn->IsBusy() || Pawn->SkillRuntime->HasPendingDerivation()) return EStateTreeRunStatus::Running;
     if(Pawn->bLastSkillInterrupted) return EStateTreeRunStatus::Succeeded;
     if(Data.NextSkill.IsValid() && Data.ChainCount < 4)
     {
         const FGameplayTag Next = Data.NextSkill; Data.NextSkill = FGameplayTag();
-        if(Pawn->RequestSkillByTag(Next)) { ++Data.ChainCount; if(auto* Skill = Pawn->GetActiveSkillDefinition()) Data.NextSkill = Skill->NextSkillTag; return EStateTreeRunStatus::Running; }
+        if(Pawn->RequestSkillByTag(Next)) { ++Data.ChainCount; if(auto* Skill = Pawn->GetActiveSkillDefinition()) Data.NextSkill = Skill->bDataDriven ? FGameplayTag() : Skill->NextSkillTag; return EStateTreeRunStatus::Running; }
     }
     return EStateTreeRunStatus::Succeeded;
 }

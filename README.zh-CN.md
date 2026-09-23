@@ -2,7 +2,7 @@
 
 UE **5.8.2** 单人第三人称剑斗工程：玩家与 Boss、GAS 技能、Montage 通知、可扩展蓝图与技能数据。交付为**编辑器 PIE 工程**，不含独立打包版本。
 
-正式30/60fps共20场 **495/495** 项通过；最终冷启动359项、暂停试玩交接12项通过，当前按 **P** 继续战斗。默认四连、独立技能扩展及AI/空间专项已有验证。真实性能、补充覆盖失败和引擎启动自测限制见 [交付记录](Docs/DeliveryVerification.md)、[性能报告](Docs/Performance.md) 与 [启动说明](Docs/EngineStartupNotes.md)。
+新增面向设计人员的技能编辑器 V1：新系统 **68/68**、默认四连 **29/29**、组合伤害 **17/17**、30/60fps 共20场 **495/495**、冷启动工作台检查 **15/15** 通过。入口为 **工具 → 战斗技能工作台**；本次功能证据、性能长帧及尚未完成的编辑器界面视觉验收见 [技能编辑器交付记录](Docs/SkillEditorVerification.md)。旧版剑斗交付记录与历史限制继续保留在 [交付记录](Docs/DeliveryVerification.md)、[性能报告](Docs/Performance.md) 和 [启动说明](Docs/EngineStartupNotes.md)。
 
 ## 打开试玩
 
@@ -25,6 +25,10 @@ UE **5.8.2** 单人第三人称剑斗工程：玩家与 Boss、GAS 技能、Mont
 详细时机和限制见 [玩家指南](Docs/PlayerGuide.zh-CN.md)。角色为原生 Kwang / Greystone；资源来源、授权与原创资源说明见 [Assets 来源清单](Docs/Assets/ASSET_SOURCES.md)。
 
 ## 工程和扩展入口
+
+- **原生 Montage 集成**：动画技能使用原生 `Combat Skill Action` / `Combat Skill Window` 通知，派生图独立引用命名窗口。已有数据技能可点击“迁移到 Montage”。见 [使用与迁移说明](Docs/NativeMontageSkills.zh-CN.md) 和 [本轮验证](Docs/NativeMontageVerification.md)。
+
+- **新增：工具 → 战斗技能工作台**。时间轴、派生图、子弹/导弹、Buff 和打断配置见 [技能编辑器指南](Docs/SkillEditor.zh-CN.md)。独立示例位于 `/Game/Combat/SkillEditorExamples`；[本次验证记录](Docs/SkillEditorVerification.md) 与旧工程历史验收分开记录。
 
 - `Source/Combat`：角色、GAS、技能积木、StateTree AI、UMG、命中与表现生命周期。
 - `Source/CombatEditor`、`Tools/editor`：可编辑蓝图图表、动画和资产生成工具。

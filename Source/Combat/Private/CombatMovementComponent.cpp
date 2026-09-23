@@ -2,6 +2,7 @@
 #include "CombatCharacter.h"
 #include "CombatAnimInstance.h"
 #include "CombatLocomotionSettings.h"
+#include "CombatAttributeSet.h"
 
 void UCombatMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
@@ -32,16 +33,17 @@ void UCombatMovementComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 float UCombatMovementComponent::GetMaxSpeed() const
 {
     const auto* Character = Cast<ACombatCharacter>(CharacterOwner);
-    if(!Character || Character->bIsBoss || (!IsMovingOnGround() && !IsFalling())) return Super::GetMaxSpeed();
+    const float Multiplier = Character && Character->Attributes ? FMath::Max(.01f,Character->Attributes->GetMoveSpeedMultiplier()) : 1.f;
+    if(!Character || Character->bIsBoss || (!IsMovingOnGround() && !IsFalling())) return Super::GetMaxSpeed() * Multiplier;
     const auto& S = UCombatLocomotionSubsystem::For(this);
     FVector Direction = Acceleration.IsNearlyZero() ? Velocity.GetSafeNormal2D() : Acceleration.GetSafeNormal2D();
     if(const auto* Anim = Cast<UCombatAnimInstance>(Character->GetMesh()->GetAnimInstance()); Anim && Anim->IsPivoting()) Direction = Anim->GetPivotDirection();
-    if(Direction.IsNearlyZero()) return S.ForwardSpeed;
+    if(Direction.IsNearlyZero()) return S.ForwardSpeed * Multiplier;
     const FVector Local = Character->GetActorTransform().InverseTransformVectorNoScale(Direction);
     const float XSpeed = Local.X >= 0.f ? S.ForwardSpeed : S.BackwardSpeed;
     const float YSpeed = Local.Y >= 0.f ? S.RightSpeed : S.LeftSpeed;
     // An ellipse preserves cardinal limits without boosting diagonal speed.
-    return 1.f / FMath::Sqrt(FMath::Square(Local.X / XSpeed) + FMath::Square(Local.Y / YSpeed));
+    return Multiplier / FMath::Sqrt(FMath::Square(Local.X / XSpeed) + FMath::Square(Local.Y / YSpeed));
 }
 
 float UCombatMovementComponent::GetMaxAcceleration() const

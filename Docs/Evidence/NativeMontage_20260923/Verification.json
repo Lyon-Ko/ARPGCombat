@@ -1,0 +1,27 @@
+{
+  "utc": "2026-09-23T03:28:19.797836+00:00",
+  "builds": {
+    "CombatEditor Win64 Development": "exit 0",
+    "Combat Win64 Development": "exit 0"
+  },
+  "binaries": {
+    "UnrealEditor-Combat.dll": "7a2e2c5a0d3575de5b565ffd855887e770bb15224743eb5874805a992ef1f72d",
+    "UnrealEditor-CombatEditor.dll": "f474f2811bb8513c94c9b6613cfadc0c15fa7389c5a10bfa4039583d36ae13b4",
+    "Combat.exe": "5cca28f73c2b48f201900b59ada49a110fded81fcf9a2f58a4fa854511368e37"
+  },
+  "reports": [
+    "MontageSkills_20260923T031810597699Z.json",
+    "MontageSkills_20260923T031221418764Z.json",
+    "SkillEditor_20260923T031920509646Z.json",
+    "SkillEditorCompatibility_20260923T032049328337Z.json",
+    "default_chain_only_20260923T032049451166Z.json",
+    "CombinedSources_20260923T032059734563Z.json"
+  ],
+  "ui_observations": [
+    "Native AM_Strike editor showed animation preview and Skill Actions / Hit Windows / Derivation Windows / Cancel Windows tracks",
+    "Native skill toolbar menu opened and listed DA_Strike",
+    "Standalone derivation editor was opened through editor API; its tab was visible beside AM_Strike",
+    "Further click-through was not counted after concurrent user input was detected"
+  ],
+  "full_twenty_bouts_rerun": false
+}

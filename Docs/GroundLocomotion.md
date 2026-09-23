@@ -9,6 +9,17 @@ Kwang 非锁定折返现使用官方动作重定向并融合持剑上半身的�
 3. 画面左上角显示 `Locomotion r版本 | Speed | InputA | BrakeA | Brake/Reverse/Move | Pivot进度`。InputA 为输入加速度，BrakeA 为折返减速度；刹车时 InputA 为 0 是正常的。
 4. Details 提供范围限制与中文提示。字段关系错误（例如 JogSpeed 大于 FastSpeed）会显示错误并保留上次有效配置；修正后自动恢复。
 5. 控制台命令 `Combat.Locomotion.Reload` 可立即重新应用资产。Debug 分类中的 Overlay 关闭持续显示。
+
+Details 面板现在分为「配置值」和只读的「运行时调试值」两列。右列每约 0.1 秒读取当前 PIE 玩家实际状态：
+
+- 四向最高速度旁显示角色局部方向上的实际速度分量；StopSpeed、MinSpeed 旁显示当前水平速度。
+- ReverseMaxFacingAngle 旁显示角色与 Pivot 目标的朝向误差；ReverseMinProgress / ExitMinProgress 旁显示动画进度。
+- ReverseDelay / TurnDelay 旁显示 Pivot 已过时间，Cooldown 旁显示剩余冷却。
+- PlayRate 旁显示活动 Pivot 蒙太奇的播放倍率，融合参数旁显示其当前权重。
+- 刹车减速度及附加摩擦旁显示采样得到的总减速度，包含摩擦、碰撞等影响，不是单独的摩擦贡献。
+- BS 参数、垂直速度、跳跃次数、镜头臂长等在对应行显示；没有对应瞬时量的配置显示「—」。
+
+顶部显示被观察的世界、玩家、配置版本及当前阶段。暂停时角速度、减速度保留最后一次有效采样；结束 PIE 后清空为「未运行」。只读取正在使用当前资产的世界；多个世界同时使用该资产时提示无法唯一确定，不混合读取不同玩家。左列保留原来的编辑、范围约束和恢复默认功能。
 6. **Debug → MovementVectors** 开启世界空间移动箭头，与文字 Overlay 开关独立。绿色表示普通移动目标，黄色表示 Pivot 刹车时的目标，紫色表示反向加速目标，橙色表示技能位移方向；蓝色表示 CharacterMovement 的水平速度，长度随速度缩放。刹车时可看到目标箭头与蓝色速度箭头相反。零向量不画箭头，关闭后下一绘制帧清除；不影响移动逻辑。
 7. 同分类的 MovementVectorLength / MovementVectorHeight 调整箭头长度和离胶囊底部高度，支持 PIE 实时修改。此可视化用于编辑器/开发构建。
 

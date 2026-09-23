@@ -2,6 +2,7 @@
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
 #include "Engine/DataAsset.h"
+#include "CombatSkillAuthoring.h"
 #include "CombatTypes.generated.h"
 class UGameplayAbility;
 class UAnimMontage;
@@ -25,6 +26,7 @@ struct COMBAT_API FCombatHit
     UPROPERTY(EditAnywhere, BlueprintReadWrite) FVector Direction = FVector::ForwardVector;
     UPROPERTY(EditAnywhere, BlueprintReadWrite) bool bParryable = true;
     UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 AttackInstance = 0;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int64 ExecutionSerial = 0;
 };
 
 UCLASS(BlueprintType)
@@ -32,6 +34,20 @@ class COMBAT_API UCombatSkillDefinition : public UPrimaryDataAsset
 {
     GENERATED_BODY()
 public:
+    UPROPERTY(VisibleAnywhere, Category="编辑器") int32 SchemaVersion = 1;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="编辑器") bool bDataDriven = false;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="编辑器", meta=(ToolTip="动画技能由原生 Montage 的 Combat Skill Action / Window 通知驱动；转换后旧事件数组不执行。")) bool bUseMontageNotifies = false;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="时间轴", meta=(EditCondition="!bUseMontageNotifies || Montage == nullptr", EditConditionHides)) TArray<FCombatSkillEvent> Events;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="派生") TArray<FCombatSkillDerivation> Derivations;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="互斥") FGameplayTagContainer ExclusiveTags;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="互斥") FGameplayTagContainer BlockedByTags;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="打断") int32 InterruptPriority = 0;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="打断") int32 InterruptResistance = 0;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="打断") bool bForceInterrupt = false;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="打断") TArray<ECombatInterruptReason> AllowedInterrupts = { ECombatInterruptReason::Skill, ECombatInterruptReason::Hit, ECombatInterruptReason::Parry, ECombatInterruptReason::PoiseBreak, ECombatInterruptReason::Control };
+#if WITH_EDITORONLY_DATA
+    UPROPERTY() FVector2D GraphPosition = FVector2D::ZeroVector;
+#endif
     UPROPERTY(EditAnywhere, BlueprintReadOnly) FGameplayTag SkillTag;
     UPROPERTY(EditAnywhere, BlueprintReadOnly) FGameplayTag InputTag;
     UPROPERTY(EditAnywhere, BlueprintReadOnly) FGameplayTag NextSkillTag;

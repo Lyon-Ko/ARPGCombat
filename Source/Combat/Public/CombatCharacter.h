@@ -20,15 +20,27 @@ class USoundBase;
 class UAnimMontage;
 struct FCombatLocomotionSettings;
 class UCombatLocomotionConfig;
+class UCombatSkillRuntime;
 
 UCLASS(Blueprintable)
 class COMBAT_API ACombatCharacter : public ACharacter, public IAbilitySystemInterface
 {
     GENERATED_BODY()
 public:
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Combat") TObjectPtr<UCombatSkillRuntime> SkillRuntime;
+    UPROPERTY(BlueprintReadOnly, Category="Combat") TWeakObjectPtr<ACombatCharacter> LastDamageSource;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Combat") TObjectPtr<UCombatSkillSet> DesignerSkillSet;
+    UFUNCTION(BlueprintCallable, Category="Combat") ECombatSkillRequestResult RequestSkillDetailed(FGameplayTag SkillTag);
+    UFUNCTION(BlueprintCallable, Category="Combat") bool TryInterruptSkill(ECombatInterruptReason Reason);
+    UFUNCTION(BlueprintCallable, Category="Combat") void SetComboWindow(bool bAllowed) { bComboWindow = bAllowed; }
+    void ApplyPeriodicDamage(float Damage, ACombatCharacter* Source);
+    int32 AllocateAttackInstance() { return ++AttackInstance; }
+    void SampleSkillHit() { TraceHitWindow(); }
+    UFUNCTION(BlueprintCallable, Category="Combat") void EquipRuntimeSkills(const TArray<UCombatSkillDefinition*>& Skills);
     ACombatCharacter(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
     const FCombatLocomotionSettings& GetLocomotionSettings() const;
     void DrawLocomotionDebug() const;
+    FVector GetLocomotionDebugInput() const { return SampleMovementDirection(); }
     virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override { return AbilitySystem; }
     virtual void Tick(float DeltaSeconds) override;
     virtual void SetupPlayerInputComponent(UInputComponent* Input) override;

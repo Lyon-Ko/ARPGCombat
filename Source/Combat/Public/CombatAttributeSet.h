@@ -13,6 +13,10 @@ class COMBAT_API UCombatAttributeSet : public UAttributeSet
 {
     GENERATED_BODY()
 public:
+    UPROPERTY(BlueprintReadOnly) FGameplayAttributeData DamageMultiplier = 1.f;
+    COMBAT_ATTRIBUTE(DamageMultiplier)
+    UPROPERTY(BlueprintReadOnly) FGameplayAttributeData MoveSpeedMultiplier = 1.f;
+    COMBAT_ATTRIBUTE(MoveSpeedMultiplier)
     UPROPERTY(BlueprintReadOnly) FGameplayAttributeData Health;
     COMBAT_ATTRIBUTE(Health)
     UPROPERTY(BlueprintReadOnly) FGameplayAttributeData MaxHealth;
